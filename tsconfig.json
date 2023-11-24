@@ -17,10 +17,21 @@
     "lib": [
       "es2018",
       "dom"
+    ],
+    "plugins": [
+      {
+        "name": "@angular/language-service"
+      }
     ]
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,
     "strictInjectionParameters": true
-  }
+  },
+  "styles": [
+    "node_modules/primeicons/primeicons.css",
+    "node_modules/primeng-lts/resources/themes/nova-light/theme.css",
+    "node_modules/primeng-lts/resources/primeng.min.css"
+    //...
+  ]
 }

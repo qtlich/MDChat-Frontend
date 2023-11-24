@@ -1,68 +1,98 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { HeaderComponent } from './header/header.component';
-import { SignupComponent } from './auth/signup/signup.component';
-import { ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { LoginComponent } from './auth/login/login.component';
-import { NgxWebstorageModule } from 'ngx-webstorage';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ToastrModule } from 'ngx-toastr';
-import { TokenInterceptor } from './token-interceptor';
-import { HomeComponent } from './home/home.component';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { PostTileComponent } from './shared/post-tile/post-tile.component';
-import { VoteButtonComponent } from './shared/vote-button/vote-button.component';
-import { SideBarComponent } from './shared/side-bar/side-bar.component';
-import { SubredditSideBarComponent } from './shared/subreddit-side-bar/subreddit-side-bar.component';
-import { CreateSubredditComponent } from './subreddit/create-subreddit/create-subreddit.component';
-import { CreatePostComponent } from './post/create-post/create-post.component';
-import { ListSubredditsComponent } from './subreddit/list-subreddits/list-subreddits.component';
-import { EditorModule } from '@tinymce/tinymce-angular';
-import { ViewPostComponent } from './post/view-post/view-post.component';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { UserProfileComponent } from './auth/user-profile/user-profile.component';
+import {BrowserModule} from '@angular/platform-browser';
+import {NgModule} from '@angular/core';
+import {AppRoutingModule} from './app-routing.module';
+import {AppComponent} from './app.component';
+import {HeaderComponent} from './header/header.component';
+import {SignupComponent} from './auth/signup/signup.component';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+import {LoginComponent} from './auth/login/login.component';
+import {NgxWebstorageModule} from 'ngx-webstorage';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {ToastrModule} from 'ngx-toastr';
+import {TokenInterceptor} from './token-interceptor';
+import {HomeComponent} from './home/home.component';
+import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
+import {PostTileComponent} from './shared/post-tile/post-tile.component';
+import {VoteButtonComponent} from './shared/vote-button/vote-button.component';
+import {SideBarComponent} from './shared/side-bar/side-bar.component';
+import {CreateChannelComponent} from './channel/create-channel/create-channel.component';
+import {CreatePostComponent} from './post/create-post/create-post.component';
+import {ListOfChannelsComponent} from './channel/list-of-channels/list-of-channels.component';
+import {ViewPostComponent} from './post/view-post/view-post.component';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {UserProfileComponent} from './auth/user-profile/user-profile.component';
+import {ViewChannelComponent} from "./channel/view-channel/view-channel.component";
+import {EditorModule} from "primeng/editor";
+import {DropdownModule} from "primeng/dropdown";
+import {InputTextModule} from "primeng/inputtext";
+import {CreatePostLittleComponent} from "./post/create-post-little/create-post-little.component";
+import {DialogModule} from "primeng/dialog";
+import {TooltipModule} from "primeng/tooltip";
+import {RadioButtonModule} from "primeng/radiobutton";
+import {ButtonModule} from "primeng/button";
+import {ToastModule} from "primeng/toast";
+import {MessageService} from "primeng/api";
+import {PanelModule} from "primeng/panel";
+import {ToolbarModule} from "primeng/toolbar";
+import {SplitButtonModule} from "primeng/splitbutton";
+import {VirtualScrollerModule} from "primeng/virtualscroller";
+import {ChannelSideBarComponent} from "./shared/channel-side-bar/channel-side-bar.component";
+import {TruncateAndSafeHtmlDirectiveModule} from "./common/directives/truncate-and-safe-html-directive";
 
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    HeaderComponent,
-    SignupComponent,
-    LoginComponent,
-    HomeComponent,
-    PostTileComponent,
-    VoteButtonComponent,
-    SideBarComponent,
-    SubredditSideBarComponent,
-    CreateSubredditComponent,
-    CreatePostComponent,
-    ListSubredditsComponent,
-    ViewPostComponent,
-    UserProfileComponent
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    ReactiveFormsModule,
-    HttpClientModule,
-    NgxWebstorageModule.forRoot(),
-    BrowserAnimationsModule,
-    ToastrModule.forRoot(),
-    FontAwesomeModule,
-    EditorModule,
-    NgbModule
-  ],
-  providers: [
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: TokenInterceptor,
-      multi: true
-    }
-  ],
-  bootstrap: [AppComponent]
-})
-export class AppModule { }
+            declarations: [AppComponent,
+              HeaderComponent,
+              SignupComponent,
+              LoginComponent,
+              HomeComponent,
+              PostTileComponent,
+              VoteButtonComponent,
+              SideBarComponent,
+              ChannelSideBarComponent,
+              CreateChannelComponent,
+              CreatePostComponent,
+              ListOfChannelsComponent,
+              ViewChannelComponent,
+              ViewPostComponent,
+              UserProfileComponent,
+              CreatePostLittleComponent],
+            imports: [
+              BrowserModule,
+              AppRoutingModule,
+              ReactiveFormsModule,
+              HttpClientModule,
+              InputTextModule,
+              NgxWebstorageModule.forRoot(),
+              BrowserAnimationsModule,
+              ToastrModule.forRoot(),
+              FontAwesomeModule,
+              EditorModule,
+              DropdownModule,
+              FormsModule,
+              NgbModule,
+              DialogModule,
+              ButtonModule,
+              ToastModule,
+              TooltipModule,
+              RadioButtonModule,
+              PanelModule,
+              ToolbarModule,
+              SplitButtonModule,
+              VirtualScrollerModule,
+              TruncateAndSafeHtmlDirectiveModule
+            ],
+            providers: [
+              {
+                provide: HTTP_INTERCEPTORS,
+                useClass: TokenInterceptor,
+                multi: true
+              },
+              MessageService
+            ],
+            bootstrap: [AppComponent]
+          })
+export class AppModule
+{
+}

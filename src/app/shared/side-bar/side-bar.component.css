@@ -1,7 +1,7 @@
 .sidebar{
     width: 312px;
     height: 242px;
-    --post-line-color: #ccc;    
+    --post-line-color: #ccc;
     border: 1px solid #ccc;
     margin-bottom: 10px;
     overflow: hidden;
@@ -14,7 +14,7 @@
     margin-bottom: 10px;
 }
 
-.btnCreatePost, .btnCreateSubreddit{
+.btnCreatePost, .btnCreateChannel{
     background-color: #0079D3;
     border-color: #0079D3;
     color: aliceblue;
@@ -29,13 +29,13 @@
     letter-spacing: .5px;
     line-height: 24px;
     text-transform: uppercase;
-    padding: 3px 16px;    
+    padding: 3px 16px;
     opacity: 1;
     width: 288px;
     height: 34px;
 }
 
-.btnCreateSubreddit{
+.btnCreateChannel{
     margin-top: 5px;
     color: #0079D3;
     background-color: transparent;

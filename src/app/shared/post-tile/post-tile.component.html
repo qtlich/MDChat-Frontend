@@ -1,29 +1,47 @@
 <!-- Display Posts-->
-<div class="row post" *ngFor="let post of posts">
+<!--<div class="p-grid">-->
+<!--  <div class="p-grid">-->
+
+<!--  </div>-->
+<!--  <div class="p-grid">-->
+
+<!--  </div>-->
+<!--  <div class="p-grid">-->
+
+<!--  </div>-->
+<!--</div>-->
+<div *ngFor="let post of posts" class="row post">
   <app-vote-button [post]="post"></app-vote-button>
-  <!-- Section to Display Post Information-->
   <div class="col-md-11">
     <span class="subreddit-info">
-      <span class="subreddit-text"><a class="posturl" routerLink="">{{post.subredditName}}</a></span>
+      <span class="comment-text"><a class="posturl" routerLink="">{{post.channelName}}</a></span>
       <span> . Posted by <a class="username" routerLink="/user/{{post.userName}}">{{post.userName}}</a></span>
       <span> . {{post.duration}}</span>
     </span>
-    <hr />
+    <hr/>
     <div class="post-title">
-      <a class="postname" href="{{post.url}}">{{post.postName}}</a>
+      <a class="postname" href="/view-post/{{post.id}}">{{post.postName}}</a>
     </div>
     <div>
-      <p class="post-text" [innerHtml]="post.description"></p>
-    </div>
-    <hr />
-    <span>
-      <a class="btnCommments" role="button">
-        <fa-icon [icon]="faComments"></fa-icon>
-        Comments({{post.commentCount}})
+      <a class="postname" href="/view-post/{{post.id}}">
+        <p [appMaxCharacters]="400" [appTruncateAndSafeHtml]="post.description" class="post-text"></p>
       </a>
-      <button class="login" (click)="goToPost(post.id)">
-        Read Post
-      </button>
-    </span>
+    </div>
+    <hr/>
+
   </div>
+
+  <a class="btnCommments" role="button">
+    <fa-icon [icon]="faComments"></fa-icon>
+    Comments({{post.commentCount}})
+  </a>
+  <button (click)="goToPost(post.id)"
+          class="btn-login">
+    Read Post
+  </button>
+  <button (click)="deletePost(post.id)"
+          class="btn-delete">
+    Delete Post
+  </button>
+
 </div>

@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SubredditSideBarComponent } from './subreddit-side-bar.component';
+import { CreateChannelComponent } from './create-channel.component';
 
-describe('SubredditSideBarComponent', () => {
-  let component: SubredditSideBarComponent;
-  let fixture: ComponentFixture<SubredditSideBarComponent>;
+describe('CreateChannelComponent', () => {
+  let component: CreateChannelComponent;
+  let fixture: ComponentFixture<CreateChannelComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SubredditSideBarComponent ]
+      declarations: [ CreateChannelComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SubredditSideBarComponent);
+    fixture = TestBed.createComponent(CreateChannelComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

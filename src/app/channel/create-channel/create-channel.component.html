@@ -1,0 +1,68 @@
+<div class="p-grid">
+  <div class="p-col-6 p-offset-3">
+    <p-panel [style]="{'margin-top':'0.8em'}">
+      <p-header>Create a channel</p-header>
+      <div class="p-grid">
+        <div class="p-col-3">Channel name:</div>
+        <div class="p-col-9 ui-fluid">
+          <input (input)="countRemaining()"
+                 [(ngModel)]="channelName"
+                 maxlength="30"
+                 pInputText
+                 placeholder="Channel name"
+                 required>
+        </div>
+        <div class="p-col-12 text-right small">{{remaining}} Characters remaining</div>
+        <div class="p-col-12">Description:</div>
+        <div class="p-col-12 ui-fluid">
+          <p-editor [(ngModel)]="channelDescription"
+                    [required]="true"
+                    [style]="{'height':'400px'}"
+                    class="ui-fluid">
+          </p-editor>
+        </div>
+        <div class="p-col-12">Channel type</div>
+        <div class="p-col-4">
+          <p-radioButton [(ngModel)]="channelType"
+                         label="Public"
+                         name="groupname"
+                         pTooltip="Anyone can view, post, and comment to this community"
+                         value="public">
+          </p-radioButton>
+        </div>
+        <div class="p-col-4">
+          <p-radioButton [(ngModel)]="channelType"
+                         label="Restricted"
+                         name="groupname"
+                         pTooltip="Anyone can view this community, but only approved users can post"
+                         value="restricted">
+          </p-radioButton>
+        </div>
+        <div class="p-col-4">
+          <p-radioButton [(ngModel)]="channelType"
+                         label="Private"
+                         name="groupname"
+                         pTooltip="Only approved users can view and submit to this community"
+                         value="private">
+          </p-radioButton>
+        </div>
+      </div>
+      <p-footer>
+        <button (click)="onCreateChannelClick()"
+                class="ui-button-success ui-button-rounded"
+                label="Create"
+                pTooltip="Create channel"
+                pButton
+                type="button">
+        </button>
+        <button (click)="onDiscardClick()"
+                class="ui-button-secondary ui-button-rounded"
+                label="Discard"
+                pButton
+                type="button">
+        </button>
+      </p-footer>
+    </p-panel>
+  </div>
+  <div class="p-col-3"><app-side-bar></app-side-bar></div>
+</div>

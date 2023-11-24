@@ -2,17 +2,28 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "./out-tsc/app",
-    "types": []
+    "baseUrl": "./",
+    "types": [],
+    "paths": {
+    "primeng/*": ["node_modules/primeng-lts/*"]
+  }
+
   },
   "files": [
     "src/main.ts",
     "src/polyfills.ts"
   ],
   "include": [
-    "src/**/*.ts"
+//    "src/**/*.ts"
   ],
   "exclude": [
     "src/test.ts",
     "src/**/*.spec.ts"
+  ],
+  "styles": [
+    "node_modules/primeicons/primeicons.css",
+    "node_modules/primeng-lts/resources/themes/nova-light/theme.css",
+    "node_modules/primeng-lts/resources/primeng.min.css",
+    //...
   ]
 }

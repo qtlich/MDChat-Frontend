@@ -1,0 +1,56 @@
+<div class="p-grid">
+  <div class="p-col-3"></div>
+  <div class="p-col-6">
+    <p-virtualScroller [value]="channelItems"
+                       scrollHeight="450px"
+                       [itemSize]="100"
+                       [rows]="100"
+                       [lazy]="true"
+                       (onLazyLoad)="loadChannelLazy($event)">
+      <p-header>
+        List of Channels
+      </p-header>
+      <ng-template let-channel pTemplate="item" let-i="index">
+        <div class="p-grid">
+          <div class="p-col-12">
+            {{channel.name}}&nbsp;Posted by
+          </div>
+          <div class="p-col-1">
+            <button pButton type="button" icon="pi pi-search" (click)="selectChannel($event, channel)"></button>
+          </div>
+          <div class="p-col-11" [innerHtml]="channel.description"></div>
+        </div>
+      </ng-template>
+      <ng-template let-car pTemplate="loadingItem">
+        <div class="car-details">
+          <div>
+            <div class="car-item-image empty-car-item-image"></div>
+            <div>
+              <b class="empty-car-item-text"></b>
+              <div class="empty-car-item-text"></div>
+            </div>
+          </div>
+          <div class="empty-car-item-button"></div>
+        </div>
+      </ng-template>
+    </p-virtualScroller>
+  </div>
+  <div class="p-col-3">
+    <app-side-bar></app-side-bar>
+  </div>
+</div>
+<div class="container">
+  <div class="row">
+    <hr/>
+    <div class="col-md-9">
+      <ul>
+        <li *ngFor="let channel of channelItems">
+          <a routerLink="/view-channel/{{channel.id}}">{{channel.name}}</a>
+        </li>
+      </ul>
+    </div>
+    <div class="col-md-3">
+
+    </div>
+  </div>
+</div>

@@ -1,29 +1,44 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { PostModel } from './post-model';
-import { Observable } from 'rxjs';
-import { CreatePostPayload } from '../post/create-post/create-post.payload';
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {PostModel} from './post-model';
+import {Observable} from 'rxjs';
+import {CreatePostPayload} from '../post/create-post/create-post.payload';
+import {HttpConfigService} from "../services/http.config.service";
+import {OperationResult} from "../common/operation.result.model";
 
 @Injectable({
-  providedIn: 'root'
-})
-export class PostService {
+              providedIn: 'root'
+            })
+export class PostService
+{
 
-  constructor(private http: HttpClient) { }
-
-  getAllPosts(): Observable<Array<PostModel>> {
-    return this.http.get<Array<PostModel>>('http://localhost:8080/api/posts/');
+  constructor(private http: HttpClient,
+              private httpConfigService: HttpConfigService)
+  {
   }
 
-  createPost(postPayload: CreatePostPayload): Observable<any> {
-    return this.http.post('http://localhost:8080/api/posts/', postPayload);
+  public deletePost(postId: number): Observable<Array<OperationResult>>
+  {
+    return this.http.delete<Array<OperationResult>>(`${this.httpConfigService.baseApiUrl}/posts/delete/${postId}`);
   }
 
-  getPost(id: number): Observable<PostModel> {
-    return this.http.get<PostModel>('http://localhost:8080/api/posts/' + id);
+  getAllPosts(): Observable<Array<PostModel>>
+  {
+    return this.http.get<Array<PostModel>>(`${this.httpConfigService.baseApiUrl}/posts/all`);
   }
 
-  getAllPostsByUser(name: string): Observable<PostModel[]> {
-    return this.http.get<PostModel[]>('http://localhost:8080/api/posts/by-user/' + name);
+  createPost(postPayload: CreatePostPayload): Observable<any>
+  {
+    return this.http.post(`${this.httpConfigService.baseApiUrl}/posts/create`, postPayload);
+  }
+
+  getPost(id: number): Observable<PostModel>
+  {
+    return this.http.get<PostModel>(`${this.httpConfigService.baseApiUrl}/posts/by-id/` + id);
+  }
+
+  getAllPostsByUser(name: string): Observable<PostModel[]>
+  {
+    return this.http.get<PostModel[]>(`${this.httpConfigService.baseApiUrl}/posts/by-user/` + name);
   }
 }

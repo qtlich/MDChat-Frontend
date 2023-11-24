@@ -1,6 +1,9 @@
 export class CreatePostPayload {
-    postName: string;
-    subredditName?: string;
-    url?: string;
-    description: string;
+
+  constructor(public channelId?:number,
+              public postName?: string,
+              public description?:string,
+              public url?:string)
+  {
+  }
 }
