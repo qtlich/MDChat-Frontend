@@ -42,6 +42,14 @@ import {TruncateAndSafeHtmlDirectiveModule} from './common/directives/truncate-a
 import {ViewChannelPostsComponent} from './channel/view-channel-posts/view-channel-posts.component';
 import {TabViewModule} from 'primeng/tabview';
 import {AutoCompleteModule} from 'primeng/autocomplete';
+import {PickListModule} from 'primeng/picklist';
+import {OrderListModule} from 'primeng/orderlist';
+import {TreeModule} from 'primeng/tree';
+import {CalendarModule} from 'primeng/calendar';
+import {MenuModule} from 'primeng/menu';
+import {PanelMenuModule} from 'primeng/panelmenu';
+import {ListboxModule} from 'primeng/listbox';
+import {TableModule} from 'primeng/table';
 
 
 @NgModule({
@@ -64,11 +72,11 @@ import {AutoCompleteModule} from 'primeng/autocomplete';
               ViewChannelPostsComponent],
             imports: [
               BrowserModule,
+              NgxWebstorageModule.forRoot(),
               AppRoutingModule,
               ReactiveFormsModule,
               HttpClientModule,
               InputTextModule,
-              NgxWebstorageModule.forRoot(),
               BrowserAnimationsModule,
               ToastrModule.forRoot(),
               FontAwesomeModule,
@@ -87,7 +95,15 @@ import {AutoCompleteModule} from 'primeng/autocomplete';
               VirtualScrollerModule,
               TruncateAndSafeHtmlDirectiveModule,
               TabViewModule,
-              AutoCompleteModule
+              AutoCompleteModule,
+              PickListModule,
+              OrderListModule,
+              TreeModule,
+              CalendarModule,
+              MenuModule,
+              PanelMenuModule,
+              ListboxModule,
+              TableModule
             ],
             providers: [
               {

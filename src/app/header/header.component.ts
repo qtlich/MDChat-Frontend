@@ -7,6 +7,7 @@ import {SelectItem} from 'primeng/api';
 import {ChannelResponseModel} from '../channel/models/channel.response.model';
 import {SearchChannelsInputModel} from '../channel/models/search-channels-input-model';
 import {SearchChannelsResultModel} from '../channel/models/search-channels-result-model';
+import {ThemeItem, themes, ThemeService} from '../services/theme.service';
 
 enum EItems
 {
@@ -25,6 +26,7 @@ enum EItems
            })
 export class HeaderComponent implements OnInit
 {
+  public themes:ThemeItem[] = themes;
   items: any[];
   faUser = faUser;
   public isLoggedIn: boolean;
@@ -42,8 +44,14 @@ export class HeaderComponent implements OnInit
 
   constructor(private _authService: AuthService,
               private _router: Router,
-              private _channelService: ChannelService)
+              private _channelService: ChannelService,
+              private _themeService: ThemeService)
   {
+  }
+
+  public changeTheme(theme: string)
+  {
+    this._themeService.switchTheme(theme);
   }
 
   public onInputData(event: any): void
@@ -107,13 +115,13 @@ export class HeaderComponent implements OnInit
   filteredChannelsMultiple: SearchChannelsResultModel[];
   channels: SearchChannelsResultModel[];
 
-  public filterChannelsMultiple(event: any):void
+  public filterChannelsMultiple(event: any): void
   {
     console.log('EVENT=>', event);
     let channelMask = event.query;
     this._channelService
         .searchChannels(new SearchChannelsInputModel(channelMask))
-        .subscribe((channelsFromServer:SearchChannelsResultModel[]) =>
+        .subscribe((channelsFromServer: SearchChannelsResultModel[]) =>
                    {
                      console.log('FOUND=>', channelsFromServer);
                      this.filteredChannelsMultiple = this.__filterChannels(channelMask, channelsFromServer);

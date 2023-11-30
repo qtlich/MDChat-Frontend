@@ -1,5 +1,6 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {MessageService} from "primeng/api";
+import {ThemeService} from './services/theme.service';
 
 /**
  * need execute in cmd as administrator
@@ -11,7 +12,15 @@ import {MessageService} from "primeng/api";
              styleUrls: ['./app.component.css'],
              providers: [MessageService]
            })
-export class AppComponent
+export class AppComponent implements OnInit
 {
   title = 'MDChat';
+  constructor()
+  {
+  }
+
+  public ngOnInit()
+  {
+  }
+
 }
