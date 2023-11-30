@@ -3,8 +3,8 @@ import {HttpClient} from '@angular/common/http';
 import {PostModel} from './post-model';
 import {Observable} from 'rxjs';
 import {CreatePostPayload} from '../post/create-post/create-post.payload';
-import {HttpConfigService} from "../services/http.config.service";
-import {OperationResult} from "../common/operation.result.model";
+import {HttpConfigService} from '../services/http.config.service';
+import {OperationResult} from '../common/operation.result.model';
 
 @Injectable({
               providedIn: 'root'
@@ -19,7 +19,7 @@ export class PostService
 
   public deletePost(postId: number): Observable<Array<OperationResult>>
   {
-    return this.http.delete<Array<OperationResult>>(`${this.httpConfigService.baseApiUrl}/posts/delete/${postId}`);
+    return this.http.post<Array<OperationResult>>(`${this.httpConfigService.baseApiUrl}/posts/delete/${postId}`,{postId: postId});
   }
 
   getAllPosts(): Observable<Array<PostModel>>
@@ -40,5 +40,10 @@ export class PostService
   getAllPostsByUser(name: string): Observable<PostModel[]>
   {
     return this.http.get<PostModel[]>(`${this.httpConfigService.baseApiUrl}/posts/by-user/` + name);
+  }
+
+  public getPostsByChannel(channelId: number): Observable<PostModel[]>
+  {
+    return this.http.get<PostModel[]>(`${this.httpConfigService.baseApiUrl}/posts/chposts/${channelId}`);
   }
 }

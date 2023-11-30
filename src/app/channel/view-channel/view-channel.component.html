@@ -1,10 +1,30 @@
 <div class="container">
   <div class="row">
-    <hr />
-    <div class="col-md-9">
-      <h3>Channel: {{channel.name}}</h3>
-      <h4>Number of posts: {{channel.numberOfPosts}}</h4>
-      <p [innerHtml]="channel.description"></p>
+    <hr/>
+    <div class="col-md-9" *ngIf="channel">
+      <p-tabView>
+        <p-tabPanel header={{channel.name}}>
+          <span class="number-of-posts">Number of posts: {{channel.numberOfPosts}}</span>
+          <button (click)="refreshChannel(channel.id)"
+                  class="btn-refresh-channel">
+            Refresh channel
+          </button>
+          <div *ngFor="let post of channelPosts" style="margin-top: 0.3em;">
+            <p-panel >
+              <p-header><span class="post-name">{{post.postName}}</span>&nbsp;
+                <span class="posted-by">Posted by: {{post.userName}}</span>
+              </p-header>
+              <a class="postname" href="/view-post/{{post.id}}">
+                <p [appMaxCharacters]="400" [appTruncateAndSafeHtml]="post.description"></p>
+              </a>
+            </p-panel>
+          </div>
+        </p-tabPanel>
+        <p-tabPanel header="Description">
+          <p [innerHtml]="channel.description"></p>
+        </p-tabPanel>
+      </p-tabView>
+
     </div>
     <div class="col-md-3">
       <app-side-bar></app-side-bar>

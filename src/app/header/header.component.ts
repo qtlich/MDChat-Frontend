@@ -2,9 +2,11 @@ import {Component, OnInit} from '@angular/core';
 import {faUser} from '@fortawesome/free-solid-svg-icons';
 import {AuthService} from '../auth/shared/auth.service';
 import {Router} from '@angular/router';
-import {ChannelService} from "../channel/channel.service";
-import {SelectItem} from "primeng/api";
-import {ChannelResponseModel} from "../channel/models/channel.response.model";
+import {ChannelService} from '../channel/channel.service';
+import {SelectItem} from 'primeng/api';
+import {ChannelResponseModel} from '../channel/models/channel.response.model';
+import {SearchChannelsInputModel} from '../channel/models/search-channels-input-model';
+import {SearchChannelsResultModel} from '../channel/models/search-channels-result-model';
 
 enum EItems
 {
@@ -23,7 +25,7 @@ enum EItems
            })
 export class HeaderComponent implements OnInit
 {
-  items:any[];
+  items: any[];
   faUser = faUser;
   public isLoggedIn: boolean;
   public username: string;
@@ -51,7 +53,7 @@ export class HeaderComponent implements OnInit
 
   public onSearch(event: KeyboardEvent): void
   {
-    if (["Enter"].includes(event.key))
+    if (['Enter'].includes(event.key))
     {
       this.__search();
     }
@@ -102,6 +104,36 @@ export class HeaderComponent implements OnInit
 
   }
 
+  filteredChannelsMultiple: SearchChannelsResultModel[];
+  channels: SearchChannelsResultModel[];
+
+  public filterChannelsMultiple(event: any):void
+  {
+    console.log('EVENT=>', event);
+    let channelMask = event.query;
+    this._channelService
+        .searchChannels(new SearchChannelsInputModel(channelMask))
+        .subscribe((channelsFromServer:SearchChannelsResultModel[]) =>
+                   {
+                     console.log('FOUND=>', channelsFromServer);
+                     this.filteredChannelsMultiple = this.__filterChannels(channelMask, channelsFromServer);
+                   });
+  }
+
+  private __filterChannels(query: string, channels: SearchChannelsResultModel[]): any[]
+  {
+    let filtered: SearchChannelsResultModel[] = [];
+    for (let i = 0; i < channels.length; i++)
+    {
+      let channel = channels[i];
+      if (channel.channelName.toLowerCase().indexOf(query.toLowerCase()) != -1)
+      {
+        filtered.push(channel);
+      }
+    }
+    return filtered;
+  }
+
   /**
    * @param value
    */
@@ -136,7 +168,7 @@ export class HeaderComponent implements OnInit
 
   private __search(): void
   {
-    console.log('__search()');
+    this._channelService.searchChannels(new SearchChannelsInputModel(this.searchString)).subscribe(data => console.log('Data=>', data));
     this.__selectSearch();
   }
 

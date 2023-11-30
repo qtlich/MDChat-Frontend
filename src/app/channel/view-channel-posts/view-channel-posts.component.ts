@@ -7,14 +7,14 @@ import {PostService} from '../../shared/post.service';
 import {PostModel} from '../../shared/post-model';
 
 @Component({
-             selector: 'view-channel',
-             templateUrl: './view-channel.component.html',
-             styleUrls: ['./view-channel.component.css']
+             selector: 'view-channel-posts',
+             templateUrl: './view-channel-posts.component.html',
+             styleUrls: ['./view-channel-posts.component.css']
            })
-export class ViewChannelComponent implements OnInit, OnDestroy
+export class ViewChannelPostsComponent implements OnInit, OnDestroy
 {
 
-  @Input() channelId: number;
+  channelId: number;
   channel: ChannelResponseModel;
   channelPosts: PostModel[];
   subscription: Subscription;
@@ -34,18 +34,7 @@ export class ViewChannelComponent implements OnInit, OnDestroy
   {
 
   }
-  public refreshChannel(id:number):void
-  {
-    this.postService.getPostsByChannel(id).subscribe(data =>
-                                                                 {
-                                                                   this.channelPosts = data;
-                                                                   console.log('Channel posts', this.channelPosts);
-                                                                 },
-                                                                 error =>
-                                                                 {
-                                                                   throwError(error);
-                                                                 });
-  }
+
   loadChannelContent(): void
   {
     this.channelService.getChannel(this.channelId).subscribe(data =>
@@ -55,8 +44,15 @@ export class ViewChannelComponent implements OnInit, OnDestroy
                                                              {
                                                                throwError(error);
                                                              });
-    this.refreshChannel(this.channelId)
-
+    this.postService.getPostsByChannel(this.channelId).subscribe(data =>
+                                                                 {
+                                                                   this.channelPosts = data;
+                                                                   console.log('Channel posts', this.channelPosts);
+                                                                 },
+                                                                 error =>
+                                                                 {
+                                                                   throwError(error);
+                                                                 });
   }
 
   public ngOnDestroy()

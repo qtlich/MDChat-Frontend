@@ -22,23 +22,26 @@ import {ListOfChannelsComponent} from './channel/list-of-channels/list-of-channe
 import {ViewPostComponent} from './post/view-post/view-post.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {UserProfileComponent} from './auth/user-profile/user-profile.component';
-import {ViewChannelComponent} from "./channel/view-channel/view-channel.component";
-import {EditorModule} from "primeng/editor";
-import {DropdownModule} from "primeng/dropdown";
-import {InputTextModule} from "primeng/inputtext";
-import {CreatePostLittleComponent} from "./post/create-post-little/create-post-little.component";
-import {DialogModule} from "primeng/dialog";
-import {TooltipModule} from "primeng/tooltip";
-import {RadioButtonModule} from "primeng/radiobutton";
-import {ButtonModule} from "primeng/button";
-import {ToastModule} from "primeng/toast";
-import {MessageService} from "primeng/api";
-import {PanelModule} from "primeng/panel";
-import {ToolbarModule} from "primeng/toolbar";
-import {SplitButtonModule} from "primeng/splitbutton";
-import {VirtualScrollerModule} from "primeng/virtualscroller";
-import {ChannelSideBarComponent} from "./shared/channel-side-bar/channel-side-bar.component";
-import {TruncateAndSafeHtmlDirectiveModule} from "./common/directives/truncate-and-safe-html-directive";
+import {ViewChannelComponent} from './channel/view-channel/view-channel.component';
+import {EditorModule} from 'primeng/editor';
+import {DropdownModule} from 'primeng/dropdown';
+import {InputTextModule} from 'primeng/inputtext';
+import {CreatePostLittleComponent} from './post/create-post-little/create-post-little.component';
+import {DialogModule} from 'primeng/dialog';
+import {TooltipModule} from 'primeng/tooltip';
+import {RadioButtonModule} from 'primeng/radiobutton';
+import {ButtonModule} from 'primeng/button';
+import {ToastModule} from 'primeng/toast';
+import {MessageService} from 'primeng/api';
+import {PanelModule} from 'primeng/panel';
+import {ToolbarModule} from 'primeng/toolbar';
+import {SplitButtonModule} from 'primeng/splitbutton';
+import {VirtualScrollerModule} from 'primeng/virtualscroller';
+import {ChannelSideBarComponent} from './shared/channel-side-bar/channel-side-bar.component';
+import {TruncateAndSafeHtmlDirectiveModule} from './common/directives/truncate-and-safe-html-directive';
+import {ViewChannelPostsComponent} from './channel/view-channel-posts/view-channel-posts.component';
+import {TabViewModule} from 'primeng/tabview';
+import {AutoCompleteModule} from 'primeng/autocomplete';
 
 
 @NgModule({
@@ -57,7 +60,8 @@ import {TruncateAndSafeHtmlDirectiveModule} from "./common/directives/truncate-a
               ViewChannelComponent,
               ViewPostComponent,
               UserProfileComponent,
-              CreatePostLittleComponent],
+              CreatePostLittleComponent,
+              ViewChannelPostsComponent],
             imports: [
               BrowserModule,
               AppRoutingModule,
@@ -81,7 +85,9 @@ import {TruncateAndSafeHtmlDirectiveModule} from "./common/directives/truncate-a
               ToolbarModule,
               SplitButtonModule,
               VirtualScrollerModule,
-              TruncateAndSafeHtmlDirectiveModule
+              TruncateAndSafeHtmlDirectiveModule,
+              TabViewModule,
+              AutoCompleteModule
             ],
             providers: [
               {

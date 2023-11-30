@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import {MessageService} from "primeng/api";
 
 /**
+ * need execute in cmd as administrator
  * set NODE_OPTIONS=--openssl-legacy-provider
  */
 @Component({
@@ -12,5 +13,5 @@ import {MessageService} from "primeng/api";
            })
 export class AppComponent
 {
-  title = 'md-chat';
+  title = 'MDChat';
 }

@@ -35,5 +35,4 @@ export class ChannelService
   {
     return this.http.post<ChannelResponseModel>(`${this.httpConfigService.baseApiUrl}/channel/create`, channelModel);
   }
-
 }
