@@ -3,4 +3,5 @@ export class CommentPayload{
     postId: number;
     username?:string;
     duration?: string;
+  
 }
