@@ -4,7 +4,6 @@ import { VoteService } from './vote.service';
 
 describe('VoteService', () => {
   let service: VoteService;
-
   beforeEach(() => {
     TestBed.configureTestingModule({});
     service = TestBed.inject(VoteService);
