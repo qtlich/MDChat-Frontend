@@ -20,8 +20,8 @@ import {CreateChannelComponent} from './channel/create-channel/create-channel.co
 import {CreatePostComponent} from './post/create-post/create-post.component';
 import {ListOfChannelsComponent} from './channel/list-of-channels/list-of-channels.component';
 import {ViewPostComponent} from './post/view-post/view-post.component';
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import {UserProfileComponent} from './auth/user-profile/user-profile.component';
+import {NgbModule}            from '@ng-bootstrap/ng-bootstrap';
+import {UserProfileComponent} from './user/user-profile/user-profile.component';
 import {ViewChannelComponent} from './channel/view-channel/view-channel.component';
 import {EditorModule} from 'primeng/editor';
 import {DropdownModule} from 'primeng/dropdown';
@@ -50,6 +50,11 @@ import {MenuModule} from 'primeng/menu';
 import {PanelMenuModule} from 'primeng/panelmenu';
 import {ListboxModule} from 'primeng/listbox';
 import {TableModule} from 'primeng/table';
+import {SlideMenuModule} from 'primeng/slidemenu';
+import {PasswordModule} from 'primeng/password';
+import {KeyFilterModule}    from 'primeng/keyfilter';
+import {RemoveFormattingAndTruncateDirectiveModule} from './common/directives/remove-formatting-and-truncate-directive';
+import {CardModule} from 'primeng/card';
 
 
 @NgModule({
@@ -70,41 +75,46 @@ import {TableModule} from 'primeng/table';
               UserProfileComponent,
               CreatePostLittleComponent,
               ViewChannelPostsComponent],
-            imports: [
-              BrowserModule,
-              NgxWebstorageModule.forRoot(),
-              AppRoutingModule,
-              ReactiveFormsModule,
-              HttpClientModule,
-              InputTextModule,
-              BrowserAnimationsModule,
-              ToastrModule.forRoot(),
-              FontAwesomeModule,
-              EditorModule,
-              DropdownModule,
-              FormsModule,
-              NgbModule,
-              DialogModule,
-              ButtonModule,
-              ToastModule,
-              TooltipModule,
-              RadioButtonModule,
-              PanelModule,
-              ToolbarModule,
-              SplitButtonModule,
-              VirtualScrollerModule,
-              TruncateAndSafeHtmlDirectiveModule,
-              TabViewModule,
-              AutoCompleteModule,
-              PickListModule,
-              OrderListModule,
-              TreeModule,
-              CalendarModule,
-              MenuModule,
-              PanelMenuModule,
-              ListboxModule,
-              TableModule
-            ],
+              imports: [
+                  BrowserModule,
+                  NgxWebstorageModule.forRoot(),
+                  AppRoutingModule,
+                  ReactiveFormsModule,
+                  HttpClientModule,
+                  InputTextModule,
+                  BrowserAnimationsModule,
+                  ToastrModule.forRoot(),
+                  FontAwesomeModule,
+                  EditorModule,
+                  DropdownModule,
+                  FormsModule,
+                  NgbModule,
+                  DialogModule,
+                  ButtonModule,
+                  ToastModule,
+                  TooltipModule,
+                  RadioButtonModule,
+                  PanelModule,
+                  ToolbarModule,
+                  SplitButtonModule,
+                  VirtualScrollerModule,
+                  TruncateAndSafeHtmlDirectiveModule,
+                  TabViewModule,
+                  AutoCompleteModule,
+                  PickListModule,
+                  OrderListModule,
+                  TreeModule,
+                  CalendarModule,
+                  MenuModule,
+                  PanelMenuModule,
+                  ListboxModule,
+                  TableModule,
+                  SlideMenuModule,
+                  PasswordModule,
+                  KeyFilterModule,
+                  RemoveFormattingAndTruncateDirectiveModule,
+                  CardModule
+              ],
             providers: [
               {
                 provide: HTTP_INTERCEPTORS,

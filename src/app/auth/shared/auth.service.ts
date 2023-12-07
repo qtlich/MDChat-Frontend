@@ -1,12 +1,19 @@
-import {EventEmitter, Injectable, Output} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {SignupRequestPayload} from '../signup/singup-request.payload';
-import {Observable, throwError} from 'rxjs';
-import {LocalStorageService} from 'ngx-webstorage';
-import {LoginRequestPayload} from '../login/login-request.payload';
-import {LoginResponse} from '../login/login-response.payload';
-import {map, tap} from 'rxjs/operators';
-import {HttpConfigService} from "../../services/http.config.service";
+import {EventEmitter, Injectable, Output}      from '@angular/core';
+import {HttpClient}                            from '@angular/common/http';
+import {Observable}                            from 'rxjs';
+import {LocalStorageService}                   from 'ngx-webstorage';
+import {LoginRequestPayload}                   from '../login/login-request.payload';
+import {LoginResponse}                         from '../login/login-response.payload';
+import {map, tap}                              from 'rxjs/operators';
+import {HttpConfigService}                     from '../../services/http.config.service';
+import {SignUpRequestInputModel}               from './models/signup.request.input.model';
+import {isEmptyStringField, isNullOrUndefined} from '../../common/core.free.functions';
+import {Router}                                from '@angular/router';
+import {ChangeUserInfoRequestModel}            from './models/change.user.info.request.model';
+import {ChangeUserInfoResponseModel}           from './models/change.user.info.response.model';
+import {MessageService}                        from 'primeng/api';
+import {UserInfoRequestModel}                  from '../../user/user-profile/models/user.info.request.model';
+import {UserInfoResponseModel}                 from '../../user/user-profile/models/user.info.response.model';
 
 @Injectable({
               providedIn: 'root'
@@ -19,82 +26,131 @@ export class AuthService
 
   refreshTokenPayload = {
     refreshToken: this.getRefreshToken(),
-    username: this.getUserName()
+    username:     this.getUserName()
   }
 
-  constructor(private httpClient: HttpClient,
-              private localStorage: LocalStorageService,
-              private httpConfigService: HttpConfigService)
+  constructor(private _httpClient: HttpClient,
+              private _localStorage: LocalStorageService,
+              private _httpConfigService: HttpConfigService,
+              private _messageService: MessageService,
+              private _router: Router)
   {
   }
 
-  signup(signupRequestPayload: SignupRequestPayload): Observable<any>
+  public getUserInfo(item: UserInfoRequestModel): Observable<Array<UserInfoResponseModel>>
   {
-    return this.httpClient.post(`${this.httpConfigService.baseApiUrl}/auth/signup`, signupRequestPayload, {responseType: 'text'});
+    return this._httpClient.post<Array<UserInfoResponseModel>>(`${this._httpConfigService.baseApiUrl}/auth/getusersinfo`, item);
   }
 
-  login(loginRequestPayload: LoginRequestPayload): Observable<boolean>
+  public changeUserInfo(item: ChangeUserInfoRequestModel): Observable<ChangeUserInfoResponseModel[]>
   {
-    return this.httpClient.post<LoginResponse>(`${this.httpConfigService.baseApiUrl}/auth/login`,
-                                               loginRequestPayload).pipe(map(data =>
-                                                                             {
-                                                                               this.localStorage.store('authenticationToken', data.authenticationToken);
-                                                                               this.localStorage.store('username', data.username);
-                                                                               this.localStorage.store('refreshToken', data.refreshToken);
-                                                                               this.localStorage.store('expiresAt', data.expiresAt);
-                                                                               this.loggedIn.emit(true);
-                                                                               this.username.emit(data.username);
-                                                                               return true;
-                                                                             }));
+    return this._httpClient.post<ChangeUserInfoResponseModel[]>(`${this._httpConfigService.baseApiUrl}/auth/changeuserinfo`, item);
   }
 
-  getJwtToken()
+  public signup(item: SignUpRequestInputModel): Observable<any>
   {
-    return this.localStorage.retrieve('authenticationToken');
+    return this._httpClient.post(`${this._httpConfigService.baseApiUrl}/auth/signup`, item, {responseType: 'text'});
   }
 
-  refreshToken()
+  public login(item: LoginRequestPayload): Observable<boolean>
   {
-    return this.httpClient.post<LoginResponse>(`${this.httpConfigService.baseApiUrl}/auth/refresh/token`,
-                                               this.refreshTokenPayload)
-      .pipe(tap(response =>
-                {
-                  this.localStorage.clear('authenticationToken');
-                  this.localStorage.clear('expiresAt');
-
-                  this.localStorage.store('authenticationToken',
-                                          response.authenticationToken);
-                  this.localStorage.store('expiresAt', response.expiresAt);
-                }));
+    return this._httpClient
+               .post<LoginResponse>(`${this._httpConfigService.baseApiUrl}/auth/login`, item)
+               .pipe(map((data: LoginResponse) =>
+                         {
+                           this._localStorage.store('authenticationToken', data.authenticationToken);
+                           this._localStorage.store('username', data.username);
+                           this._localStorage.store('userid', data.username);
+                           this._localStorage.store('refreshToken', data.refreshToken);
+                           this._localStorage.store('expiresAt', data.expiresAt);
+                           this.loggedIn.emit(true);
+                           this.username.emit(data.username);
+                           return true;
+                         },
+                         error =>
+                         {
+                           this._messageService.add({severity: 'error', detail: `An error occurred during the login operation`});
+                           return false;
+                         }));
   }
 
-  logout()
+  public getJwtToken(): any
   {
-    this.httpClient.post(`${this.httpConfigService.baseApiUrl}/auth/logout`, this.refreshTokenPayload, {responseType: 'text'})
-      .subscribe(data =>
-                 {
-                   console.log(data);
-                 }, error =>
-                 {
-                   throwError(error);
-                 })
-    this.localStorage.clear('authenticationToken');
-    this.localStorage.clear('username');
-    this.localStorage.clear('refreshToken');
-    this.localStorage.clear('expiresAt');
+    return this._localStorage.retrieve('authenticationToken');
   }
 
-  getUserName()
+  public refreshToken(): Observable<any>
   {
-    return this.localStorage.retrieve('username');
+    return this._httpClient
+               .post<LoginResponse>(`${this._httpConfigService.baseApiUrl}/auth/refresh/token`,
+                                    this.refreshTokenPayload)
+               .pipe(tap((response: LoginResponse) =>
+                         {
+                           this._localStorage.clear('authenticationToken');
+                           this._localStorage.clear('expiresAt');
+                           if (!isNullOrUndefined(response))
+                           {
+                             this._localStorage.store('authenticationToken', response.authenticationToken);
+                             this._localStorage.store('expiresAt', response.expiresAt);
+                           }
+                           else
+                           {
+                             this._messageService.add({severity: 'error', detail: `Can't retrive response during the refresh token operation`});
+                           }
+                         },
+                         error => this._messageService.add({severity: 'error', detail: `An error occurred during the refresh token operation`})));
   }
 
-  getRefreshToken()
+  public logout(): void
   {
-    return this.localStorage.retrieve('refreshToken');
+    this._httpClient
+        .post(`${this._httpConfigService.baseApiUrl}/auth/logout`,
+              this.refreshTokenPayload, {responseType: 'text'})
+        .subscribe(message =>
+                   {
+                     if (!isEmptyStringField(message))
+                     {
+                       this._messageService.add({severity: 'info', detail: message});
+                       this._router.navigateByUrl('/')
+                     }
+                     else
+                     {
+                       this._messageService.add({severity: 'error', detail: `Can't retrieve logout state`});
+                     }
+                     this.__clearStorage();
+                   }, error =>
+                   {
+                     this._messageService.add({severity: 'error', detail: `An error occurred during the logout operation`});
+                     this.__clearStorage();
+                   })
+
   }
 
-  isLoggedIn(): boolean
+  private __clearStorage(): void
+  {
+    this._localStorage.clear('authenticationToken');
+    this._localStorage.clear('username');
+    this._localStorage.clear('userid');
+    this._localStorage.clear('refreshToken');
+    this._localStorage.clear('expiresAt');
+  }
+
+  public getUserName(): string
+  {
+    return this._localStorage.retrieve('username');
+  }
+
+  public getUserId(): string
+  {
+    return this._localStorage.retrieve('userid');
+  }
+
+  public getRefreshToken(): any
+  {
+    return this._localStorage.retrieve('refreshToken');
+  }
+
+  public isLoggedIn(): boolean
   {
     return this.getJwtToken() != null;
   }

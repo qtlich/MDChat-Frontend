@@ -1,11 +1,13 @@
-import {Component, OnInit} from '@angular/core';
-import {PostService} from 'src/app/shared/post.service';
-import {ActivatedRoute, Router} from '@angular/router';
-import {PostModel} from 'src/app/shared/post-model';
-import {throwError} from 'rxjs';
+import {Component, OnInit}                  from '@angular/core';
+import {PostService}                        from 'src/app/shared/post.service';
+import {ActivatedRoute, Router}             from '@angular/router';
+import {PostModel}                          from 'src/app/shared/post-model';
+import {throwError}                         from 'rxjs';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {CommentPayload} from 'src/app/comment/comment.payload';
-import {CommentService} from 'src/app/comment/comment.service';
+import {CommentPayload}                     from 'src/app/comment/comment.payload';
+import {CommentService}                              from 'src/app/comment/comment.service';
+import {faBookmark, faComments, faEyeSlash,faShare} from '@fortawesome/free-solid-svg-icons';
+import {IconDefinition} from '@fortawesome/fontawesome-svg-core';
 
 @Component({
              selector: 'app-view-post',
@@ -15,6 +17,10 @@ import {CommentService} from 'src/app/comment/comment.service';
 export class ViewPostComponent implements OnInit
 {
 
+  readonly faComments: IconDefinition = faComments;
+  readonly faShare: IconDefinition = faShare;
+  readonly faBookMark: IconDefinition = faBookmark;
+  readonly faEyeSlash: IconDefinition = faEyeSlash;
   postId: number;
   post: PostModel;
   commentForm: FormGroup;
@@ -63,5 +69,6 @@ export class ViewPostComponent implements OnInit
   {
     this.commentService.getAllCommentsForPost(this.postId).subscribe(data => this.comments = data, error => throwError(error));
   }
+
 
 }

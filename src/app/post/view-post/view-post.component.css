@@ -1,50 +1,92 @@
 .post-title {
-  font-size: 28px;
+  font-size: 1.5em;
   font-weight: bold;
   opacity: 1;
+  margin-bottom: 1em;
 }
 
-.post-title:hover {
-  opacity: 0.6;
+.post-text {
+  font-size: 1em;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  min-height: 4em;
 }
 
-.comment-text {
-  font-weight: bold;
-}
-
-.post-url {
-  color: black;
-}
-
-.username{
-    color: gray;
-}
-
-.post-text{
-    margin-top: 10px;
-}
-
-.post{
-    --post-line-color: #ccc;
-    border: 1px solid #ccc;
-    margin-top: 10px;
-    margin-bottom: 10px;
+.post-hover {
+    border-radius: 10px;
     overflow: hidden;
-    background-color: rgba(255,255,255,0.8);
-    color: #878A8C;
-    position: relative;
-    border-radius: 4px;
-    padding:5px;
+    border: 1px solid #000000;
 }
 
-.comment{
-    --post-line-color: #ccc;
-    border: 1px solid #ccc;
-    margin-bottom: 10px;
-    overflow: hidden;
-    background-color: rgba(255,255,255,0.8);
-    color: #878A8C;
-    position: relative;
-    border-radius: 4px;
-    padding:5px;
+.buttons-bottom {
+  align-self: flex-end;
 }
+
+
+
+.custom-button {
+  cursor: pointer;
+  display: inline-block;
+  padding: 0px 2px;
+  text-decoration: none;
+  border-radius: 10px;
+  transition: border-color 0.3s ease, color 0.3s ease;
+  font-size: 0.8em;
+
+  &:hover {
+    border: 1px solid #000000;
+  }
+}
+
+
+/*.post-title {*/
+/*  font-size: 28px;*/
+/*  font-weight: bold;*/
+/*  opacity: 1;*/
+/*}*/
+
+/*.post-title:hover {*/
+/*  opacity: 0.6;*/
+/*}*/
+
+/*.comment-text {*/
+/*  font-weight: bold;*/
+/*}*/
+
+/*.post-url {*/
+/*  color: black;*/
+/*}*/
+
+/*.username{*/
+/*    color: gray;*/
+/*}*/
+
+/*.post-text{*/
+/*    margin-top: 10px;*/
+/*}*/
+
+/*.post{*/
+/*    --post-line-color: #ccc;*/
+/*    border: 1px solid #ccc;*/
+/*    margin-top: 10px;*/
+/*    margin-bottom: 10px;*/
+/*    overflow: hidden;*/
+/*    background-color: rgba(255,255,255,0.8);*/
+/*    color: #878A8C;*/
+/*    position: relative;*/
+/*    border-radius: 4px;*/
+/*    padding:5px;*/
+/*}*/
+
+/*.comment{*/
+/*    --post-line-color: #ccc;*/
+/*    border: 1px solid #ccc;*/
+/*    margin-bottom: 10px;*/
+/*    overflow: hidden;*/
+/*    background-color: rgba(255,255,255,0.8);*/
+/*    color: #878A8C;*/
+/*    position: relative;*/
+/*    border-radius: 4px;*/
+/*    padding:5px;*/
+/*}*/

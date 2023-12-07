@@ -15,12 +15,13 @@ import {ThemeService} from './services/theme.service';
 export class AppComponent implements OnInit
 {
   title = 'MDChat';
-  constructor()
+  constructor(private _messageService: MessageService)
   {
   }
 
   public ngOnInit()
   {
+    this._messageService.add({severity:'Warn',detail:'hi'});
   }
 
 }

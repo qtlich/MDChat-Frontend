@@ -1,9 +1,13 @@
-<div class="sidebar">
-  <div style="text-align: center; font-size: 1em"><b>Welcome to MDChat.</b></div>
-    <div style="text-align: center">
-        <button class="btnCreatePost" (click)="goToCreatePost()">Create Post</button>
-    </div>
-    <div style="text-align: center">
-        <button class="btnCreateChannel" (click)="goToCreateChannel()">Create Channel</button>
-    </div>
+<p-panel>
+  <p-header>
+    Welcome to MDChat
+  </p-header>
+<div class="p-grid">
+  <div class="p-col-12 ui-fluid">
+    <button pButton type="button" class="ui-button-rounded" label="Create post" (click)="goToCreatePost()"></button>
+  </div>
+  <div class="p-col-12 ui-fluid">
+    <button pButton  type="button"  class="ui-button-rounded" label="Create channel" (click)="goToCreateChannel()"></button>
+  </div>
 </div>
+</p-panel>

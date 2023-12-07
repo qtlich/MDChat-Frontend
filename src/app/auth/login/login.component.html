@@ -1,56 +1,43 @@
-<!--<p-panel [style]="{'margin':'200px'}">-->
-<!--  <p-header>-->
-<!--    <h4>Login</h4>-->
-<!--  </p-header>-->
-<!--  <p-footer>-->
-
-<!--  </p-footer>-->
-<!--</p-panel>-->
-<div class="login-section">
-    <div class="row justify-content-center">
-        <div class="col-3"></div>
-        <div class="col-6">
-            <div class="card">
-                <div class="card-header" style="text-align: center"><h4>Login</h4></div>
-                <div class="card-body">
-                    <form [formGroup]="loginForm" (ngSubmit)="login()">
-                        <div class="form-group row">
-                            <label for="user_name" class="col-md-4 col-form-label text-md-right">Username</label>
-                            <div class="col-md-6">
-                                <input type="text" id="user_name" class="form-control" [formControlName]="'username'" name="user_name" required
-                                    autofocus>
-                                <span *ngIf="!loginForm.get('username').valid && loginForm.get('username').touched">
-                                   Please provide a valid username
-                                </span>
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="password" class="col-md-4 col-form-label text-md-right">Password</label>
-                            <div class="col-md-6">
-                                <input type="password" id="password" class="form-control" [formControlName]="'password'" name="password" required>
-                                <span *ngIf="!loginForm.get('password').valid && loginForm.get('password').touched">
-                                  Password cannot be empty
-                                </span>
-                            </div>
-                        </div>
-
-                        <span class="col-md-6 offset-md-4">
-                            <button type="submit" class="btn-login">
-                                Login
-                            </button>
-                            <span style="padding-left: 15px">New User? <a routerLink="/signup">SIGN UP</a></span>
-                        </span>
-                        <div class="login-failed" *ngIf='isError'>
-                             <p class="login-failed-text">Login Failed. Please check your credentials and try again.</p>
-                        </div>
-                        <div class="login-failed" [ngStyle]="{'background-color': 'green'}" *ngIf="registerSuccessMessage && registerSuccessMessage.length > 0">
-                            <p class="register-success-text">{{registerSuccessMessage}}</p>
-                       </div>
-                    </form>
-                </div>
+<div class="p-grid">
+  <div class="p-col-4 p-offset-4">
+    <p-panel>
+      <p-header>
+        Login
+      </p-header>
+      <div class="p-grid">
+        <div class="p-col-12">
+          <div class="p-grid justify-content-center">
+            <div class="p-col-2 d-flex align-items-center">
+              <b>Username</b>
             </div>
+            <div class="p-col-4 ui-fluid">
+              <input [(ngModel)]="userName"
+                     autofocus
+                     pInputText
+                     required
+                     type="text">
+            </div>
+          </div>
         </div>
-        <div class="col-md-3"></div>
-    </div>
+        <div class="p-col-12">
+          <div class="p-grid justify-content-center">
+            <div class="p-col-2 d-flex align-items-center">
+              <b>Password</b>
+            </div>
+            <div class="p-col-4 ui-fluid">
+              <input [(ngModel)]="password"
+                     pInputText
+                     pPassword
+                     required
+                     type="password">
+            </div>
+          </div>
+        </div>
+      </div>
+      <p-footer class="align-content-center footer-center-content">
+        <button (click)="onLoginClick()" label="Login" pButton type="button"></button>
+        <span style="padding-left: 15px" class="d-flex align-items-center">New User?&nbsp;<a routerLink="/sign-up">Sign up</a></span>
+      </p-footer>
+    </p-panel>
+  </div>
 </div>

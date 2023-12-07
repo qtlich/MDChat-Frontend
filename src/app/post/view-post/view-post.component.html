@@ -1,70 +1,91 @@
-<!--<div class="p-grid" style="margin-top: 2em">-->
-<!--  <div class="p-col-3">-->
+<div class="p-grid">
+  <div class="p-col-6 p-offset-2">
 
-<!--  </div>-->
-<!--  <div class="p-col-6">-->
-<!--    <p-panel>-->
-<!--      <p-header>-->
-
-<!--      </p-header>-->
-<!--      <p-footer>-->
-
-<!--      </p-footer>-->
-<!--    </p-panel>-->
-<!--  </div>-->
-<!--  <div class="p-col-3">-->
-<!--    <app-side-bar></app-side-bar>-->
-<!--  </div>-->
-<!--</div>-->
-<!--<br>-->
-<div class="container">
-  <div class="row">
-    <hr />
-    <div class="col-md-9">
-      <div class="row post" *ngIf="post">
-        <div class="col-md-1">
+    <p-card>
+      <div class="p-grid p-col-nogutter">
+        <div class="p-col-1">
           <app-vote-button [post]="post"></app-vote-button>
         </div>
-        <div class="col-md-11">
-          <span>
-            <span class="subreddit-text"><a class="post-url" href="">{{post.channelName}}</a></span>
-            <span> . Posted
-              <span> {{post.duration}} </span>
-              by
-              <a class="username" href="">{{post.userName}}</a>
-            </span>
-          </span>
-          <hr />
-          <a routerLink="/view-channel/{{post.id}}" class="post-title">{{post.postName}}</a>
-          <div>
-            <p class="post-text" [innerHtml]="post.description"></p>
-          </div>
-          <div class="post-comment">
-            <form [formGroup]="commentForm" (ngSubmit)="postComment()">
-              <div class="form-group">
-                <textarea class="form-control" [formControlName]="'text'" placeholder="Your Thoughts?"></textarea>
-              </div>
-              <button type="submit" class="btn-login float-right">Comment</button>
-            </form>
-          </div>
-          <div style="margin-top: 60px;" *ngFor="let comment of comments">
-            <div class="comment">
-              <div class="username">
-                <a routerLink="/user/comment.username">{{comment.username}}</a>
-              </div>
-              <div>
-                <p>{{comment.duration}}</p>
-              </div>
-              <b>{{comment.text}}</b>
-            </div>
-            <hr />
-          </div>
+        <div class="p-col-11">
+          <p class="post-title" [appRemoveFormattingAndTruncate]="post.postName"></p>
+          <p class="post-text" [appTruncateAndSafeHtml]="post.description" [appMaxCharacters]="-1"></p>
         </div>
       </div>
-    </div>
-    <div class="col-md-3">
-      <app-side-bar></app-side-bar>
-<!--      <app-channel-side-bar></app-channel-side-bar>-->
-    </div>
+      <p-footer>
+        <div class="p-col-12 buttons-bottom">
+          <a class="custom-button" role="button">
+            <fa-icon [icon]="faComments"></fa-icon>
+            Comments({{post.commentCount}})
+          </a>&nbsp;
+          <a class="custom-button" role="button">
+            <fa-icon [icon]="faShare"></fa-icon>
+            Share
+          </a>&nbsp;
+          <a class="custom-button" role="button">
+            <fa-icon [icon]="faBookMark"></fa-icon>
+            Save
+          </a>&nbsp;
+          <a class="custom-button" role="button">
+            <fa-icon [icon]="faEyeSlash"></fa-icon>
+            Hide
+          </a>&nbsp;
+        </div>
+      </p-footer>
+    </p-card>
+
+  </div>
+  <div class="p-col-3">
+    <app-side-bar></app-side-bar>
   </div>
 </div>
+<!--<div class="container">-->
+<!--  <div class="row">-->
+<!--    <hr />-->
+<!--    <div class="col-md-9">-->
+<!--      <div class="row post" *ngIf="post">-->
+<!--        <div class="col-md-1">-->
+<!--          <app-vote-button [post]="post"></app-vote-button>-->
+<!--        </div>-->
+<!--        <div class="col-md-11">-->
+<!--          <span>-->
+<!--            <span class="subreddit-text"><a class="post-url" href="">{{post.channelName}}</a></span>-->
+<!--            <span> . Posted-->
+<!--              <span> {{post.duration}} </span>-->
+<!--              by-->
+<!--              <a class="username" href="">{{post.userName}}</a>-->
+<!--            </span>-->
+<!--          </span>-->
+<!--          <hr />-->
+<!--          <a routerLink="/view-channel/{{post.id}}" class="post-title">{{post.postName}}</a>-->
+<!--          <div>-->
+<!--            <p class="post-text" [innerHtml]="post.description"></p>-->
+<!--          </div>-->
+<!--          <div class="post-comment">-->
+<!--            <form [formGroup]="commentForm" (ngSubmit)="postComment()">-->
+<!--              <div class="form-group">-->
+<!--                <textarea class="form-control" [formControlName]="'text'" placeholder="Your Thoughts?"></textarea>-->
+<!--              </div>-->
+<!--              <button type="submit" class="btn-login float-right">Comment</button>-->
+<!--            </form>-->
+<!--          </div>-->
+<!--          <div style="margin-top: 60px;" *ngFor="let comment of comments">-->
+<!--            <div class="comment">-->
+<!--              <div class="username">-->
+<!--                <a routerLink="/user/comment.username">{{comment.username}}</a>-->
+<!--              </div>-->
+<!--              <div>-->
+<!--                <p>{{comment.duration}}</p>-->
+<!--              </div>-->
+<!--              <b>{{comment.text}}</b>-->
+<!--            </div>-->
+<!--            <hr />-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--    <div class="p-col-3">-->
+<!--      <app-side-bar></app-side-bar>-->
+<!--      <app-channel-side-bar></app-channel-side-bar>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->

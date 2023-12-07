@@ -1,202 +1,74 @@
-<!--<p-toolbar>-->
-<!--  <div class="ui-toolbar-group-left">-->
-<!--    <button pButton type="button" label="New" icon="pi pi-plus"></button>-->
-<!--    <button pButton type="button" label="Upload" icon="pi pi-upload" class="ui-button-success"></button>-->
-
-<!--    <i class="pi pi-bars"></i>-->
-
-<!--    <p-splitButton label="Save" icon="pi pi-check" [model]="items" styleClass="ui-button-warning"></p-splitButton>-->
-<!--  </div>-->
-
-<!--  <div class="ui-toolbar-group-right">-->
-<!--    <button pButton type="button" icon="pi pi-search"></button>-->
-<!--    <button pButton type="button" icon="pi pi-calendar" class="ui-button-success"></button>-->
-<!--    <button pButton type="button" icon="pi pi-times" class="ui-button-danger"></button>-->
-<!--  </div>-->
-<!--</p-toolbar>-->
-<header>
-  <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
-    <!--  <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">-->
-    <div class="flex-grow-1">
-      <a aria-label="Home" class="logo" routerLink="/">
-        <svg class="channel-icon-svg" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-          <g>
-            <circle cx="10" cy="10" fill="#FF4500" r="10"></circle>
-            <path
-              d="M16.67,10A1.46,1.46,0,0,0,14.2,9a7.12,7.12,0,0,0-3.85-1.23L11,4.65,13.14,5.1a1,1,0,1,0,.13-0.61L10.82,4a0.31,0.31,0,0,0-.37.24L9.71,7.71a7.14,7.14,0,0,0-3.9,1.23A1.46,1.46,0,1,0,4.2,11.33a2.87,2.87,0,0,0,0,.44c0,2.24,2.61,4.06,5.83,4.06s5.83-1.82,5.83-4.06a2.87,2.87,0,0,0,0-.44A1.46,1.46,0,0,0,16.67,10Zm-10,1a1,1,0,1,1,1,1A1,1,0,0,1,6.67,11Zm5.81,2.75a3.84,3.84,0,0,1-2.47.77,3.84,3.84,0,0,1-2.47-.77,0.27,0.27,0,0,1,.38-0.38A3.27,3.27,0,0,0,10,14a3.28,3.28,0,0,0,2.09-.61A0.27,0.27,0,1,1,12.48,13.79Zm-0.18-1.71a1,1,0,1,1,1-1A1,1,0,0,1,12.29,12.08Z"
-              fill="#FFF">
-            </path>
-          </g>
-        </svg>
-        <span class="channel-text" style="margin-right: 2em;">MdChat</span>
-      </a>
-      <p-dropdown (onChange)="onChangeChannel($event.value)"
-                  [(ngModel)]="selectedChannel"
-                  [filter]="true"
-                  [options]="channelItems"
-                  [style]="{'width':'15em'}"
-                  filterBy="label"
-                  placeholder="Select">
-        <ng-template let-it pTemplate="item">
-          <i class={{it.icon}} style="width: 2em;"></i>
-          <span style="vertical-align: middle">{{it.label}}</span>
-        </ng-template>
-        <ng-template let-it pTemplate="selectedItem">
-          <i class={{it.icon}} style="width: 2em;"></i>
-          <span style="vertical-align: middle">{{it.label}}</span>
-        </ng-template>
-      </p-dropdown>
-      <p-autoComplete (completeMethod)="filterChannelsMultiple($event)"
-                      [(ngModel)]="channels"
-                      [minLength]="1"
-                      [multiple]="true"
-                      [size]="300"
-                      [suggestions]="filteredChannelsMultiple"
-                      field="channelName"
-                      placeholder="Channels">
-      </p-autoComplete>
-      <ul>
-        <li *ngFor="let c of channels">{{c.channelName}}</li>
-      </ul>
-    </div>
-    <div class="flex-grow-1 float-right">
-<!--      <div class="card">-->
-<!--        <div class="flex align-items-center justify-content-center mb-4">-->
-          <a *ngFor="let item of themes" (click)="changeTheme(item.path)" class="mr-3 cursor-pointer">
-            <img src="{{item.image}}" width="20">
-          </a>
-<!--        </div>-->
-<!--      </div>-->
-      <div *ngIf="isLoggedIn" class="float-right" ngbDropdown>
-        <div aria-labelledby="dropdownBasic1" ngbDropdownMenu>
-          <button (click)="goToUserProfile()" ngbDropdownItem>View Profile</button>
-          <button (click)="goToSettings()" ngbDropdownItem>Settings</button>
-          <button (click)="logout()" ngbDropdownItem>Logout</button>
-        </div>
-        <button class="userdetails" id="dropdownBasic1" ngbDropdownToggle>
-          <img class="account-icon" src="https://www.redditstatic.com/avatars/avatar_default_08_D4E815.png">
-          {{username}}
-        </button>
-      </div>
-      <div *ngIf="!isLoggedIn">
-        <a class="float-right sign-up mr-2" routerLink="/sign-up">Sign up</a>
-        <a class="float-right btn-login mr-2" routerLink="/login">Login</a>
-      </div>
-    </div>
-  </nav>
-</header>
-<div>
-  <div class="p-grid forms-grid">
-    <div class="p-col-12 p-md-6">
-      <div>InputText</div>
-      <input pInputText type="text" />
-    </div>
-    <div class="p-col-12 p-md-6">
-      <div>Textarea</div>
-      <textarea pInputTextarea type="text"></textarea>
-    </div>
-    <div class="p-col-12 p-md-6">
-      <div>Calendar</div>
-      <p-calendar [(ngModel)]="date"></p-calendar>
-    </div>
-    <div class="p-col-12 p-md-6">
-      <div>AutoComplete</div>
-      <p-autoComplete [(ngModel)]="country" [suggestions]="filteredCountriesSingle" (completeMethod)="filterCountrySingle($event)" field="name" [size]="30"
-                      placeholder="Countries" [minLength]="1"></p-autoComplete>
-    </div>
-    <div class="p-col-12 p-md-6">
-      <div>Button</div>
-      <button pButton label="Save"type="button"></button>
-    </div>
-    <div class="p-col-12 p-md-6">
-      <div>SplitButton</div>
-      <p-splitButton label="Save" icon="pi pi-check" [model]="splitMenuItems"></p-splitButton>
-    </div>
-    <div class="p-col-12 p-md-6">
-      <div>Dropdown</div>
-      <p-dropdown [options]="cities" [(ngModel)]="selectedCity"></p-dropdown>
-    </div>
-    <div class="p-col-12 p-md-6">
-      <div>Password</div>
-      <input type="text" pPassword />
-    </div>
-
-    <div class="p-col-12 p-md-6">
-      <div>Listbox</div>
-      <p-listbox [options]="options" [(ngModel)]="selectedOption"></p-listbox>
-    </div>
-    <div class="p-col-12 p-md-6">
-      <div>RadioButton</div>
-      <div class="p-grid radiobuttons">
-        <div class="p-col-12"><p-radioButton name="group1" value="Option 1" label="Option 1" [(ngModel)]="val"></p-radioButton></div>
-        <div class="p-col-12"><p-radioButton name="group1" value="Option 2" label="Option 2" [(ngModel)]="val"></p-radioButton></div>
-        <div class="p-col-12"><p-radioButton name="group1" value="Option 3" label="Option 3" [(ngModel)]="val"></p-radioButton></div>
-        <div class="p-col-12"><p-radioButton name="group1" value="Option 4" label="Option 4" [(ngModel)]="val"></p-radioButton></div>
-      </div>
-    </div>
-    <div class="p-col-12">
-      <button pButton label="Dialog" type="button" icon="pi pi-plus" (click)="showDialog()"></button>
-    </div>
+<p-toolbar class="fixed-toolbar">
+  <div class="ui-toolbar-group-left">
+    <!-- BEGIN: MDChat Avatar -->
+    <a aria-label="Home" class="logo" routerLink="/">
+      <svg class="channel-icon-svg" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+        <g>
+          <circle cx="10" cy="10" fill="#FF4500" r="10"></circle>
+          <path
+            d="M16.67,10A1.46,1.46,0,0,0,14.2,9a7.12,7.12,0,0,0-3.85-1.23L11,4.65,13.14,5.1a1,1,0,1,0,.13-0.61L10.82,4a0.31,0.31,0,0,0-.37.24L9.71,7.71a7.14,7.14,0,0,0-3.9,1.23A1.46,1.46,0,1,0,4.2,11.33a2.87,2.87,0,0,0,0,.44c0,2.24,2.61,4.06,5.83,4.06s5.83-1.82,5.83-4.06a2.87,2.87,0,0,0,0-.44A1.46,1.46,0,0,0,16.67,10Zm-10,1a1,1,0,1,1,1,1A1,1,0,0,1,6.67,11Zm5.81,2.75a3.84,3.84,0,0,1-2.47.77,3.84,3.84,0,0,1-2.47-.77,0.27,0.27,0,0,1,.38-0.38A3.27,3.27,0,0,0,10,14a3.28,3.28,0,0,0,2.09-.61A0.27,0.27,0,1,1,12.48,13.79Zm-0.18-1.71a1,1,0,1,1,1-1A1,1,0,0,1,12.29,12.08Z"
+            fill="#FFF">
+          </path>
+        </g>
+      </svg>
+      <span class="channel-text" style="margin-right: 1em;">MdChat</span>
+    </a>
+    <!-- END: MDChat Avatar -->
+    <!-- BEGIN: Channels -->
+    <p-dropdown (onChange)="onChangeChannel($event.value)"
+                [(ngModel)]="selectedChannel"
+                [filter]="true"
+                [options]="channelItems"
+                class="align-middle"
+                filterBy="label"
+                placeholder="Select">
+      <ng-template let-it pTemplate="item">
+        <i class={{it.icon}} style="width: 2em;"></i>
+        <span class="align-middle">{{it.label}}</span>
+      </ng-template>
+      <ng-template let-it pTemplate="selectedItem">
+        <i class={{it.icon}} style="width: 2em;"></i>
+        <span class="align-middle">{{it.label}}</span>
+      </ng-template>
+    </p-dropdown>&nbsp;
+    <!-- END: Channels -->
+    <!-- BEGIN: Search component -->
+    <p-autoComplete (completeMethod)="filterChannelsMultiple($event)"
+                    [(ngModel)]="channels"
+                    [minLength]="1"
+                    [multiple]="true"
+                    [size]="300"
+                    [inputStyle]="{'min-width':'20em'}"
+                    [class]="'align-middle autocomplete'"
+                    [suggestions]="filteredChannelsMultiple"
+                    field="channelName"
+                    placeholder="Channels">
+    </p-autoComplete>&nbsp;
+    <!-- END: Search component -->
+    <!-- BEGIN: Themes -->
+    <a (click)="changeTheme(item.path)" *ngFor="let item of themes" class="mr-3 cursor-pointer">
+      <img src="{{item.image}}" width="20">
+    </a>
+    <!-- END:  Themes -->
   </div>
 
-  <p-dialog header="Godfather 1" [(visible)]="display" [responsive]="true" [resizable]="false" [style]="{width: '300px'}">
-    <p>The story begins as Don Vito Corleone, the head of a New York Mafia family, oversees his daughter's wedding.
-      His beloved son Michael has just come home from the war, but does not intend to become part of his father's business.
-      Through Michael's life the nature of the family business becomes clear. The business of the family is just like the head of the family,
-      kind and benevolent to those who give respect,
-      but given to ruthless violence whenever anything stands against the good of the family.</p>
-  </p-dialog>
+  <div class="ui-toolbar-group-right">
+    <div *ngIf="isLoggedIn">
+      <p-slideMenu #usermenu [model]="items" appendTo="body" [popup]="true"></p-slideMenu>
+      <button #btn
+              (click)="onUserMenuClick($event)"
+              pButton
+              class="ui-button-rounded"
+              type="button"
+              icon="pi pi-user"
+              [label]="username">
+        <!--                <img class="account-icon" src="https://www.redditstatic.com/avatars/avatar_default_08_D4E815.png">-->
+      </button>
 
-  <p-panel header="Panel" [style]="{'margin-top':'2em'}">
-    The story begins as Don Vito Corleone, the head of a New York Mafia family, oversees his daughter's wedding.
-    His beloved son Michael has just come home from the war, but does not intend to become part of his father's business.
-    Through Michael's life the nature of the family business becomes clear. The business of the family is just like the head of the family,
-    kind and benevolent to those who give respect,
-    but given to ruthless violence whenever anything stands against the good of the family.
-  </p-panel>
-
-  <p-table [style]="{'margin-top':'2em'}" [value]="cars" [rows]="10" [paginator]="true" [pageLinks]="3" [responsive]="true">
-    <ng-template pTemplate="header">
-      <tr>
-        <th>Vin</th>
-        <th>Year</th>
-        <th>Brand</th>
-        <th>Color</th>
-      </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-car>
-      <tr>
-        <td>{{car.vin}}</td>
-        <td>{{car.year}}</td>
-        <td>{{car.brand}}</td>
-        <td>{{car.color}}</td>
-      </tr>
-    </ng-template>
-  </p-table>
-
-  <p-tree [value]="files" [style]="{'margin-top':'2em'}"></p-tree>
-
-  <p-orderList [value]="cars" [listStyle]="{'height':'250px'}" [style]="{'margin-top':'2em'}" [responsive]="true" header="Responsive Cars">
-    <ng-template let-car pTemplate="item">
-      <img src="assets/showcase/images/demo/car/{{car.brand}}.png" style="display:inline-block;margin:2px 0 2px 2px" width="48">
-      <div style="font-size:14px;float:right;margin:15px 5px 0 0">{{car.brand}} - {{car.year}} - {{car.color}}</div>
-    </ng-template>
-  </p-orderList>
-
-  <p-pickList [source]="sourceCars" [target]="targetCars" sourceHeader="Available" targetHeader="Selected" [responsive]="true"
-              [sourceStyle]="{'height':'300px'}" [targetStyle]="{'height':'300px'}" [style]="{'margin-top':'2em'}">
-    <ng-template let-car pTemplate="item">
-      <img src="assets/showcase/images/demo/car/{{car.brand}}.png" style="display:inline-block;margin:2px 0 2px 2px" width="48">
-      <div style="font-size:14px;float:right;margin:15px 5px 0 0">{{car.brand}} - {{car.year}} - {{car.color}}</div>
-    </ng-template>
-  </p-pickList>
-
-  <div class="p-grid" style="margin-top: 2em">
-    <div class="p-col-12 p-md-4">
-      <p-menu [model]="items1" [style]="{'width': '100%'}"></p-menu>
     </div>
-    <div class="p-col-12 p-md-8">
-      <p-panelMenu [model]="items2"></p-panelMenu>
+    <div *ngIf="!isLoggedIn">
+      <button icon="pi pi-sign-in" label="Login" pButton routerLink="/login" type="button"></button>
+      <button icon="pi pi-user-plus" label="Register" pButton routerLink="/sign-up" type="button"></button>
     </div>
   </div>
-</div>
+</p-toolbar>

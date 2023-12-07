@@ -45,6 +45,10 @@
   box-sizing: border-box;
 }
 
+body {
+  background-color: #AFD3C8 !important;
+}
+
 body .ui-widget {
   font-family: "Open Sans", "Helvetica Neue", sans-serif;
   font-size: 14px;
@@ -112,7 +116,7 @@ body .ui-state-disabled, body .ui-widget:disabled {
   filter: alpha(opacity=50);
 }
 body .pi {
-  font-size: 1.25em;
+  font-size: 1em;
 }
 body .ui-link {
   font-size: 14px;

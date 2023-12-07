@@ -4,6 +4,7 @@ import {ChannelService} from '../channel.service';
 import {throwError} from 'rxjs';
 import {MessageService} from "primeng/api";
 import {CreateChannelDtoPayloadModel} from "./models/create-channel-dto-payload-model";
+import {BaseComponent}                                  from '../../common/components/base.component/base.component';
 
 @Component({
              selector: 'create-channel',
@@ -11,7 +12,7 @@ import {CreateChannelDtoPayloadModel} from "./models/create-channel-dto-payload-
              styleUrls: ['./create-channel.component.css']
 
            })
-export class CreateChannelComponent implements OnInit
+export class CreateChannelComponent extends BaseComponent implements OnInit
 {
   public readonly MAX_CHANNEL_NAME_LENGTH = 30;
   public remaining: number = this.MAX_CHANNEL_NAME_LENGTH;
@@ -21,9 +22,10 @@ export class CreateChannelComponent implements OnInit
 
 
   constructor(private router: Router,
-              private messageService: MessageService,
-              private channelService: ChannelService)
+              private channelService: ChannelService,
+              messageService: MessageService)
   {
+    super(messageService)
   }
 
   public onDiscardClick(): void
@@ -48,21 +50,16 @@ export class CreateChannelComponent implements OnInit
   {
     if (!this.channelName || this.channelName.length == 0)
     {
-      this.messageService.add({severity: 'warn', summary: 'Warning', detail: 'Channel name is required'});
+      this.showWarning( 'Channel name is required');
       return false;
     }
     if (!this.channelDescription || this.channelDescription.length == 0)
     {
-      this.messageService.add({severity: 'warn', summary: 'Warning', detail: 'Channel description is required'});
+      this.showWarning(  'Channel description is required');
       return false;
     }
     return true;
   }
-
-  ngOnInit()
-  {
-  }
-
 
   discard()
   {
@@ -75,24 +72,17 @@ export class CreateChannelComponent implements OnInit
                                                                         {
                                                                           if (data && data.id > 0)
                                                                           {
-                                                                            this.messageService.add({
-                                                                                                      severity: 'success',
-                                                                                                      summary: 'Success operation',
-                                                                                                      detail: `Channel: ${data.name} success created`
-                                                                                                    });
+                                                                            this.showSuccess(`Channel: ${data.name} success created`,
+                                                                                             'Success operation');
                                                                             this.goToChannelId(data.id);
                                                                           }
                                                                           else
                                                                           {
-                                                                            this.messageService.add({
-                                                                                                      severity: 'error',
-                                                                                                      summary: 'Error',
-                                                                                                      detail: 'Channel not created'
-                                                                                                    });
+                                                                            this.showError(`Channel ${data.name} not created`);
                                                                           }
                                                                         }, error =>
                                                                         {
-                                                                          throwError(error);
+                                                                          this.showError(`Channel ${this.channelName} not created`);
                                                                         })
   }
 

@@ -1,55 +1,77 @@
-<div class="register-section">
-    <div class="row justify-content-center">
-        <div class="col-md-3"></div>
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header" style="text-align: center">
-                    <h4>Register</h4>
-                </div>
-                <div class="card-body">
-                    <form [formGroup]="signupForm" (ngSubmit)="signup()">
-                        <div class="form-group row">
-                            <label for="email_address" class="col-md-4 col-form-label text-md-right">E-Mail
-                                Address</label>
-                            <div class="col-md-6">
-                                <input type="text" [formControlName]="'email'" id="email_address" class="form-control" name="email-address" required
-                                    autofocus>
-                                <span *ngIf="!signupForm.get('email').valid && signupForm.get('email').touched">
-                                    Please provide a valid email
-                                </span>
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label class="col-md-4 col-form-label text-md-right">Username</label>
-                            <div class="col-md-6">
-                                <input type="text" [formControlName]="'username'"class="form-control" required autofocus>
-                                <span *ngIf="!signupForm.get('username').valid && signupForm.get('username').touched">
-                                    Please provide a valid username
-                                </span>
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="password" class="col-md-4 col-form-label text-md-right">Password</label>
-                            <div class="col-md-6">
-                                <input type="password" [formControlName]="'password'" id="password" class="form-control" name="password" required>
-                                <span *ngIf="!signupForm.get('password').valid && signupForm.get('password').touched">
-                                    Please provide a valid Password
-                                </span>
-                            </div>
-                        </div>
-
-                        <span class="col-md-6 offset-md-4">
-                            <button type="submit" class="sign-up">
-                                Sign Up
-                            </button>
-                            <span style="padding-left: 15px">Existing user? <a routerLink="/login">Log In</a></span>
-                        </span>
-                    </form>
-                </div>
+<div class="p-grid">
+  <div class="p-col-4 p-offset-4">
+    <p-panel>
+      <p-header>
+        Signup
+      </p-header>
+      <div class="p-grid">
+        <div class="p-col-12">
+          <div class="p-grid justify-content-center">
+            <div class="p-col-2 d-flex align-items-center">
+              <b>Email</b>
             </div>
+            <div class="p-col-5 ui-fluid">
+              <input [(ngModel)]="email"
+                     autofocus
+                     maxlength="100"
+                     pInputText
+                     pKeyFilter="email"
+                     placeholder="email"
+                     required
+                     type="text">
+            </div>
+          </div>
         </div>
-        <div class="col-md-3"></div>
-    </div>
+        <div class="p-col-12">
+          <div class="p-grid justify-content-center">
+            <div class="p-col-2 d-flex align-items-center">
+              <b>Username</b>
+            </div>
+            <div class="p-col-5 ui-fluid">
+              <input [(ngModel)]="userName"
+                     maxlength="100"
+                     pInputText
+                     placeholder="Username"
+                     required
+                     type="text">
+            </div>
+          </div>
+        </div>
+        <div class="p-col-12">
+          <div class="p-grid justify-content-center">
+            <div class="p-col-2 d-flex align-items-center">
+              <b>Password</b>
+            </div>
+            <div class="p-col-5 ui-fluid">
+              <input [(ngModel)]="password"
+                     pInputText
+                     pPassword
+                     placeholder="Password"
+                     required
+                     type="password">
+            </div>
+          </div>
+        </div>
+        <div class="p-col-12">
+          <div class="p-grid justify-content-center">
+            <div class="p-col-2 d-flex align-items-center">
+              <b>Confirm password</b>
+            </div>
+            <div class="p-col-5 ui-fluid">
+              <input [(ngModel)]="confirmPassword"
+                     pInputText
+                     pPassword
+                     required
+                     placeholder="Confirm password"
+                     type="password">
+            </div>
+          </div>
+        </div>
+      </div>
+      <p-footer class="align-content-center footer-center-content">
+        <button (click)="onSingUpClick()" label="Signup" pButton type="button"></button>
+        <span style="padding-left: 15px">Existing user?&nbsp;<a routerLink="/login">Login</a></span>
+      </p-footer>
+    </p-panel>
+  </div>
 </div>

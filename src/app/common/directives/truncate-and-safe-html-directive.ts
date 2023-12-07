@@ -37,7 +37,7 @@ export class TruncateAndSafeHtmlDirective implements OnChanges
 
   private updateHtml()
   {
-    const truncatedText = this.appTruncateAndSafeHtml.slice(0, this.appMaxCharacters).concat('...');
+    const truncatedText =this.appMaxCharacters>0?this.appTruncateAndSafeHtml.slice(0, this.appMaxCharacters).concat('...'):this.appTruncateAndSafeHtml;
     const sanitizedHtml: SafeHtml = this.sanitizer.bypassSecurityTrustHtml(truncatedText);
     const sanitizedValue = this.sanitizer.sanitize(SecurityContext.HTML, sanitizedHtml);
     this.el.nativeElement.innerHTML = sanitizedValue || '';

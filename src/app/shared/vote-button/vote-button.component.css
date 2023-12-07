@@ -1,8 +1,8 @@
-.votebox {    
+.votebox {
     display: flex;
     text-align: center;
     flex-direction: column;
-    font-size: 1em;    
+    font-size: 0.7em;
 }
 
 .votesection{
@@ -11,7 +11,7 @@
 }
 .upvote,.downvote {
     cursor: pointer;
-    border-radius: 2px solid;        
+    border-radius: 2px solid;
 }
 .upvote:hover {
     color: green;
@@ -21,5 +21,6 @@
 }
 
 .votecount{
-    font-weight: bold;    
+    font-weight: bold;
+    font-size: 1.5em;
 }

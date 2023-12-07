@@ -1,6 +1,6 @@
 <div class="p-grid">
-  <div class="p-col-6 p-offset-3">
-    <p-panel [style]="{'margin-top':'0.8em'}">
+  <div class="p-col-6 p-offset-2">
+    <p-panel>
       <p-header>
         Create post
       </p-header>
@@ -42,8 +42,8 @@
         <button (click)="createPost()"
                 class="ui-button-success ui-button-rounded"
                 label="Post"
-                pTooltip="Create post"
                 pButton
+                pTooltip="Create post"
                 type="button">
         </button>
         <button (click)="onDiscardClick()"
@@ -56,4 +56,5 @@
     </p-panel>
   </div>
   <div class="p-col-3"><app-side-bar></app-side-bar></div>
+  <div class="p-col-1"></div>
 </div>

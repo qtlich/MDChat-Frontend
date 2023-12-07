@@ -14,3 +14,6 @@ export const uaLocale                        = {
 export const maxCountRowsForScroll           = 500;
 export const pageLinks                       = 5;
 export const yearRange                       = "1910:2079";
+export const redirectUrlStorageNameConst:string = 'redirectUrl';
+export const singUpRouterUrl:string = '/sign-up';
+

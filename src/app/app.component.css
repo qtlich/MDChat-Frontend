@@ -1,0 +1,8 @@
+.footer-right-content {
+  display: flex;
+  justify-content: flex-end;
+}
+.footer-center-content {
+  display: flex;
+  justify-content: center;
+}

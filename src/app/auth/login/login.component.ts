@@ -1,67 +1,96 @@
-import {Component, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {LoginRequestPayload} from './login-request.payload';
-import {AuthService} from '../shared/auth.service';
-import {ActivatedRoute, Router} from '@angular/router';
-import {ToastrService} from 'ngx-toastr';
-import {throwError} from 'rxjs';
+import {Component, OnInit}                            from '@angular/core';
+import {LoginRequestPayload}                          from './login-request.payload';
+import {AuthService}                                  from '../shared/auth.service';
+import {ActivatedRoute, Router}                       from '@angular/router';
+import {throwError}                                   from 'rxjs';
+import {isEmptyStringField, isNullOrUndefined}        from '../../common/core.free.functions';
+import {LocalStorageService}                          from 'ngx-webstorage';
+import {redirectUrlStorageNameConst, singUpRouterUrl} from '../../common/core.free.constants';
+import {MessageService}                               from 'primeng/api';
 
 @Component({
-             selector: 'app-login',
+             selector:    'app-login',
              templateUrl: './login.component.html',
-             styleUrls: ['./login.component.css']
+             styleUrls:   ['./login.component.css']
            })
 export class LoginComponent implements OnInit
 {
+  public userName: string;
+  public password: string;
+  private _redirectUrl: string;
 
-  loginForm: FormGroup;
-  loginRequestPayload: LoginRequestPayload;
-  registerSuccessMessage: string;
-  isError: boolean;
-
-  constructor(private authService: AuthService, private activatedRoute: ActivatedRoute,
-              private router: Router, private toastr: ToastrService)
+  constructor(private _authService: AuthService,
+              private _activatedRoute: ActivatedRoute,
+              private _localStorageService: LocalStorageService,
+              private _router: Router,
+              private _messageService: MessageService)
   {
-    this.loginRequestPayload = {
-      username: '',
-      password: ''
-    };
+    this.__loadRedirectUrl();
+  }
+
+  private __loadRedirectUrl(): void
+  {
+    this._redirectUrl = this._localStorageService.retrieve(redirectUrlStorageNameConst);
+  }
+
+  public onLoginClick(): void
+  {
+    if (this.__isValidInputData())
+    {
+      this.login()
+    }
   }
 
   ngOnInit(): void
   {
-    this.loginForm = new FormGroup({
-                                     username: new FormControl('', Validators.required),
-                                     password: new FormControl('', Validators.required)
-                                   });
-
-    this.activatedRoute.queryParams
+    this._activatedRoute
+        .queryParams
         .subscribe(params =>
                    {
-                     if (params.registered !== undefined && params.registered === 'true')
+                     if (!isNullOrUndefined(params.registered) && params.registered === 'true')
                      {
-                       this.toastr.success('Signup Successful');
-                       this.registerSuccessMessage = 'Please Check your inbox for activation email '
-                         + 'activate your account before you Login!';
+                       this._messageService.add({severity: 'success', detail: 'Signup Successful'});
                      }
+                   },
+                   error => this._messageService.add({severity: 'error', detail: 'Signup Unsuccessful'}));
+  }
+
+  public login(): void
+  {
+    this._authService
+        .login(new LoginRequestPayload(this.userName,
+                                       this.password))
+        .subscribe(data =>
+                   {
+                     if (!isEmptyStringField(this._redirectUrl) && this._redirectUrl != singUpRouterUrl)
+                     {
+                       this._router.navigateByUrl(this._redirectUrl);
+                       this._localStorageService.clear(redirectUrlStorageNameConst)
+                     }
+                     else
+                     {
+                       this._router.navigateByUrl('');
+                     }
+                     this._messageService.add({severity: 'success', detail: 'Login success'});
+                   }, error =>
+                   {
+                     throwError(error);
                    });
   }
 
-  login()
+  private __isValidInputData(): boolean
   {
-    this.loginRequestPayload.username = this.loginForm.get('username').value;
-    this.loginRequestPayload.password = this.loginForm.get('password').value;
-
-    this.authService.login(this.loginRequestPayload).subscribe(data =>
-                                                               {
-                                                                 this.isError = false;
-                                                                 this.router.navigateByUrl('');
-                                                                 this.toastr.success('Login Successful');
-                                                               }, error =>
-                                                               {
-                                                                 this.isError = true;
-                                                                 throwError(error);
-                                                               });
+    if (isEmptyStringField(this.userName))
+    {
+      this._messageService.add({severity: 'warn', detail: 'Please input username'});
+      return false;
+    }
+    if (isEmptyStringField(this.password))
+    {
+      this._messageService.add({severity: 'warn', detail: 'Please input password'});
+      return false;
+    }
+    return true;
   }
 
 }

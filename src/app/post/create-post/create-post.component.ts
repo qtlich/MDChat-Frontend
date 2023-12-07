@@ -70,7 +70,8 @@ export class CreatePostComponent implements OnInit
     return new CreatePostPayload(this.selectedChannelId,
                                  this.selectedName,
                                  this.selectedDescription,
-                                 this.selectedUrl);
+                                 this.selectedUrl,
+                                 false);
   }
 
 }

@@ -1,3 +1,94 @@
+<p-virtualScroller [value]="posts"
+                   scrollHeight="650px"
+                   [itemSize]="160"
+                   [rows]="10"
+                   [lazy]="true"
+                   (onLazyLoad)="loadPostsLazy($event)">
+  <ng-template let-item pTemplate="item" let-i="index">
+
+    <div class="p-grid p-col-nogutter post-hover">
+      <div class="p-col-1">
+        <app-vote-button [post]="item"></app-vote-button>
+      </div>
+      <div class="p-col-11">
+        <div class="p-grid">
+          <div class="p-col-12">
+            <a class="post-name" href="/view-post/{{item.id}}">
+            <p class="post-title" [appRemoveFormattingAndTruncate]="item.postName"></p>
+            </a>
+          </div>
+          <div class="p-col-12">
+            <a class="post-name" href="/view-post/{{item.id}}">
+            <p class="post-text" [appTruncateAndSafeHtml]="item.description" [appMaxCharacters]="100"></p>
+            </a>
+          </div>
+          <div class="p-col-12">
+            <a routerLink="view-channel/{{item}}">{{item.channelName}}</a>&nbsp;
+            Posted by <a routerLink="/user/{{item.userName}}">{{item.userName}}.</a>&nbsp;
+            {{item.duration}}
+          </div>
+          <div class="p-col-12 buttons-bottom">
+            <a class="custom-button" role="button">
+              <fa-icon [icon]="faComments"></fa-icon>
+              Comments({{item.commentCount}})
+            </a>&nbsp;
+            <a class="custom-button" role="button">
+              <fa-icon [icon]="faShare"></fa-icon>
+              Share
+            </a>&nbsp;
+            <a class="custom-button" role="button">
+              <fa-icon [icon]="faBookMark"></fa-icon>
+              Save
+            </a>&nbsp;
+            <a class="custom-button" role="button">
+              <fa-icon [icon]="faEyeSlash"></fa-icon>
+              Hide
+            </a>&nbsp;
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--    <div class="p-grid p-col-nogutter post-hover">-->
+    <!--      <div class="p-col-1">-->
+    <!--        <app-vote-button [post]="item"></app-vote-button>-->
+    <!--      </div>-->
+    <!--      <div class="p-col-11">-->
+    <!--        <div class="p-grid">-->
+    <!--          <div class="p-col-12">-->
+    <!--            <a class="post-name" href="/view-post/{{item.id}}">-->
+    <!--              <p [appRemoveFormattingAndTruncate]="item.description" class="post-text"></p>-->
+    <!--            </a>-->
+    <!--          </div>-->
+    <!--          <div class="p-col-12">-->
+    <!--            <a routerLink="/">{{item.channelName}}</a>&nbsp;-->
+    <!--            Posted by <a routerLink="/user/{{item.userName}}">{{item.userName}}.</a>&nbsp;-->
+    <!--            {{item.duration}}-->
+    <!--          </div>-->
+    <!--          <div class="p-col-12 buttons-bottom">-->
+    <!--            <a class="custom-button" role="button">-->
+    <!--              <fa-icon [icon]="faComments"></fa-icon>-->
+    <!--              Comments({{item.commentCount}})-->
+    <!--            </a>&nbsp;-->
+    <!--            <a class="custom-button" role="button">-->
+    <!--              <fa-icon [icon]="faShare"></fa-icon>Share-->
+    <!--            </a>&nbsp;-->
+    <!--            <a class="custom-button" role="button">-->
+    <!--              <fa-icon [icon]="faBookMark"></fa-icon>Save-->
+    <!--            </a>&nbsp;-->
+    <!--            <a class="custom-button" role="button">-->
+    <!--              <fa-icon [icon]="faEyeSlash"></fa-icon>Hide-->
+    <!--            </a>&nbsp;-->
+    <!--          </div>-->
+    <!--        </div>-->
+    <!--      </div>-->
+    <!--    </div>-->
+  </ng-template>
+  <ng-template let-car pTemplate="loadingItem">
+    Loading...
+  </ng-template>
+</p-virtualScroller>
+
 <!-- Display Posts-->
 <!--<div class="p-grid">-->
 <!--  <div class="p-grid">-->
@@ -10,38 +101,42 @@
 
 <!--  </div>-->
 <!--</div>-->
-<div *ngFor="let post of posts" class="row post">
-  <app-vote-button [post]="post"></app-vote-button>
-  <div class="col-md-11">
-    <span class="subreddit-info">
-      <span class="comment-text"><a class="posturl" routerLink="">{{post.channelName}}</a></span>
-      <span> . Posted by <a class="username" routerLink="/user/{{post.userName}}">{{post.userName}}</a></span>
-      <span> . {{post.duration}}</span>
-    </span>
-    <hr/>
-    <div class="post-title">
-      <a class="postname" href="/view-post/{{post.id}}">{{post.postName}}</a>
-    </div>
-    <div>
-      <a class="postname" href="/view-post/{{post.id}}">
-        <p [appMaxCharacters]="400" [appTruncateAndSafeHtml]="post.description" class="post-text"></p>
-      </a>
-    </div>
-    <hr/>
 
-  </div>
+<!--<div *ngFor="let post of posts" class="row post">-->
+<!--  <app-vote-button [post]="post"></app-vote-button>-->
+<!--  <div class="col-md-11">-->
+<!--    <span class="subreddit-info">-->
+<!--      <span class="comment-text"><a class="posturl" routerLink="">{{post.channelName}}</a></span>-->
+<!--      <span> . Posted by <a class="username" routerLink="/user/{{post.userName}}">{{post.userName}}</a></span>-->
+<!--      <span> . {{post.duration}}</span>-->
+<!--    </span>-->
+<!--    <hr/>-->
+<!--    <div class="post-title">-->
+<!--      <a class="postname" href="/view-post/{{post.id}}">{{post.postName}}</a>-->
+<!--    </div>-->
+<!--    <div>-->
+<!--      <a class="postname" href="/view-post/{{post.id}}">-->
+<!--        <p [appMaxCharacters]="200" [appTruncateAndSafeHtml]="post.description" class="post-text"></p>-->
+<!--      </a>-->
+<!--    </div>-->
+<!--    <hr/>-->
 
-  <a class="btnCommments" role="button">
-    <fa-icon [icon]="faComments"></fa-icon>
-    Comments({{post.commentCount}})
-  </a>
-  <button (click)="goToPost(post.id)"
-          class="btn-login">
-    Read Post
-  </button>
-  <button (click)="deletePost(post.id)"
-          class="btn-delete">
-    Delete Post
-  </button>
+<!--  </div>-->
 
-</div>
+<!--  <a class="iconButton" role="button">-->
+<!--    <fa-icon [icon]="faComments"></fa-icon>-->
+<!--    Comments({{post.commentCount}})-->
+<!--  </a>-->
+<!--  <button (click)="goToPost(post.id)"-->
+<!--          label="Read Post"-->
+<!--          type="button"-->
+<!--          pButton>-->
+<!--  </button>-->
+<!--  <button (click)="deletePost(post.id)"-->
+<!--          type="button"-->
+<!--          pButton-->
+<!--          label="Delete Post"-->
+<!--          class="btn-delete">-->
+<!--  </button>-->
+
+<!--</div>-->

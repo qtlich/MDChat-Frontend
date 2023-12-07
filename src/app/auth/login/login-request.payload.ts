@@ -1,5 +1,9 @@
-export interface LoginRequestPayload {
-    username: string;
-    password: string;
+export class LoginRequestPayload
+{
+  constructor(public username: string,
+              public password: string)
+  {
+  }
+
 }
 

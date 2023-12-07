@@ -1,46 +1,49 @@
-import {Component, OnInit} from '@angular/core';
-import {faUser} from '@fortawesome/free-solid-svg-icons';
-import {AuthService} from '../auth/shared/auth.service';
-import {Router} from '@angular/router';
-import {ChannelService} from '../channel/channel.service';
-import {SelectItem} from 'primeng/api';
-import {ChannelResponseModel} from '../channel/models/channel.response.model';
-import {SearchChannelsInputModel} from '../channel/models/search-channels-input-model';
-import {SearchChannelsResultModel} from '../channel/models/search-channels-result-model';
+import {Component, OnInit, ViewChild}    from '@angular/core';
+import {AuthService}                     from '../auth/shared/auth.service';
+import {Router}                          from '@angular/router';
+import {ChannelService}                  from '../channel/channel.service';
+import {MenuItem, SelectItem}            from 'primeng/api';
+import {ChannelResponseModel}            from '../channel/models/channel.response.model';
+import {SearchChannelsInputModel}        from '../channel/models/search-channels-input-model';
+import {SearchChannelsResultModel}       from '../channel/models/search-channels-result-model';
 import {ThemeItem, themes, ThemeService} from '../services/theme.service';
+import {SlideMenu}                       from 'primeng/slidemenu/slidemenu';
 
 enum EItems
 {
-  HOME = -1,
-  CREATE_POST = -2,
+  HOME           = -1,
+  CREATE_POST    = -2,
   CREATE_CHANNEL = -3,
-  SEARCH_RESULT = -4,
-  VIEW_PROFILE = -5,
-  PEFERENCES = -6
+  SEARCH_RESULT  = -4,
+  VIEW_PROFILE   = -5,
+  PEFERENCES     = -6
 }
 
 @Component({
-             selector: 'main-header',
+             selector:    'main-header',
              templateUrl: './header.component.html',
-             styleUrls: ['./header.component.css']
+             styleUrls:   ['./header.component.css']
            })
 export class HeaderComponent implements OnInit
 {
-  public themes:ThemeItem[] = themes;
-  items: any[];
-  faUser = faUser;
+  @ViewChild('usermenu') userMenu: SlideMenu;
+  public themes: ThemeItem[] = themes;
+  public items: MenuItem[] = [{label: 'View Profile', icon: 'pi pi-user-edit', command: (event) => this.goToUserProfile()},
+                              {label: 'Settings', icon: 'pi pi-sliders-v', command: (event) => this.goToSettings()},
+                              {label: 'Logout', icon: 'pi pi-sign-out', command: (event) => this.logout()}];
   public isLoggedIn: boolean;
   public username: string;
-  public searchString;
+  public searchString: string;
   private readonly channelDefaultItems: Array<SelectItem> = [{label: 'Home', value: EItems.HOME, icon: 'pi pi-home'},
-    {label: 'Create channel', value: EItems.CREATE_CHANNEL, icon: 'pi pi-plus'},
-    {label: 'Create post', value: EItems.CREATE_POST, icon: 'pi pi-plus'},
-    {label: 'Search Result', value: EItems.SEARCH_RESULT, icon: 'pi pi-search'},
-    {label: 'View profile', value: EItems.VIEW_PROFILE, icon: 'pi pi-user'},
-    {label: 'Preferences', value: EItems.PEFERENCES, icon: 'pi pi-cog'},];
+                                                             {label: 'Create channel', value: EItems.CREATE_CHANNEL, icon: 'pi pi-plus'},
+                                                             {label: 'Create post', value: EItems.CREATE_POST, icon: 'pi pi-plus'},
+                                                             {label: 'Search Result', value: EItems.SEARCH_RESULT, icon: 'pi pi-search'},
+                                                             {label: 'View profile', value: EItems.VIEW_PROFILE, icon: 'pi pi-user'},
+                                                             {label: 'Preferences', value: EItems.PEFERENCES, icon: 'pi pi-cog'},];
 
-  channelItems: Array<SelectItem> = [];
-  selectedChannel: number;
+  public user
+  public channelItems: Array<SelectItem> = [];
+  public selectedChannel: number;
 
   constructor(private _authService: AuthService,
               private _router: Router,
@@ -49,14 +52,15 @@ export class HeaderComponent implements OnInit
   {
   }
 
+  public onUserMenuClick(event: any): void
+  {
+    console.log('EVENT', typeof event);
+    this.userMenu && this.userMenu.toggle(event);
+  }
+
   public changeTheme(theme: string)
   {
     this._themeService.switchTheme(theme);
-  }
-
-  public onInputData(event: any): void
-  {
-    console.log('event', this.searchString);
   }
 
   public onSearch(event: KeyboardEvent): void
@@ -65,18 +69,18 @@ export class HeaderComponent implements OnInit
     {
       this.__search();
     }
-    console.log('Key Up Event=>', event);
   }
 
   private __loadChannels(): void
   {
     this._channelService.getAllChannels().subscribe((data: Array<ChannelResponseModel>) =>
                                                     {
-                                                      this.channelItems = this.channelDefaultItems.concat(data.map(item => <SelectItem>{
-                                                        label: item.name,
-                                                        value: item.id,
-                                                        title: item.description
-                                                      }))
+                                                      this.channelItems = this.channelDefaultItems
+                                                                              .concat(data.map(item => <SelectItem>{
+                                                                                label: item.name,
+                                                                                value: item.id,
+                                                                                title: item.description
+                                                                              }))
                                                     });
   }
 
@@ -102,6 +106,7 @@ export class HeaderComponent implements OnInit
 
   public logout(): void
   {
+    this.userMenu.toggle(null);
     this._authService.logout();
     this.isLoggedIn = false;
     this._router.navigateByUrl('/');
@@ -117,13 +122,11 @@ export class HeaderComponent implements OnInit
 
   public filterChannelsMultiple(event: any): void
   {
-    console.log('EVENT=>', event);
     let channelMask = event.query;
     this._channelService
-        .searchChannels(new SearchChannelsInputModel(channelMask))
+        .searchChannels(new SearchChannelsInputModel(channelMask,0))
         .subscribe((channelsFromServer: SearchChannelsResultModel[]) =>
                    {
-                     console.log('FOUND=>', channelsFromServer);
                      this.filteredChannelsMultiple = this.__filterChannels(channelMask, channelsFromServer);
                    });
   }
@@ -142,9 +145,6 @@ export class HeaderComponent implements OnInit
     return filtered;
   }
 
-  /**
-   * @param value
-   */
   public onChangeChannel(value: number): void
   {
     switch (value)
