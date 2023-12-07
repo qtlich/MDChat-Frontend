@@ -14,7 +14,7 @@ import {CreatePostPayload} from './create-post.payload';
 })
 export class CreatePostLittleComponent implements OnInit {
 
-  postForm: FormGroup;
+  postForm: FormGroup; //
   postPayload: CreatePostPayload;
   subreddits: Array<ChannelResponseModel>;
 
