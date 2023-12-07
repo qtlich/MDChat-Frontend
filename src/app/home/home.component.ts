@@ -15,12 +15,10 @@ export class HomeComponent implements OnInit
   {
 
   }
-
   refresh(): void
   {
     this.postService.getAllPosts().subscribe(post =>this.posts = post);
   }
-
   ngOnInit(): void
   {
     this.refresh();
