@@ -6,6 +6,7 @@ describe('PostTileComponent', () => {
   let component: PostTileComponent;
   let fixture: ComponentFixture<PostTileComponent>;
 
+  
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ PostTileComponent ]
