@@ -6,6 +6,7 @@ describe('ViewPostComponent', () => {
   let component: ViewPostComponent;
   let fixture: ComponentFixture<ViewPostComponent>;
 
+  
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ ViewPostComponent ]
