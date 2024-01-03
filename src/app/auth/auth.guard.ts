@@ -3,7 +3,7 @@ import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTre
 import {Observable} from 'rxjs';
 import {AuthService} from './shared/auth.service';
 import {LocalStorageService}         from 'ngx-webstorage';
-import {redirectUrlStorageNameConst} from '../common/core.free.constants';
+import {redirectUrlStorageNameConst} from '../common/constants/core.free.constants';
 
 @Injectable({
               providedIn: 'root'
@@ -20,8 +20,7 @@ export class AuthGuard implements CanActivate
   canActivate(next: ActivatedRouteSnapshot,
               state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree
   {
-    const isAuthenticated = this.authService.isLoggedIn();
-    if (isAuthenticated)
+    if (this.authService.isLoggedIn())
     {
       return true;
     }

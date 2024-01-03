@@ -7,7 +7,7 @@
           <app-vote-button [post]="post"></app-vote-button>
         </div>
         <div class="p-col-11">
-          <p class="post-title" [appRemoveFormattingAndTruncate]="post.postName"></p>
+          <p class="post-title" [appTruncateAndSafeHtml]="post.postName"></p>
           <p class="post-text" [appTruncateAndSafeHtml]="post.description" [appMaxCharacters]="-1"></p>
         </div>
       </div>

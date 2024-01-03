@@ -73,14 +73,14 @@ export class HeaderComponent implements OnInit
 
   private __loadChannels(): void
   {
+    this.channelItems = this.channelDefaultItems;
     this._channelService.getAllChannels().subscribe((data: Array<ChannelResponseModel>) =>
                                                     {
-                                                      this.channelItems = this.channelDefaultItems
-                                                                              .concat(data.map(item => <SelectItem>{
-                                                                                label: item.name,
-                                                                                value: item.id,
-                                                                                title: item.description
-                                                                              }))
+                                                      this.channelItems = this.channelItems.concat(data.map(item => <SelectItem>{
+                                                        label: item.name,
+                                                        value: item.id,
+                                                        title: item.description
+                                                      }))
                                                     });
   }
 
@@ -124,7 +124,7 @@ export class HeaderComponent implements OnInit
   {
     let channelMask = event.query;
     this._channelService
-        .searchChannels(new SearchChannelsInputModel(channelMask,0))
+        .searchChannels(new SearchChannelsInputModel(channelMask, 0))
         .subscribe((channelsFromServer: SearchChannelsResultModel[]) =>
                    {
                      this.filteredChannelsMultiple = this.__filterChannels(channelMask, channelsFromServer);
@@ -150,7 +150,7 @@ export class HeaderComponent implements OnInit
     switch (value)
     {
       case EItems.HOME:
-        this._router.navigateByUrl('/');
+        this._router.navigateByUrl('/', {skipLocationChange: true}).then(() => this._router.navigate(['/']));
         break;
       case EItems.CREATE_CHANNEL:
         this._router.navigateByUrl('/create-channel');

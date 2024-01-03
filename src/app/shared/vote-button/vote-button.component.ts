@@ -1,80 +1,98 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {PostModel}                from '../post-model';
-import {faArrowDown, faArrowUp}   from '@fortawesome/free-solid-svg-icons';
-import {VotePayload}              from './vote-payload';
-import {VoteType}                 from './vote-type';
-import {VoteService}              from '../vote.service';
-import {AuthService}              from 'src/app/auth/shared/auth.service';
-import {PostService}              from '../post.service';
-import {throwError}               from 'rxjs';
-import {MessageService}           from 'primeng/api';
+import {Component, Input, OnInit}                  from '@angular/core';
+import {faArrowDown, faArrowUp}                    from '@fortawesome/free-solid-svg-icons';
+import {VoteRequestPayload}                        from './models/vote-request-payload';
+import {VoteType}                                  from './vote-type';
+import {VoteService}                               from '../vote.service';
+import {AuthService}                               from 'src/app/auth/shared/auth.service';
+import {PostService}                               from '../post.service';
+import {MessageService}                            from 'primeng/api';
+import {BaseComponent}                             from '../../common/components/base.component/base.component';
+import {isAllOperationsSuccess, isNullOrUndefined} from '../../common/core.free.functions';
+import {OperationResult}                           from '../../common/models/operation.result.model';
+import {Router}                                    from '@angular/router';
+import {redirectUrlStorageNameConst}               from '../../common/constants/core.free.constants';
+import {LocalStorageService}      from 'ngx-webstorage';
+import {GetUserVotesRequestModel} from './models/get.user.votes.request.model';
 
 @Component({
              selector:    'app-vote-button',
              templateUrl: './vote-button.component.html',
              styleUrls:   ['./vote-button.component.css']
            })
-export class VoteButtonComponent implements OnInit
+export class VoteButtonComponent extends BaseComponent implements OnInit
 {
 
-  @Input() post: PostModel;
-  votePayload: VotePayload;
+  @Input() postId: number;
+  @Input() commentId: number;
+  @Input() countVoted: number;
   faArrowUp = faArrowUp;
   faArrowDown = faArrowDown;
   upvoteColor: string;
   downvoteColor: string;
   isLoggedIn: boolean;
+  countVotes: number;
 
   constructor(private voteService: VoteService,
-              private authService: AuthService,
+              private _authService: AuthService,
               private postService: PostService,
-              private _messageService: MessageService)
+              private _router: Router,
+              private _localStorageService: LocalStorageService,
+              messageService: MessageService)
   {
-
-    this.votePayload = {
-      voteType: undefined,
-      postId:   undefined
-    }
-    this.authService.loggedIn.subscribe((data: boolean) => this.isLoggedIn = data);
+    super(messageService);
+    this._authService.loggedIn.subscribe((data: boolean) => this.isLoggedIn = data);
   }
 
   ngOnInit(): void
   {
-    this.updateVoteDetails();
+
+    this.__updateVoteDetails();
+    this.isLoggedIn = this._authService.isLoggedIn();
   }
 
-  upvotePost()
+  public upvotePost()
   {
-    this.votePayload.voteType = VoteType.UPVOTE;
-    this.vote();
+    if (this.isLoggedIn)
+    {
+      this.__vote(new VoteRequestPayload(VoteType.UPVOTE,
+                                         this.postId,
+                                         !isNullOrUndefined(this.commentId) ? this.commentId : null));
+    }
+    else
+    {
+      this._localStorageService.store(redirectUrlStorageNameConst, this._router.url);
+      this._router.navigateByUrl('/login');
+    }
     this.downvoteColor = '';
   }
 
-  downvotePost()
+  public downvotePost()
   {
-    this.votePayload.voteType = VoteType.DOWNVOTE;
-    this.vote();
+    this.__vote(new VoteRequestPayload(VoteType.DOWNVOTE,
+                                       this.postId,
+                                       !isNullOrUndefined(this.commentId) ? this.commentId : null));
     this.upvoteColor = '';
   }
 
-  private vote()
+  private __vote(item: VoteRequestPayload): void
   {
-    this.votePayload.postId = this.post.id;
-    this.voteService.vote(this.votePayload).subscribe(() =>
-                                                      {
-                                                        this.updateVoteDetails();
-                                                      }, error =>
-                                                      {
-                                                        this._messageService.add({severity: 'error', detail: error.error.message});
-                                                        throwError(error);
-                                                      });
+    this.voteService.vote(item).subscribe((data: OperationResult[]) =>
+                                          {
+                                            if (isAllOperationsSuccess(data))
+                                            {
+                                              this.__updateVoteDetails();
+                                            }
+                                            this.showMessages(data);
+                                          }, error => this.showError(error.error.message));
   }
 
-  private updateVoteDetails()
+  private __updateVoteDetails(): void
   {
-    this.postService.getPost(this.post.id).subscribe(post =>
-                                                     {
-                                                       this.post = post;
-                                                     });
+    // this.voteService
+    //     .getVotes(new GetUserVotesRequestModel(this.postId))
+    //     .subscribe(post =>
+    //                {
+    //                  // this.post = post;
+    //                });
   }
 }

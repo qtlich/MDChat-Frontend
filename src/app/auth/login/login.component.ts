@@ -5,7 +5,7 @@ import {ActivatedRoute, Router}                       from '@angular/router';
 import {throwError}                                   from 'rxjs';
 import {isEmptyStringField, isNullOrUndefined}        from '../../common/core.free.functions';
 import {LocalStorageService}                          from 'ngx-webstorage';
-import {redirectUrlStorageNameConst, singUpRouterUrl} from '../../common/core.free.constants';
+import {redirectUrlStorageNameConst, singUpRouterUrl} from '../../common/constants/core.free.constants';
 import {MessageService}                               from 'primeng/api';
 
 @Component({

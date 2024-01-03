@@ -1,14 +1,19 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MessageService}               from 'primeng/api';
+import {OperationResult}              from '../../models/operation.result.model';
+import {isEmptyArray}                 from '../../core.free.functions';
 
 @Component({
              selector:    'base-component',
              templateUrl: './base.component.html',
              styleUrls:   ['./base.component.css']
            })
-export abstract class BaseComponent implements OnInit,OnDestroy
+export abstract class BaseComponent implements OnInit, OnDestroy
 {
-  protected constructor(private _messageService:MessageService)
+  public informationMessages: OperationResult[] = [];
+
+
+  protected constructor(private _messageService: MessageService)
   {
   }
 
@@ -19,16 +24,49 @@ export abstract class BaseComponent implements OnInit,OnDestroy
   public ngOnDestroy()
   {
   }
-  protected showError(detail:string,summary?:string,):void
+  protected clearInformationMessages():void
   {
-    this._messageService.add({severity: 'error', summary:summary, detail:detail});
+    this.informationMessages = [];
   }
-  protected showSuccess(detail:string,summary?:string,):void
+  protected addInformationMessage(id:number,message:string):void
   {
-    this._messageService.add({severity: 'success', summary:summary, detail:detail});
+    this.informationMessages.push(new OperationResult(id,message));
   }
-  protected showWarning(detail:string,summary?:string,):void
+  protected showMessages(items: OperationResult[]): void
   {
-    this._messageService.add({severity: 'warn', summary:summary, detail:detail});
+    !isEmptyArray(items)
+    {
+      items.forEach(item =>
+                    {
+                      if (item.id < 0)
+                      {
+                        this.showError(`${item.id}. item.message`)
+                      }
+                      else
+                      {
+                        this.showInfo(`${item.id}. item.message`)
+                      }
+                    })
+    }
+  }
+
+  protected showError(detail: string, summary?: string,): void
+  {
+    this._messageService.add({severity: 'error', summary: summary, detail: detail});
+  }
+
+  protected showSuccess(detail: string, summary?: string,): void
+  {
+    this._messageService.add({severity: 'success', summary: summary, detail: detail});
+  }
+
+  protected showWarning(detail: string, summary?: string,): void
+  {
+    this._messageService.add({severity: 'warn', summary: summary, detail: detail});
+  }
+
+  protected showInfo(detail: string, summary?: string): void
+  {
+    this._messageService.add({severity: 'info', summary: summary, detail: detail});
   }
 }

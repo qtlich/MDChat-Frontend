@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --output-hashing=all",
-    "build": "ng build --watch --configuration development",
+    "build": "ng build",
     "test": "ng test",
     "lint": "ng lint --fix",
     "e2e": "ng e2e"
@@ -27,7 +27,8 @@
     "@fullcalendar/timegrid": "^6.1.9",
     "@ng-bootstrap/ng-bootstrap": "^6.0.3",
     "bootstrap": "^4.4.1",
-    "chart.js": "^4.4.0",
+    "chart.js": "^4.4.1",
+    "http-server": "^14.1.1",
     "primeflex": "^2.0.0",
     "primeicons": "^6.0.1",
     "primeng-lts": "^9.2.8",
@@ -43,7 +44,7 @@
     "@angular/language-service": "~9.1.0",
     "@fortawesome/angular-fontawesome": "^0.6.1",
     "@fortawesome/fontawesome-svg-core": "^1.2.28",
-    "@fortawesome/free-solid-svg-icons": "^5.13.0",
+    "@fortawesome/free-solid-svg-icons": "^5.15.4",
     "@types/jasmine": "~3.5.10",
     "@types/jasminewd2": "~2.0.8",
     "@types/node": "~13.11.0",

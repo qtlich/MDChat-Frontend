@@ -1,27 +1,14 @@
-import {Component, OnInit, Sanitizer} from '@angular/core';
-import {PostModel} from '../shared/post-model';
-import {PostService} from '../shared/post.service';
+import {Component} from '@angular/core';
 
 @Component({
-             selector: 'app-home',
+             selector:    'app-home',
              templateUrl: './home.component.html',
-             styleUrls: ['./home.component.css']
+             styleUrls:   ['./home.component.css']
            })
-export class HomeComponent implements OnInit
+export class HomeComponent
 {
-  posts: Array<PostModel> = [];
-
-  constructor(private postService: PostService)
+  constructor()
   {
 
   }
-  refresh(): void
-  {
-    this.postService.getAllPosts().subscribe(post =>this.posts = post);
-  }
-  ngOnInit(): void
-  {
-    this.refresh();
-  }
-
 }

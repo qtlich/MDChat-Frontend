@@ -1,9 +1,10 @@
 import {OperationResult} from '../../../common/models/operation.result.model';
 
 /**
- * API POST: /api/auth/changeuserinfo
+ * Create, update, delete post
+ * API POST: /posts/cud
  */
-export class ChangeUserInfoResponseModel extends OperationResult
+export class PostCudResponseModel extends OperationResult
 {
   constructor()
   {
