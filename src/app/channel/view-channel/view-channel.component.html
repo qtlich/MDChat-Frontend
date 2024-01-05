@@ -5,11 +5,11 @@
         <div class="p-col-12 ui-fluid">
           <p-tabView>
             <p-tabPanel header={{channel.name}}>
-              <span class="number-of-posts">Number of posts: {{channel.numberOfPosts+1}}</span>
-<!--              <button (click)="refreshChannel(channel.id)"-->
-<!--                      class="btn-refresh-channel">-->
-<!--                Refresh channel-->
-<!--              </button>-->
+              <span class="number-of-posts">Number of posts: {{channel.numberOfPosts + 1}}</span>
+              <!--              <button (click)="refreshChannel(channel.id)"-->
+              <!--                      class="btn-refresh-channel">-->
+              <!--                Refresh channel-->
+              <!--              </button>-->
               <div *ngFor="let item of channelPosts" style="margin-top: 0.3em;">
                 <p-panel>
                   <p-header><span class="post-text">{{item.postName}}</span>&nbsp;
@@ -21,16 +21,18 @@
                 </p-panel>
               </div>
             </p-tabPanel>
-            <p-tabPanel header="Description">
-              <p [innerHtml]="channel.description"></p>
-            </p-tabPanel>
+            <!--            <p-tabPanel header="Description">-->
+            <!--              <p [innerHtml]="channel.description"></p>-->
+            <!--            </p-tabPanel>-->
           </p-tabView>
         </div>
       </div>
     </p-panel>
   </div>
   <div class="p-col-3">
-    <app-side-bar></app-side-bar>
+    <create-channel-post-side-bar></create-channel-post-side-bar>
+    <br>
+    <channel-description-side-bar [channel]="channel"></channel-description-side-bar>
   </div>
   <div class="p-col-1"></div>
 </div>

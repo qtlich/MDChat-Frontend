@@ -24,7 +24,7 @@ export class VoteButtonComponent extends BaseComponent implements OnInit
 
   @Input() postId: number;
   @Input() commentId: number;
-  @Input() countVoted: number;
+  @Input() countVoted: number = 0;
   faArrowUp = faArrowUp;
   faArrowDown = faArrowDown;
   upvoteColor: string;
