@@ -58,8 +58,10 @@
     <!-- END: Channels -->
     <!-- BEGIN: Search component -->
     <p-autoComplete (completeMethod)="filterChannelsMultiple($event)"
+                    (onKeyUp)="onKeyUp($event)"
+                    (onClear)="onClearAutoComplete()"
+                    (onSelect)="onSelectChannel($event)"
                     [(ngModel)]="channels"
-                    [class]="'align-middle autocomplete'"
                     [inputStyle]="{'min-width':'20em'}"
                     [minLength]="1"
                     [multiple]="true"
