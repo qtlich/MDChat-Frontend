@@ -16,7 +16,7 @@
 
     <div class="p-grid p-col-nogutter post-hover">
       <div class="p-col-1">{{item.postId}}
-        <app-vote-button [countVoted]="item.postVoteCount" [post]="item"></app-vote-button>
+        <vote-button [postId]="item.postId"></vote-button>
       </div>
       <div class="p-col-11">
         <div class="p-grid">

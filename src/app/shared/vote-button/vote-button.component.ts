@@ -1,40 +1,40 @@
-import {Component, Input, OnInit}                  from '@angular/core';
-import {faArrowDown, faArrowUp}                    from '@fortawesome/free-solid-svg-icons';
-import {VoteRequestPayload}                        from './models/vote-request-payload';
-import {VoteType}                                  from './vote-type';
-import {VoteService}                               from '../vote.service';
-import {AuthService}                               from 'src/app/auth/shared/auth.service';
-import {PostService}                               from '../post.service';
-import {MessageService}                            from 'primeng/api';
-import {BaseComponent}                             from '../../common/components/base.component/base.component';
-import {isAllOperationsSuccess, isNullOrUndefined} from '../../common/core.free.functions';
-import {OperationResult}                           from '../../common/models/operation.result.model';
-import {Router}                                    from '@angular/router';
-import {redirectUrlStorageNameConst}               from '../../common/constants/core.free.constants';
-import {LocalStorageService}      from 'ngx-webstorage';
-import {GetUserVotesRequestModel} from './models/get.user.votes.request.model';
+import {Component, Input, OnChanges, OnInit, SimpleChanges}                               from '@angular/core';
+import {Router}                                                                           from '@angular/router';
+import {faArrowDown, faArrowUp}                                                           from '@fortawesome/free-solid-svg-icons';
+import {LocalStorageService}                                                              from 'ngx-webstorage';
+import {MessageService}                                                                   from 'primeng/api';
+import {take}                                                                             from 'rxjs/operators';
+import {AuthService}                                                                      from 'src/app/auth/shared/auth.service';
+import {BaseComponent}                                                                    from '../../common/components/base.component/base.component';
+import {redirectUrlStorageNameConst}                                                      from '../../common/constants/core.free.constants';
+import {errorToText, executeIf, isChangedAndNullOrUndefined, isNullOrUndefined, toNumber} from '../../common/core.free.functions';
+import {OperationResult}                                                                  from '../../common/models/operation.result.model';
+import {VoteService}                                                                      from '../vote.service';
+import {GetUserVotesRequestModel}                                                         from './models/get.user.votes.request.model';
+import {GetUserVotesResponseModel}                                                        from './models/get.user.votes.response.model';
+import {VoteV1RequestModel}                                                               from './models/vote-v1-request.model';
+import {VoteV1ResponseModel}                                                              from './models/vote-v1-response.model';
+import {VoteType}                                                                         from './vote-type';
 
 @Component({
-             selector:    'app-vote-button',
+             selector:    'vote-button',
              templateUrl: './vote-button.component.html',
              styleUrls:   ['./vote-button.component.css']
            })
-export class VoteButtonComponent extends BaseComponent implements OnInit
+export class VoteButtonComponent extends BaseComponent implements OnInit, OnChanges
 {
 
   @Input() postId: number;
   @Input() commentId: number;
-  @Input() countVoted: number = 0;
   faArrowUp = faArrowUp;
   faArrowDown = faArrowDown;
-  upvoteColor: string;
-  downvoteColor: string;
   isLoggedIn: boolean;
-  countVotes: number;
+  public upVoted: boolean = false;
+  public downVoted: boolean = false;
+  public countVoted: number = 0;
 
   constructor(private voteService: VoteService,
               private _authService: AuthService,
-              private postService: PostService,
               private _router: Router,
               private _localStorageService: LocalStorageService,
               messageService: MessageService)
@@ -42,57 +42,79 @@ export class VoteButtonComponent extends BaseComponent implements OnInit
     super(messageService);
     this._authService.loggedIn.subscribe((data: boolean) => this.isLoggedIn = data);
   }
-
+  public refresh()
+  {
+    this.__getVotes();
+  }
   ngOnInit(): void
   {
-
-    this.__updateVoteDetails();
+    this.__getVotes();
     this.isLoggedIn = this._authService.isLoggedIn();
   }
 
-  public upvotePost()
+  public ngOnChanges(changes: SimpleChanges)
+  {
+    console.log('ngOnChanges', changes);
+    executeIf(isChangedAndNullOrUndefined(changes, 'postId'), () => this.__getVotes());
+  }
+
+  public onUpVoteClick(): void
+  {
+    this.__vote(VoteType.UPVOTE);
+  }
+
+  public onDownVoteClick(): void
+  {
+    this.__vote(VoteType.DOWNVOTE);
+  }
+
+  private __vote(voteType: VoteType): void
   {
     if (this.isLoggedIn)
     {
-      this.__vote(new VoteRequestPayload(VoteType.UPVOTE,
-                                         this.postId,
-                                         !isNullOrUndefined(this.commentId) ? this.commentId : null));
+      this.voteService
+          .vote(this.__prepareDataForVote(voteType))
+          .pipe(take(1))
+          .subscribe((item: VoteV1ResponseModel) =>
+                     {
+                       if (item.id > 0)
+                       {
+                         this.__getVotes();
+                         this.countVoted = item.voteCount;
+                         this.upVoted = item.upVoted;
+                         this.downVoted = item.downVoted;
+                       }
+                       else
+                       {
+                         this.showMessages([new OperationResult(item.id, item.message)]);
+                       }
+                     }, error => this.showError(errorToText(error)));
     }
     else
     {
       this._localStorageService.store(redirectUrlStorageNameConst, this._router.url);
       this._router.navigateByUrl('/login');
     }
-    this.downvoteColor = '';
   }
 
-  public downvotePost()
+  private __prepareDataForVote(voteType: VoteType): VoteV1RequestModel
   {
-    this.__vote(new VoteRequestPayload(VoteType.DOWNVOTE,
-                                       this.postId,
-                                       !isNullOrUndefined(this.commentId) ? this.commentId : null));
-    this.upvoteColor = '';
+    return new VoteV1RequestModel(!isNullOrUndefined(this.postId) ? toNumber(this.postId) : null,
+                                  !isNullOrUndefined(this.commentId) ? toNumber(this.commentId) : null,
+                                  voteType);
   }
 
-  private __vote(item: VoteRequestPayload): void
+  private __getVotes(): void
   {
-    this.voteService.vote(item).subscribe((data: OperationResult[]) =>
-                                          {
-                                            if (isAllOperationsSuccess(data))
-                                            {
-                                              this.__updateVoteDetails();
-                                            }
-                                            this.showMessages(data);
-                                          }, error => this.showError(error.error.message));
-  }
-
-  private __updateVoteDetails(): void
-  {
-    // this.voteService
-    //     .getVotes(new GetUserVotesRequestModel(this.postId))
-    //     .subscribe(post =>
-    //                {
-    //                  // this.post = post;
-    //                });
+    this.voteService
+        .getVotes(new GetUserVotesRequestModel(!isNullOrUndefined(this.postId) ? toNumber(this.postId) : null,
+                                               !isNullOrUndefined(this.commentId) ? toNumber(this.commentId) : null))
+        .pipe(take(1))
+        .subscribe((item: GetUserVotesResponseModel) =>
+                   {
+                     this.countVoted = item.countVotes;
+                     this.upVoted = item.upVoted;
+                     this.downVoted = item.downVoted;
+                   }, error => this.showError(errorToText(error)));
   }
 }

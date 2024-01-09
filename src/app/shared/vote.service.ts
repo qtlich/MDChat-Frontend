@@ -1,11 +1,11 @@
 import {HttpClient}                from '@angular/common/http';
 import {Injectable}                from '@angular/core';
 import {Observable}                from 'rxjs';
-import {OperationResult}           from '../common/models/operation.result.model';
 import {HttpConfigService}         from '../services/http.config.service';
 import {GetUserVotesRequestModel}  from './vote-button/models/get.user.votes.request.model';
 import {GetUserVotesResponseModel} from './vote-button/models/get.user.votes.response.model';
-import {VoteRequestPayload}        from './vote-button/models/vote-request-payload';
+import {VoteV1RequestModel}        from './vote-button/models/vote-v1-request.model';
+import {VoteV1ResponseModel}       from './vote-button/models/vote-v1-response.model';
 
 @Injectable({
               providedIn: 'root'
@@ -18,13 +18,13 @@ export class VoteService
   {
   }
 
-  public vote(item: VoteRequestPayload): Observable<OperationResult[]>
+  public vote(item: VoteV1RequestModel): Observable<VoteV1ResponseModel>
   {
-    return this.http.post<Array<OperationResult>>(`${this.httpConfigService.baseApiUrl}/votes/vote`, item);
+    return this.http.post<VoteV1ResponseModel>(`${this.httpConfigService.baseApiUrl}/votes/vote`, item);
   }
 
   public getVotes(item: GetUserVotesRequestModel): Observable<GetUserVotesResponseModel>
   {
-    return this.http.post<GetUserVotesResponseModel>(`${this.httpConfigService.baseApiUrl}/votes/getvotes`, item);
+    return this.http.post<GetUserVotesResponseModel>(`${this.httpConfigService.baseApiUrl}/votes/get`, item);
   }
 }

@@ -1,26 +1,29 @@
 .votebox {
-    display: flex;
-    text-align: center;
-    flex-direction: column;
-    font-size: 0.7em;
+  display: flex;
+  text-align: center;
+  flex-direction: column;
+  font-size: 1em;
 }
 
-.votesection{
-    margin:0px;
-    background-color: #ffffff;
+.votesection {
+  margin: 0px;
+  background-color: #ffffff;
 }
-.upvote,.downvote {
-    cursor: pointer;
-    border-radius: 2px solid;
+
+.upvote, .downvote {
+  cursor: pointer;
+  font-size: 1em;
 }
+
 .upvote:hover {
-    color: green;
-}
-.downvote:hover {
-    color: red;
+  color: green;
 }
 
-.votecount{
-    font-weight: bold;
-    font-size: 1.5em;
+.downvote:hover {
+  color: red;
+}
+
+.votecount {
+  font-weight: bold;
+  font-size: 1.7em;
 }

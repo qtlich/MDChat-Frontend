@@ -4,18 +4,18 @@
     <p-card>
       <div class="p-grid p-col-nogutter">
         <div class="p-col-1">
-          <app-vote-button [post]="post"></app-vote-button>
+          <vote-button [postId]="postId"></vote-button>
         </div>
         <div class="p-col-11">
-          <p class="post-title" [appTruncateAndSafeHtml]="post.postName"></p>
-          <p class="post-text" [appTruncateAndSafeHtml]="post.description" [appMaxCharacters]="-1"></p>
+          <p class="post-title" [appTruncateAndSafeHtml]="post?.postName"></p>
+          <p class="post-text" [appTruncateAndSafeHtml]="post?.description" [appMaxCharacters]="-1"></p>
         </div>
       </div>
       <p-footer>
         <div class="p-col-12 buttons-bottom">
           <a class="custom-button" role="button">
             <fa-icon [icon]="faComments"></fa-icon>
-            Comments({{post.commentCount}})
+            Comments({{post?.commentCount}})
           </a>&nbsp;
           <a class="custom-button" role="button">
             <fa-icon [icon]="faShare"></fa-icon>

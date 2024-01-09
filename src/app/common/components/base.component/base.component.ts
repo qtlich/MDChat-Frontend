@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MessageService}               from 'primeng/api';
-import {OperationResult}              from '../../models/operation.result.model';
 import {isEmptyArray}                 from '../../core.free.functions';
+import {OperationResult}              from '../../models/operation.result.model';
 
 @Component({
              selector:    'base-component',
@@ -11,7 +11,6 @@ import {isEmptyArray}                 from '../../core.free.functions';
 export abstract class BaseComponent implements OnInit, OnDestroy
 {
   public informationMessages: OperationResult[] = [];
-
 
   protected constructor(private _messageService: MessageService)
   {
@@ -24,14 +23,17 @@ export abstract class BaseComponent implements OnInit, OnDestroy
   public ngOnDestroy()
   {
   }
-  protected clearInformationMessages():void
+
+  protected clearInformationMessages(): void
   {
     this.informationMessages = [];
   }
-  protected addInformationMessage(id:number,message:string):void
+
+  protected addInformationMessage(id: number, message: string): void
   {
-    this.informationMessages.push(new OperationResult(id,message));
+    this.informationMessages.push(new OperationResult(id, message));
   }
+
   protected showMessages(items: OperationResult[]): void
   {
     !isEmptyArray(items)
@@ -40,27 +42,27 @@ export abstract class BaseComponent implements OnInit, OnDestroy
                     {
                       if (item.id < 0)
                       {
-                        this.showError(`${item.id}. item.message`)
+                        this.showError(`${item.id}. ${item.message}`);
                       }
                       else
                       {
-                        this.showInfo(`${item.id}. item.message`)
+                        this.showInfo(`${item.id}. ${item.message}`);
                       }
                     })
     }
   }
 
-  protected showError(detail: string, summary?: string,): void
+  protected showError(detail: string, summary?: string): void
   {
     this._messageService.add({severity: 'error', summary: summary, detail: detail});
   }
 
-  protected showSuccess(detail: string, summary?: string,): void
+  protected showSuccess(detail: string, summary?: string): void
   {
     this._messageService.add({severity: 'success', summary: summary, detail: detail});
   }
 
-  protected showWarning(detail: string, summary?: string,): void
+  protected showWarning(detail: string, summary?: string): void
   {
     this._messageService.add({severity: 'warn', summary: summary, detail: detail});
   }

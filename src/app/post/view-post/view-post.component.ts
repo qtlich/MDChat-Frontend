@@ -1,13 +1,13 @@
-import {Component, OnInit}                  from '@angular/core';
-import {PostService}                        from 'src/app/shared/post.service';
-import {ActivatedRoute, Router}             from '@angular/router';
-import {PostModel}                          from 'src/app/shared/post-model';
-import {throwError}                         from 'rxjs';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {CommentPayload}                     from 'src/app/comment/comment.payload';
+import {Component, OnInit}                           from '@angular/core';
+import {FormControl, FormGroup, Validators}          from '@angular/forms';
+import {ActivatedRoute, Router}                      from '@angular/router';
+import {IconDefinition}                              from '@fortawesome/fontawesome-svg-core';
+import {faBookmark, faComments, faEyeSlash, faShare} from '@fortawesome/free-solid-svg-icons';
+import {throwError}                                  from 'rxjs';
+import {CommentPayload}                              from 'src/app/comment/comment.payload';
 import {CommentService}                              from 'src/app/comment/comment.service';
-import {faBookmark, faComments, faEyeSlash,faShare} from '@fortawesome/free-solid-svg-icons';
-import {IconDefinition} from '@fortawesome/fontawesome-svg-core';
+import {PostModel}                                   from 'src/app/shared/post-model';
+import {PostService}                                 from 'src/app/shared/post.service';
 
 @Component({
              selector: 'app-view-post',
