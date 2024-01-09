@@ -1,18 +1,12 @@
 <!-- Section to Display Votes-->
 <div class="col-md-1">
   <div class="d-flex flex-column votebox">
-    <div>
-      <button pButton (click)="refresh()">{{postId}}</button>
-    </div>
-    <br>
-    <div [style.color]="upVoted ? 'red':''">
-      <fa-icon (click)="onUpVoteClick()" [icon]="faArrowUp" class="p-2 upvote"></fa-icon>
+    <div [ngClass]="upVoted ? 'upvote':'upVoteIcon'">
+      <fa-icon (click)="onUpVoteClick()" [icon]="faArrowUp" class="p-2 upVoteIcon"></fa-icon>
     </div>
     <div [style.color]="upVoted ? 'red':downVoted?'blue':''" class="p-2 votecount">{{countVoted}}</div>
-    <div [style.color]="downVoted ? 'blue':''">
-      <fa-icon (click)="onDownVoteClick()" [icon]="faArrowDown" [style.color]="downVoted ? 'blue':''"
-               class="p-2 downvote">
-      </fa-icon>
+    <div [ngClass]="downVoted ? 'downvote':'downVoteIcon'">
+      <fa-icon (click)="onDownVoteClick()" [icon]="faArrowDown" class="p-2 downVoteIcon"></fa-icon>
     </div>
   </div>
 </div>

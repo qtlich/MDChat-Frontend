@@ -10,17 +10,33 @@
   background-color: #ffffff;
 }
 
-.upvote, .downvote {
+
+.upVoteIcon {
   cursor: pointer;
+}
+
+.downVoteIcon {
+  cursor: pointer;
+}
+
+.upvote {
+  color: red;
+  font-size: 1em;
+}
+
+.downvote {
+  color: blue;
   font-size: 1em;
 }
 
 .upvote:hover {
-  color: green;
+  cursor: pointer;
+  color: red;
 }
 
 .downvote:hover {
-  color: red;
+  cursor: pointer;
+  color: blue;
 }
 
 .votecount {
