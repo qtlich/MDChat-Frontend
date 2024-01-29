@@ -11,11 +11,7 @@
 }
 
 
-.upVoteIcon {
-  cursor: pointer;
-}
-
-.downVoteIcon {
+.upVoteIcon .downVoteIcon{
   cursor: pointer;
 }
 
@@ -41,5 +37,5 @@
 
 .votecount {
   font-weight: bold;
-  font-size: 1.7em;
+  font-size: 1.5em;
 }
