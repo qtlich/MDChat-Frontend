@@ -1,0 +1,49 @@
+<div class = "p-grid">
+  <div class = "p-col-12">
+    <p-panel [showHeader] = "false">
+      <div class = "p-grid">
+        <div class = "p-col-12">
+          <p-editor [(ngModel)] = "sD.comment" placeholder = "What are you thoughts?" [style] = "{'height':'100px'}">
+            <p-header>
+              <span class = "ql-formats">
+                <button class = "ql-clean" pTooltip = "Clear text format"></button>
+                <button class = "ql-bold" pTooltip = "Bold"></button>
+                <button class = "ql-italic" pTooltip = "Italic"></button>
+                <button class = "ql-underline" pTooltip = "Underline"></button>
+                <button class = "ql-strike"></button>
+                <select class = "ql-font" pTooltip = "Select font"></select>
+                <select class = "ql-size" pTooltip = "Select font size"></select>
+              </span>
+              <span class = "ql-formats">
+                <select class = "ql-color" pTooltip = "Set font color"></select>
+                <select class = "ql-background" pTooltip = "Set background color"></select>
+              </span>
+              <span class = "ql-formats">
+                <button class = "ql-header" value = "1" pTooltip = "Header 1 block"></button>
+                <button class = "ql-blockquote" pTooltip = "Quote block"></button>
+                <button class = "ql-code-block" pTooltip = "Code block"></button>
+              </span>
+              <span class = "ql-formats">
+                <button class = "ql-list" value = "ordered" pTooltip = "Order list block"></button>
+                <button class = "ql-list" value = "bullet"></button>
+                <button class = "ql-indent" value = "-1"></button>
+                <button class = "ql-indent" value = "+1"></button>
+              </span>
+              <span class = "ql-formats">
+                <button class = "ql-direction" value = "rtl"></button>
+                <select class = "ql-align"></select>
+              </span>
+              <span class = "ql-formats">
+                <button class = "ql-link"></button>
+              </span>
+            </p-header>
+          </p-editor>
+        </div>
+        <div class = "p-col-10"></div>
+        <div class = "p-col-2 ui-fluid">
+          <button (click) = "onModifyCommentClick()" class = "ui-button-secondary ui-button-rounded" icon = "pi pi-comment" [label] = "mode==0?'Comment':'Save'" pButton type = "button"></button>
+        </div>
+      </div>
+    </p-panel>
+  </div>
+</div>

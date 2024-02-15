@@ -2,90 +2,60 @@
   <div class="p-col-6 p-offset-2">
 
     <p-card>
-      <div class="p-grid p-col-nogutter">
-        <div class="p-col-1">
-          <vote-button [postId]="postId"></vote-button>
-        </div>
-        <div class="p-col-11">
-          <p class="post-title" [appTruncateAndSafeHtml]="post?.postName"></p>
-          <p class="post-text" [appTruncateAndSafeHtml]="post?.description" [appMaxCharacters]="-1"></p>
+      <div class="d-flex align-items-center">
+        <vote-button [postId]="postId"></vote-button>
+        <div *ngIf="post" class="flex-grow-1 ml-2">
+          <p-editor [(ngModel)]="post.postDescription" readonly="readonly">
+            <p-header>
+              Posted by {{post.userName}} - {{post.createdTimeAgo}}<br>
+              <b>{{post.postName}}</b>&nbsp;
+              <a (click)="onEditClick()" *ngIf="post.canEdit" class="custom-button" role="button">
+                <fa-icon [icon]="faEdit" pTooltip="Edit post"></fa-icon>
+              </a>&nbsp;
+              <a (click)="onDeleteClick()" *ngIf="post.canDelete" class="custom-button" role="button">
+                <fa-icon [icon]="faTrash" pTooltip="Delete post"></fa-icon>
+              </a>&nbsp;
+            </p-header>
+          </p-editor>
         </div>
       </div>
       <p-footer>
-        <div class="p-col-12 buttons-bottom">
-          <a class="custom-button" role="button">
-            <fa-icon [icon]="faComments"></fa-icon>
-            Comments({{post?.commentCount}})
-          </a>&nbsp;
-          <a class="custom-button" role="button">
-            <fa-icon [icon]="faShare"></fa-icon>
-            Share
-          </a>&nbsp;
-          <a class="custom-button" role="button">
-            <fa-icon [icon]="faBookMark"></fa-icon>
-            Save
-          </a>&nbsp;
-          <a class="custom-button" role="button">
-            <fa-icon [icon]="faEyeSlash"></fa-icon>
-            Hide
-          </a>&nbsp;
+        <div class="p-grid">
+          <div class="p-col-1"></div>
+          <div class="p-col-11">
+            <a class="custom-button"  fragment="comments" role="button">
+              <fa-icon [icon]="faComments"></fa-icon>
+              Comments({{post?.commentsCount}})
+            </a>&nbsp;
+            <a class="custom-button" role="button">
+              <fa-icon [icon]="faShare"></fa-icon>
+              Share
+            </a>&nbsp;
+            <!--            <a class="custom-button" role="button">-->
+            <!--              <fa-icon [icon]="faBookMark"></fa-icon>-->
+            <!--              Save-->
+            <!--            </a>&nbsp;-->
+            <!--            <a class="custom-button" role="button">-->
+            <!--              <fa-icon [icon]="faEyeSlash"></fa-icon>-->
+            <!--              Hide-->
+            <!--            </a>&nbsp;-->
+          </div>
+          <div class="p-col-1"></div>
+          <div *ngIf="isLoggedIn && post && !post.commentsLocked" class="p-col-11">
+            <create-edit-comment [postId]="postId"></create-edit-comment>
+          </div>
+          <div class="p-col-12" id="comments">
+            <view-post-comments [postId]="postId"></view-post-comments>
+          </div>
         </div>
       </p-footer>
     </p-card>
 
   </div>
   <div class="p-col-3">
-    <app-side-bar></app-side-bar>
+    <create-channel-post-side-bar></create-channel-post-side-bar>
+    <br>
+    <channel-description-side-bar *ngIf="post" [channelId]="post.channelId"></channel-description-side-bar>
   </div>
 </div>
-<!--<div class="container">-->
-<!--  <div class="row">-->
-<!--    <hr />-->
-<!--    <div class="col-md-9">-->
-<!--      <div class="row post" *ngIf="post">-->
-<!--        <div class="col-md-1">-->
-<!--          <app-vote-button [post]="post"></app-vote-button>-->
-<!--        </div>-->
-<!--        <div class="col-md-11">-->
-<!--          <span>-->
-<!--            <span class="subreddit-text"><a class="post-url" href="">{{post.channelName}}</a></span>-->
-<!--            <span> . Posted-->
-<!--              <span> {{post.duration}} </span>-->
-<!--              by-->
-<!--              <a class="username" href="">{{post.userName}}</a>-->
-<!--            </span>-->
-<!--          </span>-->
-<!--          <hr />-->
-<!--          <a routerLink="/view-channel/{{post.id}}" class="post-title">{{post.postName}}</a>-->
-<!--          <div>-->
-<!--            <p class="post-text" [innerHtml]="post.description"></p>-->
-<!--          </div>-->
-<!--          <div class="post-comment">-->
-<!--            <form [formGroup]="commentForm" (ngSubmit)="postComment()">-->
-<!--              <div class="form-group">-->
-<!--                <textarea class="form-control" [formControlName]="'text'" placeholder="Your Thoughts?"></textarea>-->
-<!--              </div>-->
-<!--              <button type="submit" class="btn-login float-right">Comment</button>-->
-<!--            </form>-->
-<!--          </div>-->
-<!--          <div style="margin-top: 60px;" *ngFor="let comment of comments">-->
-<!--            <div class="comment">-->
-<!--              <div class="username">-->
-<!--                <a routerLink="/user/comment.username">{{comment.username}}</a>-->
-<!--              </div>-->
-<!--              <div>-->
-<!--                <p>{{comment.duration}}</p>-->
-<!--              </div>-->
-<!--              <b>{{comment.text}}</b>-->
-<!--            </div>-->
-<!--            <hr />-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--    <div class="p-col-3">-->
-<!--      <app-side-bar></app-side-bar>-->
-<!--      <app-channel-side-bar></app-channel-side-bar>-->
-<!--    </div>-->
-<!--  </div>-->
-<!--</div>-->
+<p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>

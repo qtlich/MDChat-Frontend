@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree} from '@angular/router';
-import {Observable} from 'rxjs';
-import {AuthService} from './shared/auth.service';
-import {LocalStorageService}         from 'ngx-webstorage';
+import {Observable}          from 'rxjs';
+import {AuthDataService}     from './shared/auth.data.service';
+import {LocalStorageService} from 'ngx-webstorage';
 import {redirectUrlStorageNameConst} from '../common/constants/core.free.constants';
 
 @Injectable({
@@ -11,7 +11,7 @@ import {redirectUrlStorageNameConst} from '../common/constants/core.free.constan
 export class AuthGuard implements CanActivate
 {
 
-  constructor(private authService: AuthService,
+  constructor(private authService: AuthDataService,
               private router: Router,
               private _localStorageService:LocalStorageService)
   {

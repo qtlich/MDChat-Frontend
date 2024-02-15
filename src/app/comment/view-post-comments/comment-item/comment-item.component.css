@@ -1,0 +1,5 @@
+@import "../../../app.component.css";
+.narrow-vote-button
+{
+  width: 5em;
+}

@@ -8,10 +8,11 @@
 .votesection {
   margin: 0px;
   background-color: #ffffff;
+  border: 0;
 }
 
 
-.upVoteIcon .downVoteIcon{
+.upVoteIcon .downVoteIcon {
   cursor: pointer;
 }
 
@@ -24,6 +25,7 @@
   color: blue;
   font-size: 1em;
 }
+
 
 .upvote:hover {
   cursor: pointer;
@@ -38,4 +40,27 @@
 .votecount {
   font-weight: bold;
   font-size: 1.5em;
+}
+
+
+.voteboxc {
+  display: flex;
+  text-align: center;
+  flex-direction: column;
+  font-size: 1em;
+}
+
+.upvotec {
+  color: red;
+  font-size: 1em;
+}
+
+.downvotec {
+  color: blue;
+  font-size: 1em;
+}
+
+.votecountc {
+  font-weight: bold;
+  font-size: 1em;
 }

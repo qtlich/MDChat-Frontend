@@ -3,7 +3,7 @@ import {SelectItem}          from 'primeng/api';
 
 export class CreatePostScreenDataModel extends PostCudRequestModel
 {
-  public channelItems: Array<SelectItem> = [];
+  public channelItems: SelectItem[] = [];
   constructor()
   {
     super();

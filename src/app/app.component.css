@@ -6,3 +6,25 @@
   display: flex;
   justify-content: center;
 }
+.custom-button {
+  cursor: pointer;
+  display: inline-block;
+  padding: 0px 2px;
+  text-decoration: none;
+  border-radius: 10px;
+  transition: border-color 0.3s ease, color 0.3s ease;
+  font-size: 0.9em;
+
+  &:hover {
+    border: 1px solid #000000;
+  }
+}
+
+a {
+  color: inherit; /* Устанавливаем цвет текста как у родительского элемента */
+  text-decoration: none; /* Убираем подчеркивание у ссылок */
+}
+
+a:hover {
+  text-decoration: underline; /* Подчеркиваем ссылку при наведении */
+}

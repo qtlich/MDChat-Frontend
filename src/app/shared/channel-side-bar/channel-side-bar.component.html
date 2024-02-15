@@ -1,7 +1,7 @@
 <div class="sidebar-view-subreddit">
     <div style="color: black; font-weight: bold">Browse Channel</div>
     <hr />
-    <span *ngFor="let subreddit of subreddits">
+    <span *ngFor="let subreddit of channels">
         <span class="comment-text"><a href="/view-channel/{{subreddit.id}}">{{subreddit.name}}</a></span>
         <hr />
     </span>

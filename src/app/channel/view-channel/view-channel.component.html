@@ -6,10 +6,7 @@
           <p-tabView>
             <p-tabPanel header={{channel.name}}>
               <span class="number-of-posts">Number of posts: {{channel.numberOfPosts + 1}}</span>
-              <!--              <button (click)="refreshChannel(channel.id)"-->
-              <!--                      class="btn-refresh-channel">-->
-              <!--                Refresh channel-->
-              <!--              </button>-->
+
               <div *ngFor="let item of channelPosts" style="margin-top: 0.3em;">
                 <p-panel>
                   <p-header><span class="post-text">{{item.postName}}</span>&nbsp;
@@ -32,7 +29,7 @@
   <div class="p-col-3">
     <create-channel-post-side-bar></create-channel-post-side-bar>
     <br>
-    <channel-description-side-bar [channel]="channel"></channel-description-side-bar>
+    <channel-description-side-bar [channelId]="channelId"></channel-description-side-bar>
   </div>
   <div class="p-col-1"></div>
 </div>

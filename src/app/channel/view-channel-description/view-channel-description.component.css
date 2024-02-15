@@ -1,0 +1,14 @@
+.p-grid {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.p-col-12 {
+  width: 100%;
+}
+
+/* Если вы хотите обеспечить перенос слов при необходимости */
+p {
+  word-wrap: break-word;
+  white-space: pre-wrap;
+}

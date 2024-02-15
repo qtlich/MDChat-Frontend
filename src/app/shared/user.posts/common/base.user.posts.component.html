@@ -1,0 +1,110 @@
+<!--         (onRowSelect)="onRowSelect($event)"
+         selectionMode="single"-->
+<div class="page-content" style="height: calc(100vh - 150px)">
+<!--  {{posts.length}}-->
+  <p-table #dt
+           (onLazyLoad)="loadPostsLazy($event)"
+           [(selection)]="selectedItem"
+           [lazy]="true"
+           [loading]="loading"
+           [rows]="100"
+           [scrollable]="true"
+           [totalRecords]="10"
+           [value]="posts"
+           [virtualRowHeight]="34"
+           [virtualScroll]="true"
+           dataKey="postId"
+           rowHover="true"
+           scrollHeight="flex">
+    <ng-template *ngIf="showSortBar" pTemplate="caption">
+      <p-selectButton (onChange)="onChangeSortMode($event.value)"
+                      [(ngModel)]="selectedSortBy"
+                      [options]="existingSortingDD">
+      </p-selectButton>
+    </ng-template>
+    <ng-template let-columns pTemplate="colgroup">
+      <colgroup>
+        <col style="width: 4em;">
+        <col>
+      </colgroup>
+
+    </ng-template>
+    <!--  <ng-template let-columns pTemplate="header">-->
+    <!--    <tr>-->
+    <!--      <th>votes</th>-->
+    <!--      <th></th>-->
+    <!--    </tr>-->
+    <!--  </ng-template>-->
+    <ng-template let-columns="columns" let-item let-rowIndex="rowIndex" pTemplate="body">
+      <tr [pSelectableRowIndex]="rowIndex" [pSelectableRow]="item" class="ui-selectable-row">
+        <td class="center-cell">
+          <vote-button [postId]="item.postId"></vote-button>
+        </td>
+        <td (click)="onRowSelect(item)">
+          <div class="p-grid">
+            <div class="p-col-12">
+              <div class="p-grid">
+                <div class="p-col-12">
+                  <a class="post-name" href="/view-post/{{item.postId}}">
+                    <p CleanHtmlAndTruncate [text]="item.postName" class="post-title"></p>
+                  </a>
+                </div>
+                <div class="p-col-12">
+                  <a class="post-name" href="/view-post/{{item.postId}}">
+                    <p CleanHtmlAndTruncate [maxLength]="100" [text]="item.postDescription" class="post-text"></p>
+                  </a>
+                </div>
+                <div class="p-col-12">
+                  <a pTooltip="Channel" routerLink="view-channel/{{item.postChannelId}}">{{item.channelName}}</a>&nbsp;
+                  Posted by <a routerLink="/user/{{item.postUserName}}">{{item.postUserName}} </a>{{item.postTimeAgo}}&nbsp;
+                  {{item.duration}}
+                </div>
+                <div class="p-col-12 buttons-bottom">
+                  <a class="custom-button" href="/view-post/{{item.postId}}#comments" role="button">
+                    <fa-icon [icon]="faComments"></fa-icon>
+                    Comments({{item.postCountComments}})
+                  </a>&nbsp;
+                  <a (click)="overlayPanel.toggle($event); hoverPostId = item.postId" class="custom-button" role="button">
+                    <fa-icon [icon]="faShare" pTooltip="Share"></fa-icon>
+                    Share
+                  </a>&nbsp;
+                  <a (click)="onBookmarkPostClick(item.postId)" *ngIf="isLoggedIn && !item.saved" class="custom-button" role="button">
+                    <fa-icon [icon]="faEmptyBookMark" pTooltip="Save"></fa-icon>
+                    Save
+                  </a>&nbsp;
+                  <a (click)="onBookmarkPostClick(item.postId,false)" *ngIf="isLoggedIn && item.saved" class="custom-button" role="button">
+                    <fa-icon [icon]="faSolidBookMark" pTooltip="Unsave"></fa-icon>
+                    Unsave
+                  </a>
+                  <a (click)="onHidePostClick(item.postId)" *ngIf="isLoggedIn && item.hidden" class="custom-button" role="button">
+                    <fa-icon [icon]="faEye" pTooltip="Unhide"></fa-icon>
+                    Unhide
+                  </a>&nbsp;
+                  <a (click)="onHidePostClick(item.postId,false)" *ngIf="isLoggedIn && !item.hidden" class="custom-button" role="button">
+                    <fa-icon [icon]="faEyeSlash" pTooltip="Hide"></fa-icon>
+                    Hide
+                  </a>
+                  <a (click)="onDeleteClick(item.postId)" *ngIf="isLoggedIn && item.canDelete" class="custom-button" role="button">
+                    <fa-icon [icon]="faTrashAlt" pTooltip="Delete"></fa-icon>
+                    Delete
+                  </a>&nbsp;
+                </div>
+              </div>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="2" style="text-align:left">No posts found.</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+<p-overlayPanel #overlayPanel appendTo="body">
+  <div>
+    <a (click)="copyLink()" class="custom-button" role="button">Copy link</a>
+  </div>
+</p-overlayPanel>
+<p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>

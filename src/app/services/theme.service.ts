@@ -1,7 +1,7 @@
-import {Inject, Injectable} from '@angular/core';
-import {DOCUMENT} from '@angular/common';
-import {isEmptyArray, isNullOrUndefined} from '../common/core.free.functions';
-import {LocalStorageService} from 'ngx-webstorage';
+import {DOCUMENT}                        from '@angular/common';
+import {Inject, Injectable}              from '@angular/core';
+import {LocalStorageService}             from 'ngx-webstorage';
+import {isEmptyArray, isNullOrUndefined} from '../common/core/core.free.functions';
 
 export interface ThemeItem
 {
@@ -18,9 +18,8 @@ export const themes: ThemeItem[] = [{name: 'Luna amber', path: 'luna-amber', ima
                                     {name: 'Nova dark', path: 'nova-dark', image: 'assets/images/themes/nova-alt.png'},
                                     {name: 'Nova light', path: 'nova-light', image: 'assets/images/themes/nova-vue.png'},
                                     {name: 'Rhea', path: 'rhea', image: 'assets/images/themes/rhea.png'}];
-@Injectable({
-              providedIn: 'root',
-            })
+
+@Injectable({providedIn: 'root',})
 export class ThemeService
 {
   private _existingThemes: ThemeItem[] = themes;

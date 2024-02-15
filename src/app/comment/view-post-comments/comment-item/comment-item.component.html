@@ -1,0 +1,53 @@
+<div id={{item.id}} style="margin-left: 0.7em; margin-top: 1em;">
+
+  <!-- BEGIN: View item -->
+  <ng-container *ngIf="readonly">
+    <div class="p-grid d-flex align-items-center">
+      <div class="narrow-vote-button">
+        <vote-button [commentId]="item.id" [mode]="1" [postId]="item.postId"></vote-button>
+      </div>
+      <div class="flex-grow-1 ml-2">
+        <p-editor [(ngModel)]="item.comment" readonly="readonly">
+          <p-header>
+            {{item.userName}} - {{item.createdTimeAgo}}
+            <a (click)="onReplayClick()" class="custom-button" role="button">
+              <fa-icon [icon]="faReply" pTooltip="Replay"></fa-icon>
+            </a>&nbsp;
+            <a (click)="onEditClick()" *ngIf="item.canEdit" class="custom-button" role="button">
+              <fa-icon [icon]="faEdit" pTooltip="Edit"></fa-icon>
+            </a>&nbsp;
+            <a (click)="onDeleteClick(item.id)" *ngIf="item.canDelete" class="custom-button" role="button">
+              <fa-icon [icon]="faTrash" pTooltip="Delete"></fa-icon>
+            </a>&nbsp;
+          </p-header>
+        </p-editor>
+      </div>
+    </div>
+  </ng-container>
+
+  <!-- END: View item -->
+
+  <!-- BEGIN: Edit item -->
+  <ng-container *ngIf="!readonly && item.canEdit">
+    <div class="narrow-vote-button"></div>
+    <div class="flex-grow-1 ml-2">
+      <create-edit-comment [commentId]="item.id" [comment]="item.comment" [mode]="1" [parentId]="item.id" [postId]="item.postId"></create-edit-comment>
+    </div>
+  </ng-container>
+  <!-- END: Edit item -->
+
+  <!-- BEGIN: Replay item -->
+  <ng-container *ngIf="needReplay">
+    <div class="narrow-vote-button"></div>
+    <div class="flex-grow-1 ml-2">
+      <create-edit-comment [parentId]="item.id" [postId]="item.postId"></create-edit-comment>
+    </div>
+  </ng-container>
+  <!-- END: Replay item -->
+
+  <ng-container *ngIf="item.comments && item.comments.length && item.comments.length > 0">
+    <comment-item *ngFor="let nestedItem of item.comments" [item]="nestedItem"></comment-item>
+  </ng-container>
+
+</div>
+<p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>

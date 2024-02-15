@@ -1,9 +1,9 @@
-import {Injectable}                                                              from '@angular/core';
 import {HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
+import {Injectable}                                                              from '@angular/core';
 import {BehaviorSubject, Observable, throwError}                                 from 'rxjs';
-import {AuthService}                                                             from './auth/shared/auth.service';
 import {catchError, filter, switchMap, take}                                     from 'rxjs/operators';
-import {LoginResponse}                                                           from './auth/login/login-response.payload';
+import {AuthDataService}                                                         from './auth/shared/auth.data.service';
+import {AuthenticationResponseModel}                                             from './auth/shared/models/authentication.response.model';
 
 @Injectable({
               providedIn: 'root'
@@ -14,14 +14,13 @@ export class TokenInterceptor implements HttpInterceptor
   isTokenRefreshing = false;
   refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject(null);
 
-  constructor(public authService: AuthService)
+  constructor(public authService: AuthDataService)
   {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler):
     Observable<HttpEvent<any>>
   {
-    console.log('req=>', req);
     if (req.url.indexOf('refresh') !== -1 || req.url.indexOf('login') !== -1)
     {
       return next.handle(req);
@@ -29,13 +28,10 @@ export class TokenInterceptor implements HttpInterceptor
     const jwtToken = this.authService.getJwtToken();
     if (jwtToken)
     {
-      console.log('next', next);
       return next.handle(this.addToken(req, jwtToken)).pipe(catchError(error =>
                                                                        {
-                                                                         console.error('error.status=>', error.status);
-                                                                         console.error('error instanceof HttpErrorResponse', error instanceof HttpErrorResponse);
                                                                          if (error instanceof HttpErrorResponse
-                                                                             && ([0,401.403].includes(error.status)))
+                                                                             && ([0, 401.403].includes(error.status)))
                                                                          {
                                                                            return this.handleAuthErrors(req, next);
                                                                          }
@@ -61,14 +57,15 @@ export class TokenInterceptor implements HttpInterceptor
       this.refreshTokenSubject.next(null);
 
       return this.authService
-                 .refreshToken().pipe(switchMap((refreshTokenResponse: LoginResponse) =>
-                                                {
-                                                  this.isTokenRefreshing = false;
-                                                  this.refreshTokenSubject.next(refreshTokenResponse.authenticationToken);
-                                                  return next.handle(this.addToken(req,
-                                                                                   refreshTokenResponse.authenticationToken));
-                                                })
-        )
+                 .refreshToken()
+                 .pipe(switchMap((refreshTokenResponse: AuthenticationResponseModel) =>
+                                 {
+                                   this.isTokenRefreshing = false;
+                                   this.refreshTokenSubject.next(refreshTokenResponse.authenticationToken);
+                                   return next.handle(this.addToken(req,
+                                                                    refreshTokenResponse.authenticationToken));
+                                 })
+                 )
     }
     else
     {

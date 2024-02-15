@@ -1,17 +1,20 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {ChannelResponseModel} from '../models/channel.response.model';
-import {ChannelService} from '../channel.service';
+import {BaseComponent}                       from '../../common/components/base.component/base.component';
+import {errorToText}                         from '../../common/core/core.free.functions';
+import {GlobalBusService}                    from '../../common/services/global.bus.service';
+import {ChannelResponseModel}     from '../models/channel.response.model';
+import {ChannelRestService}       from '../../services/channels/channel.rest.service';
 import {Subscription, throwError} from 'rxjs';
-import {ActivatedRoute} from '@angular/router';
-import {PostService} from '../../shared/post.service';
-import {PostModel} from '../../shared/post-model';
+import {ActivatedRoute}  from '@angular/router';
+import {PostDataService} from '../../services/posts/post.data.service';
+import {PostModel}       from '../../shared/post-model';
 
 @Component({
              selector: 'view-channel',
              templateUrl: './view-channel.component.html',
              styleUrls: ['./view-channel.component.css']
            })
-export class ViewChannelComponent implements OnInit, OnDestroy
+export class ViewChannelComponent extends BaseComponent implements OnInit, OnDestroy
 {
 
   @Input() channelId: number;
@@ -19,10 +22,12 @@ export class ViewChannelComponent implements OnInit, OnDestroy
   channelPosts: PostModel[];
   subscription: Subscription;
 
-  constructor(private channelService: ChannelService,
-              private postService: PostService,
-              private _aR: ActivatedRoute)
+  constructor(private channelService: ChannelRestService,
+              private postService: PostDataService,
+              private _aR: ActivatedRoute,
+              serviceBus:GlobalBusService)
   {
+    super(serviceBus);
     this.subscription = this._aR.params.subscribe(params =>
                                                   {
                                                     this.channelId = params['id'];
@@ -30,20 +35,15 @@ export class ViewChannelComponent implements OnInit, OnDestroy
                                                   });
   }
 
-  ngOnInit()
-  {
-
-  }
   public refreshChannel(id:number):void
   {
     this.postService.getPostsByChannel(id).subscribe(data =>
                                                                  {
                                                                    this.channelPosts = data;
-                                                                   console.log('Channel posts', this.channelPosts);
                                                                  },
                                                                  error =>
                                                                  {
-                                                                   throwError(error);
+                                                                   this.showError(errorToText(error));
                                                                  });
   }
   loadChannelContent(): void
@@ -53,7 +53,7 @@ export class ViewChannelComponent implements OnInit, OnDestroy
                                                                this.channel = data;
                                                              }, error =>
                                                              {
-                                                               throwError(error);
+                                                               this.showError(errorToText(error));
                                                              });
     this.refreshChannel(this.channelId)
 

@@ -1,16 +1,17 @@
 import {Component, OnInit}       from '@angular/core';
-import {AuthService}             from '../shared/auth.service';
 import {Router}                  from '@angular/router';
+import {BaseComponent}                   from '../../common/components/base.component/base.component';
+import {errorToText, isEmptyStringField} from '../../common/core/core.free.functions';
+import {GlobalBusService}        from '../../common/services/global.bus.service';
+import {AuthDataService}         from '../shared/auth.data.service';
 import {SignUpRequestInputModel} from '../shared/models/signup.request.input.model';
-import {isEmptyStringField}      from '../../common/core.free.functions';
-import {MessageService}          from 'primeng/api';
 
 @Component({
              selector:    'app-signup',
              templateUrl: './signup.component.html',
              styleUrls:   ['./signup.component.css']
            })
-export class SignupComponent implements OnInit
+export class SignupComponent extends BaseComponent implements OnInit
 {
 
   public userName: string;
@@ -18,10 +19,11 @@ export class SignupComponent implements OnInit
   public password: string;
   public confirmPassword: string;
 
-  constructor(private _authService: AuthService,
+  constructor(private _authService: AuthDataService,
               private _router: Router,
-              private _messageService: MessageService)
+              serviceBus: GlobalBusService)
   {
+    super(serviceBus);
   }
 
   public onSingUpClick(): void
@@ -36,51 +38,47 @@ export class SignupComponent implements OnInit
   {
     if (isEmptyStringField(this.email))
     {
-      this._messageService.add({severity:'error',detail: `Please input email`});
+      this.showWarning(`Please input email`);
       return false;
     }
     if (isEmptyStringField(this.userName))
     {
-      this._messageService.add({severity:'error',detail: `Please input username`});
+      this.showWarning(`Please input username`);
       return false;
     }
     if (isEmptyStringField(this.password))
     {
-      this._messageService.add({severity:'error',detail: `Please input password`});
+      this.showWarning(`Please input password`);
       return false;
     }
     if (isEmptyStringField(this.confirmPassword))
     {
-      this._messageService.add({severity:'error',detail: `Please input confirmation password`});
+      this.showWarning(`Please input confirmation password`);
       return false;
     }
     if (this.password !== this.confirmPassword)
     {
-      this._messageService.add({severity:'error',detail: `Passwords do not match`});
+      this.showWarning(`Passwords do not match`);
       return false;
     }
     return true;
   }
 
-  ngOnInit()
-  {
-  }
-
-  signup()
+  public signup(): void
   {
     this._authService
         .signup(new SignUpRequestInputModel(this.userName,
                                             this.email,
                                             this.password))
-
         .subscribe(data =>
                    {
-                     this._messageService.add({severity:'info',detail: data});
+                     this.showMessages(data);
                      this._router.navigate(['/login'],
                                            {queryParams: {registered: 'true'}});
                    }, error =>
                    {
-                     this._messageService.add({severity:'error',detail: 'Registration Failed! Please try again'});
+                    this.showError(errorToText(error.error));
+                     this.showError('Registration Failed! Please try again');
                    });
   }
 }

@@ -1,74 +1,84 @@
-import {Component, OnInit}                           from '@angular/core';
-import {FormControl, FormGroup, Validators}          from '@angular/forms';
-import {ActivatedRoute, Router}                      from '@angular/router';
-import {IconDefinition}                              from '@fortawesome/fontawesome-svg-core';
-import {faBookmark, faComments, faEyeSlash, faShare} from '@fortawesome/free-solid-svg-icons';
-import {throwError}                                  from 'rxjs';
-import {CommentPayload}                              from 'src/app/comment/comment.payload';
-import {CommentService}                              from 'src/app/comment/comment.service';
-import {PostModel}                                   from 'src/app/shared/post-model';
-import {PostService}                                 from 'src/app/shared/post.service';
+import {Component, OnDestroy, OnInit}                                          from '@angular/core';
+import {ActivatedRoute, Router}                                                from '@angular/router';
+import {faBookmark, faComments, faEdit, faEyeSlash, faReply, faShare, faTrash} from '@fortawesome/free-solid-svg-icons';
+import {ConfirmationService}                                                   from 'primeng/api';
+import {AuthDataService}                                                       from '../../auth/shared/auth.data.service';
+import {OnSuccessModifyCommentItem}                                            from '../../comment/create-comment/create-comment.component';
+import {CommentDataService}                                                    from '../../comment/view-post-comments/services/comment.data.service';
+import {BaseComponent}                                                         from '../../common/components/base.component/base.component';
+import {toNumber}                                                              from '../../common/core/core.free.functions';
+import {EActionType}                                                           from '../../common/models/event.type';
+import {GlobalBusService}                                                      from '../../common/services/global.bus.service';
+import {GetPostByIdDtoRequestModel}                                            from '../../services/posts/models/get.post.by.id.dto.request.model';
+import {GetPostByIdDtoResponseModel}                                           from '../../services/posts/models/get.post.by.id.dto.response.model';
+import {IDeletePostResult, PostDataService}                                    from '../../services/posts/post.data.service';
 
 @Component({
-             selector: 'app-view-post',
+             selector:    'view-post',
              templateUrl: './view-post.component.html',
-             styleUrls: ['./view-post.component.css']
+             styleUrls:   ['./view-post.component.css'],
+             providers:   [ConfirmationService]
            })
-export class ViewPostComponent implements OnInit
+export class ViewPostComponent extends BaseComponent implements OnInit, OnDestroy
 {
 
-  readonly faComments: IconDefinition = faComments;
-  readonly faShare: IconDefinition = faShare;
-  readonly faBookMark: IconDefinition = faBookmark;
-  readonly faEyeSlash: IconDefinition = faEyeSlash;
-  postId: number;
-  post: PostModel;
-  commentForm: FormGroup;
-  commentPayload: CommentPayload;
-  comments: CommentPayload[];
+  readonly faComments: any = faComments; //IconDefinition
+  readonly faShare: any = faShare;
+  readonly faBookMark: any = faBookmark;
+  readonly faEyeSlash: any = faEyeSlash;
+  public postId: number;
+  public post: GetPostByIdDtoResponseModel;
+  protected readonly faTrash = faTrash;
+  protected readonly faReply = faReply;
+  protected readonly faEdit = faEdit;
 
-  constructor(private postService: PostService, private activateRoute: ActivatedRoute,
-              private commentService: CommentService, private router: Router)
+  constructor(private _postService: PostDataService,
+              private _activateRoute: ActivatedRoute,
+              private _commentService: CommentDataService,
+              private _confirmationService: ConfirmationService,
+              private _router: Router,
+              serviceBus: GlobalBusService,
+              authService: AuthDataService)
   {
-    this.postId = this.activateRoute.snapshot.params.id;
-
-    this.commentForm = new FormGroup({
-                                       text: new FormControl('', Validators.required)
-                                     });
-    this.commentPayload = {
-      text: '',
-      postId: this.postId
-    };
+    super(serviceBus, authService);
+    this.postId = this._activateRoute.snapshot.params.id;
   }
 
-  ngOnInit(): void
+  public ngOnInit(): void
   {
-    this.getPostById();
-    this.getCommentsForPost();
+    super.ngOnInit();
+    this.__loadPost();
   }
 
-  postComment()
+  public onEditClick(): void
   {
-    this.commentPayload.text = this.commentForm.get('text').value;
-    this.commentService.postComment(this.commentPayload).subscribe(data =>
-                                                                   {
-                                                                     this.commentForm.get('text').setValue('');
-                                                                     this.getCommentsForPost();
-                                                                   }, error =>
-                                                                   {
-                                                                     throwError(error);
-                                                                   })
+
   }
 
-  private getPostById()
+  public onDeleteClick(): void
   {
-    this.postService.getPost(this.postId).subscribe(data => this.post = data, error => throwError(error));
+    this._confirmationService.confirm({
+                                        message: 'Are you sure that you want to delete post?',
+                                        accept:  () => this._postService.deletePost(this.postId)
+                                      });
   }
 
-  private getCommentsForPost()
+  protected onSubscribeData()
   {
-    this.commentService.getAllCommentsForPost(this.postId).subscribe(data => this.comments = data, error => throwError(error));
+    super.onSubscribeData();
+    this.subscribe(this.serviceBus.onEvent(EActionType.SUCCESS_MODIFY_COMMENT, (data: OnSuccessModifyCommentItem) => this.__loadCommentsCount()));
+    this.subscribe(this.serviceBus.onEvent(EActionType.ON_DELETE_POST_ACTION, (result: IDeletePostResult) => this._router.navigateByUrl('/')));
+    this.subscribe(this._postService.onLoadPostEvent().subscribe((item: GetPostByIdDtoResponseModel) => this.post = item));
+    this.subscribe(this._postService.onLoadPostCommentsCountEvent().subscribe((data: number) => this.post.commentsCount = data));
   }
 
+  private __loadCommentsCount(): void
+  {
+    this._postService.loadCommentsCount(this.postId)
+  }
 
+  private __loadPost()
+  {
+    this._postService.loadPost(new GetPostByIdDtoRequestModel(toNumber(this.postId)))
+  }
 }

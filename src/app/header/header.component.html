@@ -71,11 +71,6 @@
                     placeholder="Channels">
     </p-autoComplete>&nbsp;
     <!-- END: Search component -->
-    <!-- BEGIN: Themes -->
-    <a (click)="changeTheme(item.path)" *ngFor="let item of themes" class="mr-3 cursor-pointer">
-      <img src="{{item.image}}" width="20">
-    </a>
-    <!-- END:  Themes -->
   </div>
 
   <div class="ui-toolbar-group-right">
@@ -83,7 +78,7 @@
       <p-slideMenu #usermenu [model]="items" [popup]="true" appendTo="body"></p-slideMenu>
       <button #btn
               (click)="onUserMenuClick($event)"
-              [label]="username"
+              [label]="userName"
               class="ui-button-rounded"
               icon="pi pi-user"
               pButton

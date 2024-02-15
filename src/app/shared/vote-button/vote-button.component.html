@@ -1,5 +1,5 @@
 <!-- Section to Display Votes-->
-<div class="col-1">
+<div class="col-1" *ngIf="mode==0">
   <div class="d-flex flex-column votebox">
     <div [ngClass]="upVoted ? 'upvote':'upVoteIcon'">
       <fa-icon (click)="onUpVoteClick()" [icon]="faArrowUp" class="p-2 upVoteIcon"></fa-icon>
@@ -10,3 +10,16 @@
     </div>
   </div>
 </div>
+<div *ngIf="mode==1" style="width: 8em; border: 1px">
+  <div class="d-flex flex-column align-items-center voteboxc">
+    <div [ngClass]="upVoted ? 'upvotec':'upVoteIcon'">
+      <fa-icon (click)="onUpVoteClick()" [icon]="faChevronUp" class="p-2 upVoteIcon"></fa-icon>
+    </div>
+    <div [style.color]="upVoted ? 'red':downVoted?'blue':''" class="p-2 votecountc">{{countVoted}}</div>
+    <div [ngClass]="downVoted ? 'downvotec':'downVoteIcon'">
+      <fa-icon (click)="onDownVoteClick()" [icon]="faChevronDown" class="p-2 downVoteIcon"></fa-icon>
+    </div>
+  </div>
+</div>
+
+

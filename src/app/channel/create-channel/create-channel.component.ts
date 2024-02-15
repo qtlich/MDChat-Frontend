@@ -1,113 +1,115 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {Router} from '@angular/router';
-import {ChannelService} from '../channel.service';
-import {throwError} from 'rxjs';
-import {MessageService} from "primeng/api";
-import {CreateChannelDtoPayloadModel} from "./models/create-channel-dto-payload-model";
+import {Component, OnDestroy, OnInit}                   from '@angular/core';
+import {Router}                                         from '@angular/router';
 import {BaseComponent}                                  from '../../common/components/base.component/base.component';
+import {isEmptyArray, isEmptyStringField}               from '../../common/core/core.free.functions';
+import {OPERATION_TYPES}                                from '../../common/core/enums/operation.types';
+import {EActionType}                                    from '../../common/models/event.type';
+import {GlobalBusService}                               from '../../common/services/global.bus.service';
+import {ChannelDataService, OnSuccessModifyChannelItem} from '../../services/channels/channel.data.service';
+import {ChannelCudRequestModel}                         from '../../services/channels/models/channel.cud.request.model';
+import {CreateChannelScreenDataModel}                   from './models/create.channel.screen.data.model';
 
 @Component({
-             selector: 'create-channel',
+             selector:    'create-channel',
              templateUrl: './create-channel.component.html',
-             styleUrls: ['./create-channel.component.css']
+             styleUrls:   ['./create-channel.component.css']
 
            })
-export class CreateChannelComponent extends BaseComponent implements OnInit
+export class CreateChannelComponent extends BaseComponent implements OnInit, OnDestroy
 {
-  public readonly MAX_CHANNEL_NAME_LENGTH = 30;
-  public remaining: number = this.MAX_CHANNEL_NAME_LENGTH;
-  public channelName: string;
-  public channelDescription: string;
-  public channelType: string = "public";
+  public readonly MAX_CHANNEL_NAME_LENGTH = 50;
+  public sD: CreateChannelScreenDataModel = new CreateChannelScreenDataModel();
 
-
-  constructor(private router: Router,
-              private channelService: ChannelService,
-              messageService: MessageService)
+  constructor(private _router: Router,
+              private _channelService: ChannelDataService,
+              serviceBus: GlobalBusService)
   {
-    super(messageService)
+    super(serviceBus);
+
+  }
+
+  public ngOnInit()
+  {
+    super.ngOnInit();
+    this.countRemaining();
   }
 
   public onDiscardClick(): void
   {
-    this.router.navigateByUrl('/');
+    this._router.navigateByUrl('/');
   }
 
   public onCreateChannelClick(): void
   {
     if (this.__isValidData())
     {
-      this.createChannel();
+      this.__createChannel();
     }
+    else
+    {
+      this.serviceBus.showMessages(this.informationMessages);
+    }
+  }
+
+  protected onSubscribeData()
+  {
+    super.onSubscribeData();
+    this.subscribe(this.serviceBus.onEvent(EActionType.SUCCESS_MODIFY_CHANNEL, (data: OnSuccessModifyChannelItem) =>
+    {
+      if (data.item.operationType == OPERATION_TYPES.CREATE)
+      {
+        this.goToChannelId(data.item.channelId);
+      }
+    }));
   }
 
   public countRemaining(): void
   {
-    this.remaining = this.MAX_CHANNEL_NAME_LENGTH - this.channelName.length;
+    this.sD.remaining = this.MAX_CHANNEL_NAME_LENGTH - (!isEmptyStringField(this.sD.channelName)? this.sD.channelName.length:0);
   }
 
   private __isValidData(): boolean
   {
-    if (!this.channelName || this.channelName.length == 0)
-    {
-      this.showWarning( 'Channel name is required');
-      return false;
-    }
-    if (!this.channelDescription || this.channelDescription.length == 0)
-    {
-      this.showWarning(  'Channel description is required');
-      return false;
-    }
-    return true;
+    this.clearInformationMessages();
+    let i: number;
+    isEmptyStringField(this.sD.channelName) && this.addInformationMessage(--i, 'Channel name is required');
+    isEmptyStringField(this.sD.channelDescription) && this.addInformationMessage(--i, 'Channel description is required');
+    return isEmptyArray(this.informationMessages);
   }
 
   discard()
   {
-    this.router.navigateByUrl('/');
+    this._router.navigateByUrl('/');
   }
 
-  createChannel()
+  private __createChannel()
   {
-    this.channelService.createChannel(this.__createPayload()).subscribe(data =>
-                                                                        {
-                                                                          if (data && data.id > 0)
-                                                                          {
-                                                                            this.showSuccess(`Channel: ${data.name} success created`,
-                                                                                             'Success operation');
-                                                                            this.goToChannelId(data.id);
-                                                                          }
-                                                                          else
-                                                                          {
-                                                                            this.showError(`Channel ${data.name} not created`);
-                                                                          }
-                                                                        }, error =>
-                                                                        {
-                                                                          this.showError(`Channel ${this.channelName} not created`);
-                                                                        })
+    this._channelService.channelCUD(this.__prepareDataForSave());
+  }
+
+  private __prepareDataForSave(): ChannelCudRequestModel
+  {
+    return new ChannelCudRequestModel(OPERATION_TYPES.CREATE,
+                                      null,
+                                      this.__getChannelType(this.sD.channelTypeString),
+                                      !isEmptyStringField(this.sD.channelName) ? this.sD.channelName : null,
+                                      !isEmptyStringField(this.sD.channelDescription) ? this.sD.channelDescription : null);
   }
 
   private goToChannelId(channelId: number): void
   {
-    this.router.navigate([`view-channel/${channelId}`]);
-  }
-
-  private __createPayload(): CreateChannelDtoPayloadModel
-  {
-    return new CreateChannelDtoPayloadModel(null,
-                                            this.channelName,
-                                            this.channelDescription,
-                                            this.__getChannelType(this.channelType));
+    this._router.navigate([`view-channel/${channelId}`]);
   }
 
   private __getChannelType(type: string): number
   {
     switch (type)
     {
-      case "public":
+      case 'public':
         return 0;
-      case "restricted":
+      case 'restricted':
         return 1;
-      case "private":
+      case 'private':
         return 2;
     }
   }

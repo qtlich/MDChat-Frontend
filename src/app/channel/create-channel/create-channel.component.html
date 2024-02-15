@@ -6,16 +6,16 @@
         <div class="p-col-3">Channel name:</div>
         <div class="p-col-9 ui-fluid">
           <input (input)="countRemaining()"
-                 [(ngModel)]="channelName"
+                 [(ngModel)]="sD.channelName"
                  maxlength="30"
                  pInputText
                  placeholder="Channel name"
                  required>
         </div>
-        <div class="p-col-12 text-right small">{{remaining}} Characters remaining</div>
+        <div class="p-col-12 text-right small">{{sD.remaining}} Characters remaining</div>
         <div class="p-col-12">Description:</div>
         <div class="p-col-12 ui-fluid">
-          <p-editor [(ngModel)]="channelDescription"
+          <p-editor [(ngModel)]="sD.channelDescription"
                     [required]="true"
                     [style]="{'height':'400px'}"
                     class="ui-fluid">
@@ -23,7 +23,7 @@
         </div>
         <div class="p-col-12">Channel type</div>
         <div class="p-col-4">
-          <p-radioButton [(ngModel)]="channelType"
+          <p-radioButton [(ngModel)]="sD.channelTypeString"
                          label="Public"
                          name="groupname"
                          pTooltip="Anyone can view, post, and comment to this community"
@@ -31,7 +31,7 @@
           </p-radioButton>
         </div>
         <div class="p-col-4">
-          <p-radioButton [(ngModel)]="channelType"
+          <p-radioButton [(ngModel)]="sD.channelTypeString"
                          label="Restricted"
                          name="groupname"
                          pTooltip="Anyone can view this community, but only approved users can post"
@@ -39,7 +39,7 @@
           </p-radioButton>
         </div>
         <div class="p-col-4">
-          <p-radioButton [(ngModel)]="channelType"
+          <p-radioButton [(ngModel)]="sD.channelTypeString"
                          label="Private"
                          name="groupname"
                          pTooltip="Only approved users can view and submit to this community"
@@ -65,7 +65,7 @@
     </p-panel>
   </div>
   <div class="p-col-3">
-    <app-side-bar></app-side-bar>
+    <create-channel-post-side-bar></create-channel-post-side-bar>
   </div>
   <div class="p-col-1"></div>
 </div>

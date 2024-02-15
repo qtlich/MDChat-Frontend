@@ -7,7 +7,7 @@ import {DomSanitizer}                                                     from '
 export class CleanHtmlAndTruncateDirective implements AfterViewInit
 {
   @Input() text: string = '';
-  @Input() maxLength: number = 100;
+  @Input() maxLength: number = 1000;
 
   constructor(private el: ElementRef,
               private renderer: Renderer2,

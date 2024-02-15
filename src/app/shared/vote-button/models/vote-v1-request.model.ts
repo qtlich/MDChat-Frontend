@@ -1,4 +1,4 @@
-import {VoteType} from '../vote-type';
+import {VoteType} from './vote-type';
 
 /**
  * Vote on post or comment

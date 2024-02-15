@@ -1,30 +1,31 @@
-import {Component, OnInit}                            from '@angular/core';
-import {LoginRequestPayload}                          from './login-request.payload';
-import {AuthService}                                  from '../shared/auth.service';
-import {ActivatedRoute, Router}                       from '@angular/router';
-import {throwError}                                   from 'rxjs';
-import {isEmptyStringField, isNullOrUndefined}        from '../../common/core.free.functions';
-import {LocalStorageService}                          from 'ngx-webstorage';
-import {redirectUrlStorageNameConst, singUpRouterUrl} from '../../common/constants/core.free.constants';
-import {MessageService}                               from 'primeng/api';
+import {Component, OnInit}                                  from '@angular/core';
+import {ActivatedRoute, Router}                             from '@angular/router';
+import {LocalStorageService}                                from 'ngx-webstorage';
+import {BaseComponent}                                      from '../../common/components/base.component/base.component';
+import {redirectUrlStorageNameConst, singUpRouterUrl}       from '../../common/constants/core.free.constants';
+import {errorToText, isEmptyStringField, isNullOrUndefined} from '../../common/core/core.free.functions';
+import {GlobalBusService}    from '../../common/services/global.bus.service';
+import {AuthDataService}     from '../shared/auth.data.service';
+import {LoginRequestPayload} from './login-request.payload';
 
 @Component({
              selector:    'app-login',
              templateUrl: './login.component.html',
              styleUrls:   ['./login.component.css']
            })
-export class LoginComponent implements OnInit
+export class LoginComponent extends BaseComponent implements OnInit
 {
   public userName: string;
   public password: string;
   private _redirectUrl: string;
 
-  constructor(private _authService: AuthService,
+  constructor(private _authService: AuthDataService,
               private _activatedRoute: ActivatedRoute,
               private _localStorageService: LocalStorageService,
               private _router: Router,
-              private _messageService: MessageService)
+              serviceBus: GlobalBusService)
   {
+    super(serviceBus);
     this.__loadRedirectUrl();
   }
 
@@ -49,10 +50,10 @@ export class LoginComponent implements OnInit
                    {
                      if (!isNullOrUndefined(params.registered) && params.registered === 'true')
                      {
-                       this._messageService.add({severity: 'success', detail: 'Signup Successful'});
+                       this.showSuccess(`Signup Successful`);
                      }
                    },
-                   error => this._messageService.add({severity: 'error', detail: 'Signup Unsuccessful'}));
+                   error => this.showError('Signup Unsuccessful'));
   }
 
   public login(): void
@@ -71,10 +72,10 @@ export class LoginComponent implements OnInit
                      {
                        this._router.navigateByUrl('');
                      }
-                     this._messageService.add({severity: 'success', detail: 'Login success'});
+                     this.showSuccess('Login success');
                    }, error =>
                    {
-                     throwError(error);
+                     this.showError(errorToText(error));
                    });
   }
 
@@ -82,12 +83,12 @@ export class LoginComponent implements OnInit
   {
     if (isEmptyStringField(this.userName))
     {
-      this._messageService.add({severity: 'warn', detail: 'Please input username'});
+      this.showWarning('Please input username');
       return false;
     }
     if (isEmptyStringField(this.password))
     {
-      this._messageService.add({severity: 'warn', detail: 'Please input password'});
+      this.showWarning('Please input password');
       return false;
     }
     return true;

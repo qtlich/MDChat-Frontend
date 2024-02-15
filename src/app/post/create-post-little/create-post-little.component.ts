@@ -1,60 +1,77 @@
-import {Component, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {ChannelResponseModel} from '../../channel/models/channel.response.model';
-import {Router} from '@angular/router';
-import {PostService} from 'src/app/shared/post.service';
-import {ChannelService} from '../../channel/channel.service';
-import {throwError} from 'rxjs';
-import {CreatePostPayload} from './create-post.payload';
+import {Component, OnDestroy, OnInit}                                                          from '@angular/core';
+import {Router}                                                                                from '@angular/router';
+import {SelectItem}                                                                            from 'primeng/api';
+import {ChannelResponseModel}                                                                  from '../../channel/models/channel.response.model';
+import {BaseComponent}                                                                         from '../../common/components/base.component/base.component';
+import {errorToText, isEmptyArray, isEmptyStringField, isNullOrUndefined, showWarningMessages} from '../../common/core/core.free.functions';
+import {OPERATION_TYPES}                                                                       from '../../common/core/enums/operation.types';
+import {GlobalBusService}                                                                      from '../../common/services/global.bus.service';
+import {ChannelRestService}                                                                    from '../../services/channels/channel.rest.service';
+import {ICUDPostResult, PostDataService}                                                       from '../../services/posts/post.data.service';
+import {PostCudRequestModel}                                                                   from '../create-post/models/post.cud.request.model';
+import {CreatePostScreenDataModel}                                                             from './models/create.post.screen.data.model';
 
 @Component({
-  selector: 'create-post-little',
-  templateUrl: './create-post-little.component.html',
-  styleUrls: ['./create-post-little.component.css']
-})
-export class CreatePostLittleComponent implements OnInit {
+             selector:    'create-post-little',
+             templateUrl: './create-post-little.component.html',
+             styleUrls:   ['./create-post-little.component.css']
+           })
+export class CreatePostLittleComponent extends BaseComponent implements OnInit, OnDestroy
+{
+  public sD: CreatePostScreenDataModel = new CreatePostScreenDataModel();
 
-  postForm: FormGroup; //
-  postPayload: CreatePostPayload;
-  subreddits: Array<ChannelResponseModel>;
-
-  constructor(private router: Router, private postService: PostService,
-    private channelService: ChannelService) {
-    this.postPayload = {
-      postName: '',
-      url: '',
-      description: ''
-    }
+  constructor(private router: Router,
+              private postService: PostDataService,
+              private channelService: ChannelRestService,
+              serviceBus: GlobalBusService)
+  {
+    super(serviceBus);
+    this.__loadDirectories();
   }
 
-  ngOnInit() {
-    this.postForm = new FormGroup({
-      postName: new FormControl('', Validators.required),
-      subredditName: new FormControl('', Validators.required),
-      url: new FormControl('', Validators.required),
-      description: new FormControl('', Validators.required),
-    });
-    this.channelService.getAllChannels().subscribe((data) => {
-      this.subreddits = data;
-    }, error => {
-      throwError(error);
-    });
+  private __loadDirectories(): void
+  {
+    this.channelService.getAllChannels().subscribe((data: ChannelResponseModel[]) =>
+                                                   {
+                                                     this.sD.channelItems = data.map(item => <SelectItem>{label: item.name, value: item.id, title: item.description});
+                                                   }, error => this.showError(errorToText(error)));
   }
 
-  createPost() {
-    this.postPayload.postName = this.postForm.get('postName').value;
-    this.postPayload.url = this.postForm.get('url').value;
-    this.postPayload.description = this.postForm.get('description').value;
-
-    this.postService.createPost(this.postPayload).subscribe((data) => {
-      this.router.navigateByUrl('/');
-    }, error => {
-      throwError(error);
-    })
+  protected onSubscribeData()
+  {
+    super.onSubscribeData();
+    this.subscribe(this.postService.onCudPostEvent().subscribe((result: ICUDPostResult) => result.success && this.router.navigateByUrl('/')));
   }
 
-  discardPost() {
-    this.router.navigateByUrl('/');
+  public onCreatePostClick(): void
+  {
+    this.__isValidDataForSave() ? this.postService.postCUD(this.__prepareDataForSave()) : showWarningMessages(this.serviceBus, this.informationMessages);
+  }
+
+  private __isValidDataForSave(): boolean
+  {
+    this.clearInformationMessages();
+    let i: number = 0;
+    isNullOrUndefined(this.sD.channelId) && this.addInformationMessage(--i, 'Please select channel');
+    isEmptyStringField(this.sD.postName) && this.addInformationMessage(--i, 'Please fill in post name');
+    isEmptyStringField(this.sD.postDescription) && this.addInformationMessage(--i, 'Please fill in post description');
+    return isEmptyArray(this.informationMessages);
+  }
+
+  private __prepareDataForSave(): PostCudRequestModel
+  {
+    return new PostCudRequestModel(OPERATION_TYPES.CREATE,
+                                   null,
+                                   !isNullOrUndefined(this.sD.channelId) ? this.sD.channelId : null,
+                                   !isEmptyStringField(this.sD.postName) ? this.sD.postName : null,
+                                   !isEmptyStringField(this.sD.postDescription) ? this.sD.postDescription : null,
+                                   !isEmptyStringField(this.sD.url) ? this.sD.url : null,
+                                   !isNullOrUndefined(this.sD.commentsLocked) ? this.sD.commentsLocked : false);
+  }
+
+  public onDiscardClick(): void
+  {
+    this.router.navigateByUrl('../');
   }
 
 }

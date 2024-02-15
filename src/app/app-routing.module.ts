@@ -11,6 +11,7 @@ import {UserProfileComponent} from './user/user-profile/user-profile.component';
 import {AuthGuard}            from './auth/auth.guard';
 import {ViewChannelComponent} from './channel/view-channel/view-channel.component';
 import {ViewChannelPostsComponent} from './channel/view-channel-posts/view-channel-posts.component';
+import {UserSettingsComponent} from './user/user-settings/user-settings.component';
 
 const routes: Routes = [
   {path: '', component: HomeComponent},
@@ -22,11 +23,12 @@ const routes: Routes = [
   {path: 'create-channel', component: CreateChannelComponent, canActivate: [AuthGuard]},
   {path: 'sign-up', component: SignupComponent},
   {path: 'login', component: LoginComponent},
-  {path: 'user-profile/:name', component: UserProfileComponent, canActivate: [AuthGuard]}
+  {path: 'user/:name', component: UserProfileComponent, canActivate: [AuthGuard]},
+  {path: 'settings', component: UserSettingsComponent, canActivate: [AuthGuard]}
 ];
 
 @NgModule({
-            imports: [RouterModule.forRoot(routes)],
+            imports: [RouterModule.forRoot(routes,{anchorScrolling: 'enabled'})],
             exports: [RouterModule]
           })
 export class AppRoutingModule {}

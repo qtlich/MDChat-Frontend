@@ -1,10 +1,14 @@
 <p-panel [toggleable]="true">
   <p-header>
-    Description
+    Channel description
   </p-header>
   <div class="p-grid">
     <div class="p-col-12 ui-fluid">
-      <p [appInnerHTML]="channel?.description"></p>
+      <!--      <p-editor [(ngModel)]="channel.description" readonly="true" [modules]="modules">-->
+      <!--        <ng-template pTemplate="header">-->
+      <!--        </ng-template>-->
+      <!--      </p-editor>-->
+      <p [appInnerHTML]="channel?.description" style="word-wrap: break-word;white-space: pre-wrap;"></p>
     </div>
   </div>
 </p-panel>

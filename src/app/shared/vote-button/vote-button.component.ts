@@ -1,20 +1,22 @@
 import {Component, Input, OnChanges, OnInit, SimpleChanges}                               from '@angular/core';
 import {Router}                                                                           from '@angular/router';
-import {faArrowDown, faArrowUp}                                                           from '@fortawesome/free-solid-svg-icons';
+import {faArrowDown, faArrowUp, faChevronDown, faChevronUp}                               from '@fortawesome/free-solid-svg-icons';
 import {LocalStorageService}                                                              from 'ngx-webstorage';
-import {MessageService}                                                                   from 'primeng/api';
 import {take}                                                                             from 'rxjs/operators';
-import {AuthService}                                                                      from 'src/app/auth/shared/auth.service';
+import {AuthDataService}                                                                  from '../../auth/shared/auth.data.service';
 import {BaseComponent}                                                                    from '../../common/components/base.component/base.component';
 import {redirectUrlStorageNameConst}                                                      from '../../common/constants/core.free.constants';
-import {errorToText, executeIf, isChangedAndNullOrUndefined, isNullOrUndefined, toNumber} from '../../common/core.free.functions';
+import {errorToText, executeIf, isChangedAndNullOrUndefined, isNullOrUndefined, toNumber} from '../../common/core/core.free.functions';
+import {EActionType}                                                                      from '../../common/models/event.type';
 import {OperationResult}                                                                  from '../../common/models/operation.result.model';
-import {VoteService}                                                                      from '../vote.service';
+import {GlobalBusService}                                                                 from '../../common/services/global.bus.service';
 import {GetUserVotesRequestModel}                                                         from './models/get.user.votes.request.model';
 import {GetUserVotesResponseModel}                                                        from './models/get.user.votes.response.model';
+import {VoteType}                                                                         from './models/vote-type';
 import {VoteV1RequestModel}                                                               from './models/vote-v1-request.model';
 import {VoteV1ResponseModel}                                                              from './models/vote-v1-response.model';
-import {VoteType}                                                                         from './vote-type';
+import {VoteDataService}                                                                  from './services/vote.data.service';
+import {VoteRestService}                                                                  from './services/vote.rest.service';
 
 @Component({
              selector:    'vote-button',
@@ -26,26 +28,32 @@ export class VoteButtonComponent extends BaseComponent implements OnInit, OnChan
 
   @Input() postId: number;
   @Input() commentId: number;
+  @Input() mode: number = 0; // 0 - post, 1 -comment
   faArrowUp = faArrowUp;
+  faChevronUp = faChevronUp;
+  faChevronDown = faChevronDown;
   faArrowDown = faArrowDown;
   isLoggedIn: boolean;
   public upVoted: boolean = false;
   public downVoted: boolean = false;
   public countVoted: number = 0;
 
-  constructor(private voteService: VoteService,
-              private _authService: AuthService,
+  constructor(private voteService: VoteRestService,
+              private _dataService: VoteDataService,
+              private _authService: AuthDataService,
               private _router: Router,
               private _localStorageService: LocalStorageService,
-              messageService: MessageService)
+              serviceBus: GlobalBusService)
   {
-    super(messageService);
+    super(serviceBus);
     this._authService.loggedIn.subscribe((data: boolean) => this.isLoggedIn = data);
   }
+
   public refresh()
   {
     this.__getVotes();
   }
+
   ngOnInit(): void
   {
     this.__getVotes();
@@ -54,7 +62,6 @@ export class VoteButtonComponent extends BaseComponent implements OnInit, OnChan
 
   public ngOnChanges(changes: SimpleChanges)
   {
-    console.log('ngOnChanges', changes);
     executeIf(isChangedAndNullOrUndefined(changes, 'postId'), () => this.__getVotes());
   }
 
@@ -68,10 +75,32 @@ export class VoteButtonComponent extends BaseComponent implements OnInit, OnChan
     this.__vote(VoteType.DOWNVOTE);
   }
 
+  protected onSubscribeData()
+  {
+    super.onSubscribeData();
+    // this.subscribe(this._dataService.onVoteEvent().subscribe((data: IVoteResult) =>
+    //                                                          {
+    //                                                            if (data.success)
+    //                                                            {
+    //                                                              this.countVoted = data.result.voteCount;
+    //                                                              this.upVoted = data.result.upVoted;
+    //                                                              this.downVoted = data.result.downVoted;
+    //                                                              this.__getVotes();
+    //                                                            }
+    //                                                          }));
+    // this.subscribe(this._dataService.onGetVoteEvent().subscribe((result: GetUserVotesResponseModel) =>
+    //                                                             {
+    //                                                               this.countVoted = result.countVotes;
+    //                                                               this.upVoted = result.upVoted;
+    //                                                               this.downVoted = result.downVoted;
+    //                                                             }));
+  }
+
   private __vote(voteType: VoteType): void
   {
     if (this.isLoggedIn)
     {
+      // this._dataService.vote(this.__prepareDataForVote(voteType));
       this.voteService
           .vote(this.__prepareDataForVote(voteType))
           .pipe(take(1))
@@ -83,6 +112,7 @@ export class VoteButtonComponent extends BaseComponent implements OnInit, OnChan
                          this.countVoted = item.voteCount;
                          this.upVoted = item.upVoted;
                          this.downVoted = item.downVoted;
+                         this.serviceBus.sendEvent(EActionType.ON_VOTE_ACTION, true);
                        }
                        else
                        {
@@ -106,6 +136,8 @@ export class VoteButtonComponent extends BaseComponent implements OnInit, OnChan
 
   private __getVotes(): void
   {
+    // this._dataService.getVote(new GetUserVotesRequestModel(!isNullOrUndefined(this.postId) ? toNumber(this.postId) : null,
+    //                                                        !isNullOrUndefined(this.commentId) ? toNumber(this.commentId) : null));
     this.voteService
         .getVotes(new GetUserVotesRequestModel(!isNullOrUndefined(this.postId) ? toNumber(this.postId) : null,
                                                !isNullOrUndefined(this.commentId) ? toNumber(this.commentId) : null))

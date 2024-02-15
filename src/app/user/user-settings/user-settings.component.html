@@ -1,0 +1,90 @@
+<p-tabView>
+  <p-tabPanel header="Account">
+    <div class="p-grid">
+      <!-- BEGIN: Left side -->
+      <div class="p-col-6">
+        <p-panel>
+          <p-header>
+            <h5>User settings - <b>{{userName}}</b></h5>
+          </p-header>
+
+          <div class="p-grid">
+            <!-- BEGIN: Row 1 -->
+            <div class="p-col-3">
+              <b>Email</b>
+            </div>
+            <div class="p-col-5 ui-fluid">
+              <input [(ngModel)]="newEmail"
+                     autofocus
+                     maxlength="100"
+                     pInputText
+                     pKeyFilter="email"
+                     placeholder="email"
+                     required
+                     type="text">
+            </div>
+            <div class="p-col-4"></div>
+            <!-- END: Row 1 -->
+            <!-- BEGIN: Row 2 -->
+            <div class="p-col-3">
+              <b>Username</b>
+            </div>
+            <div class="p-col-5 ui-fluid">
+              <input [(ngModel)]="newUserName"
+                     maxlength="100"
+                     pInputText
+                     placeholder="Username"
+                     required
+                     type="text">
+            </div>
+            <div class="p-col-4"></div>
+            <!-- END: Row 2 -->
+            <!-- BEGIN: Row 3 -->
+            <div class="p-col-3">
+              <b>Password</b>
+            </div>
+            <div class="p-col-5 ui-fluid">
+              <input [(ngModel)]="newPassword"
+                     pInputText
+                     pPassword
+                     placeholder="Password"
+                     required
+                     type="password">
+            </div>
+            <div class="p-col-4"></div>
+            <!-- END: Row 3 -->
+            <!-- BEGIN: Row 4 -->
+            <div class="p-col-3">
+              <b>Confirm password</b>
+            </div>
+            <div class="p-col-5 ui-fluid">
+              <input [(ngModel)]="newConfirmPassword"
+                     pInputText
+                     pPassword
+                     required
+                     placeholder="Confirm password"
+                     type="password">
+            </div>
+            <div class="p-col-4"></div>
+            <!-- END: Row 4 -->
+          </div>
+          <p-footer>
+            <!--          <p-footer class="align-content-center footer-center-content">-->
+            <button (click)="onChangeUserInfoClick()" label="Save" pButton type="button"></button>
+            <!--                  <span style="padding-left: 15px">Existing user?&nbsp;<a routerLink="/login">Login</a></span>-->
+          </p-footer>
+
+        </p-panel>
+      </div>
+      <!-- END: Left side -->
+      <!-- BEGIN: Right side -->
+      <div class="p-col-6">
+      </div>
+      <!-- END: Right side -->
+
+    </div>
+  </p-tabPanel>
+  <p-tabPanel header="Color scheme">
+    <color-scheme></color-scheme>
+  </p-tabPanel>
+</p-tabView>
