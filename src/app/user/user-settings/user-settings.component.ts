@@ -1,12 +1,12 @@
-import {Component, OnDestroy, OnInit}                                                          from '@angular/core';
-import {Router}                                                                                from '@angular/router';
-import {AuthDataService}                                                                       from '../../auth/shared/auth.data.service';
-import {ChangeUserInfoRequestModel}                                                            from '../../auth/shared/models/change.user.info.request.model';
-import {BaseComponent}                                                                         from '../../common/components/base.component/base.component';
-import {isAllOperationsSuccess, isEmptyArray, isEmptyStringField, showOperationResultMessages} from '../../common/core/core.free.functions';
-import {GlobalBusService}                                                                      from '../../common/services/global.bus.service';
-import {UserInfoRequestModel}                                                                  from './models/user.info.request.model';
-import {UserInfoResponseModel}                                                                 from './models/user.info.response.model';
+import {Component, OnDestroy, OnInit}                                                                       from '@angular/core';
+import {Router}                                                                                             from '@angular/router';
+import {AuthDataService}                                                                                    from '../../auth/shared/auth.data.service';
+import {ChangeUserInfoRequestModel}                                                                         from '../../auth/shared/models/change.user.info.request.model';
+import {BaseComponent}                                                                                      from '../../common/components/base.component/base.component';
+import {errorToText, isAllOperationsSuccess, isEmptyArray, isEmptyStringField, showOperationResultMessages} from '../../common/core/core.free.functions';
+import {GlobalBusService}                                                                                   from '../../common/services/global.bus.service';
+import {UserInfoRequestModel}                                                                               from './models/user.info.request.model';
+import {UserInfoResponseModel}                                                                              from './models/user.info.response.model';
 
 @Component({
              selector:    'user-settings',
@@ -46,7 +46,7 @@ export class UserSettingsComponent extends BaseComponent implements OnInit, OnDe
                          this.userName = this.newUserName;
                          this._router.navigateByUrl(`/user/${this.newUserName}`);
                        }
-                     }, error => this.showError(`Can'nt change user info`));
+                     }, error => this.showError(`Can'nt change user info:` + errorToText(error)));
     }
     else
     {
@@ -80,7 +80,7 @@ export class UserSettingsComponent extends BaseComponent implements OnInit, OnDe
                        this.enabled = item.enabled;
                      }
                    },
-                   error => this.showError(`Can't retrieve user info`));
+                   error => this.showError(`Can't retrieve user info: ` + errorToText(error)));
   }
 
   private __clearUserInfo(): void
