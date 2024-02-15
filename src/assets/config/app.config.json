@@ -1,0 +1,8 @@
+{
+  "title": "MDChat",
+  "debug": false,
+  "api": {
+    "baseApiUrl": "http://localhost:8080",
+    "apiUrl": "http://localhost:8080/api"
+  }
+}
