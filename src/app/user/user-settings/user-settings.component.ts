@@ -1,14 +1,10 @@
 import {Component, OnDestroy, OnInit}                                                          from '@angular/core';
-import {ActivatedRoute, Router}                                                                from '@angular/router';
-import {PostModel}                                                                             from 'src/app/shared/post-model';
+import {Router}                                                                                from '@angular/router';
 import {AuthDataService}                                                                       from '../../auth/shared/auth.data.service';
 import {ChangeUserInfoRequestModel}                                                            from '../../auth/shared/models/change.user.info.request.model';
-import {CommentPayload}                                                                        from '../../comment/view-post-comments/models/comment.payload';
-import {CommentDataService}                                                                    from '../../comment/view-post-comments/services/comment.data.service';
 import {BaseComponent}                                                                         from '../../common/components/base.component/base.component';
 import {isAllOperationsSuccess, isEmptyArray, isEmptyStringField, showOperationResultMessages} from '../../common/core/core.free.functions';
 import {GlobalBusService}                                                                      from '../../common/services/global.bus.service';
-import {PostDataService}                                                                       from '../../services/posts/post.data.service';
 import {UserInfoRequestModel}                                                                  from './models/user.info.request.model';
 import {UserInfoResponseModel}                                                                 from './models/user.info.response.model';
 
@@ -19,7 +15,6 @@ import {UserInfoResponseModel}                                                  
            })
 export class UserSettingsComponent extends BaseComponent implements OnInit, OnDestroy
 {
-  public currentUserName: string;
   public newUserName: string;
   public newEmail: string;
   public created: string;
@@ -27,13 +22,9 @@ export class UserSettingsComponent extends BaseComponent implements OnInit, OnDe
   public newPassword: string;
   public newConfirmPassword: string;
   public enabled: boolean;
-  postLength: number;
-  commentLength: number;
   private _userId: number;
 
   constructor(private _router: Router,
-              private _postService: PostDataService,
-              private _commentService: CommentDataService,
               serviceBus: GlobalBusService,
               authService: AuthDataService)
   {
@@ -43,15 +34,16 @@ export class UserSettingsComponent extends BaseComponent implements OnInit, OnDe
 
   public onChangeUserInfoClick(): void
   {
-    if (this.__isValidInputData())
+    if(this.__isValidInputData())
     {
-      this.authService.changeUserInfo(this.__prepareDataForSave())
+      this.authService
+          .changeUserInfo(this.__prepareDataForSave())
           .subscribe(data =>
                      {
-                       if (isAllOperationsSuccess(data))
+                       if(isAllOperationsSuccess(data))
                        {
                          this.__loadUserParameters(this.newUserName);
-                         this.currentUserName = this.newUserName;
+                         this.userName = this.newUserName;
                          this._router.navigateByUrl(`/user/${this.newUserName}`);
                        }
                      }, error => this.showError(`Can'nt change user info`));
@@ -61,13 +53,15 @@ export class UserSettingsComponent extends BaseComponent implements OnInit, OnDe
       showOperationResultMessages(this.serviceBus, this.informationMessages);
     }
   }
-  private __prepareDataForSave():ChangeUserInfoRequestModel
+
+  private __prepareDataForSave(): ChangeUserInfoRequestModel
   {
     return new ChangeUserInfoRequestModel(this._userId,
                                           this.newUserName,
                                           this.newEmail,
                                           this.newPassword);
   }
+
   private __loadUserParameters(userName: string): void
   {
     this.__clearUserInfo();
@@ -75,7 +69,7 @@ export class UserSettingsComponent extends BaseComponent implements OnInit, OnDe
         .getUserInfo(new UserInfoRequestModel(userName))
         .subscribe((data: Array<UserInfoResponseModel>) =>
                    {
-                     if (!isEmptyArray(data))
+                     if(!isEmptyArray(data))
                      {
                        const item: UserInfoResponseModel = data[0];
                        this._userId = item.id;
@@ -111,5 +105,4 @@ export class UserSettingsComponent extends BaseComponent implements OnInit, OnDe
     (this.newPassword !== this.newConfirmPassword) && this.addInformationMessage(--i, `Passwords do not match`);
     return isEmptyArray(this.informationMessages);
   }
-
 }
