@@ -4,9 +4,9 @@ import {faEdit, faReply, faTrash}            from '@fortawesome/free-solid-svg-i
 import {ConfirmationService}                 from 'primeng/api';
 import {BaseComponent}                       from '../../../common/components/base.component/base.component';
 import {GlobalBusService}                    from '../../../common/services/global.bus.service';
-import {OnSuccessModifyCommentItem}          from '../../create-comment/create-comment.component';
-import {GetAllCommentsResponseModel}         from '../models/get.all.comments.response.model';
-import {CommentDataService}                  from '../services/comment.data.service';
+import {OnSuccessModifyCommentItem}  from '../../create-comment/create-comment.component';
+import {GetAllCommentsResponseModel} from '../../../services/comments/models/get.all.comments.response.model';
+import {CommentDataService}          from '../../../services/comments/comment.data.service';
 
 @Component({
              selector:    'comment-item',

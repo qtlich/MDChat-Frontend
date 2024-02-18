@@ -3,9 +3,9 @@ import {ActivatedRoute, Router}                                                f
 import {faBookmark, faComments, faEdit, faEyeSlash, faReply, faShare, faTrash} from '@fortawesome/free-solid-svg-icons';
 import {ConfirmationService}                                                   from 'primeng/api';
 import {AuthDataService}                                                       from '../../auth/shared/auth.data.service';
-import {OnSuccessModifyCommentItem}                                            from '../../comment/create-comment/create-comment.component';
-import {CommentDataService}                                                    from '../../comment/view-post-comments/services/comment.data.service';
-import {BaseComponent}                                                         from '../../common/components/base.component/base.component';
+import {OnSuccessModifyCommentItem} from '../../comment/create-comment/create-comment.component';
+import {CommentDataService}         from '../../services/comments/comment.data.service';
+import {BaseComponent}              from '../../common/components/base.component/base.component';
 import {toNumber}                                                              from '../../common/core/core.free.functions';
 import {EActionType}                                                           from '../../common/models/event.type';
 import {GlobalBusService}                                                      from '../../common/services/global.bus.service';

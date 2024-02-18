@@ -1,16 +1,16 @@
 import {Injectable}                           from '@angular/core';
 import {Observable, ReplaySubject, Subject}   from 'rxjs';
-import {isAllOperationsSuccess, isEmptyArray} from '../../../common/core/core.free.functions';
-import {OPERATION_TYPES}                      from '../../../common/core/enums/operation.types';
-import {EActionType}                          from '../../../common/models/event.type';
-import {BaseService}                          from '../../../common/services/base.service';
-import {GlobalBusService}                     from '../../../common/services/global.bus.service';
-import {OnSuccessModifyCommentItem}           from '../../create-comment/create-comment.component';
-import {CommentCudRequestModel}               from '../models/comment.cud.request.model';
-import {CommentPayload}                       from '../models/comment.payload';
-import {GetAllCommentsRequestModel}           from '../models/get.all.comments.request.model';
-import {GetAllCommentsResponseModel}          from '../models/get.all.comments.response.model';
+import {isAllOperationsSuccess, isEmptyArray} from '../../common/core/core.free.functions';
+import {OPERATION_TYPES}                      from '../../common/core/enums/operation.types';
+import {EActionType}                          from '../../common/models/event.type';
+import {BaseService}                          from '../../common/services/base.service';
+import {GlobalBusService}                     from '../../common/services/global.bus.service';
 import {CommentRestService}                   from './comment.rest.service';
+import {CommentCudRequestModel}               from './models/comment.cud.request.model';
+import {GetAllCommentsRequestModel}           from './models/get.all.comments.request.model';
+import {GetAllCommentsResponseModel}          from './models/get.all.comments.response.model';
+import {GetUserCommentsUniverseRequestModel}  from './models/get.user.comments.universe.request.model';
+import {GetUserCommentsUniverseResponseModel} from './models/get.user.comments.universe.response.model';
 
 @Injectable({
               providedIn: 'root'
@@ -20,17 +20,19 @@ export class CommentDataService extends BaseService
   private _comments: GetAllCommentsResponseModel[] = [];
   private _tree: GetAllCommentsResponseModel[] = [];
   private readonly _onLoadCommentTreeSubject: ReplaySubject<GetAllCommentsResponseModel[]> = new ReplaySubject<GetAllCommentsResponseModel[]>(1);
-  private readonly _onLoadUserCommentsSubject: ReplaySubject<CommentPayload[]> = new ReplaySubject<CommentPayload[]>(1);
+  private readonly _onLoadUserCommentsUniversalSubject: Subject<GetUserCommentsUniverseResponseModel[]> = new Subject<GetUserCommentsUniverseResponseModel[]>();
 
   constructor(private _restService: CommentRestService,
               serviceBus: GlobalBusService)
   {
     super(serviceBus);
   }
-  public onLoadUserCommentsEvent():Observable<CommentPayload[]>
+
+  public onLoadUserCommentsUniversalEvent(): Observable<GetUserCommentsUniverseResponseModel[]>
   {
-    return this._onLoadUserCommentsSubject;
+    return this._onLoadUserCommentsUniversalSubject;
   }
+
   public loadComments(item: GetAllCommentsRequestModel): void
   {
     this.__loadComments(item);
@@ -43,20 +45,19 @@ export class CommentDataService extends BaseService
 
   private __buildTree(comments: GetAllCommentsResponseModel[]): GetAllCommentsResponseModel[]
   {
-    const commentMap = new Map<number, GetAllCommentsResponseModel>();
+    const commentMap: Map<number, GetAllCommentsResponseModel> = new Map<number, GetAllCommentsResponseModel>();
     const tree: GetAllCommentsResponseModel[] = [];
-    if (!isEmptyArray(comments))
+    if(!isEmptyArray(comments))
     {
       // Create map for quick access to comments by their id
-      comments.forEach(comment =>
+      comments.forEach((comment: GetAllCommentsResponseModel) =>
                        {
                          commentMap.set(comment.id, {...comment, comments: []});
                        });
-
       // Create tree
-      commentMap.forEach(comment =>
+      commentMap.forEach((comment: GetAllCommentsResponseModel) =>
                          {
-                           if (comment.parentId !== null && commentMap.has(comment.parentId))
+                           if(comment.parentId !== null && commentMap.has(comment.parentId))
                            {
                              commentMap.get(comment.parentId).comments.push(comment);
                            }
@@ -68,32 +69,36 @@ export class CommentDataService extends BaseService
     }
     return tree;
   }
-  public getAllCommentsByUser(userName:string):void
+
+  public loadUserCommentsUniversal(item: GetUserCommentsUniverseRequestModel): void
   {
-    this.toDb(userName,
-              input=>this._restService.getAllCommentsByUser(input),
-              (data:CommentPayload[])=>{},
-              `Can't load user comments`);
+    this.toDb<GetUserCommentsUniverseRequestModel, GetUserCommentsUniverseResponseModel[]>(item,
+                                                                                           input => this._restService.getUserCommentsUniversal(input),
+                                                                                           (data: GetUserCommentsUniverseResponseModel[]) =>
+                                                                                           {
+                                                                                             this._onLoadUserCommentsUniversalSubject.next(!isEmptyArray(data)?data:[]);
+                                                                                           },
+                                                                                           `Can't load user comments`);
   }
-  public deleteComment(commentId:number):void
+
+  public deleteComment(commentId: number): void
   {
     this.__commentCUD(new CommentCudRequestModel(OPERATION_TYPES.DELETE,
                                                  commentId));
   }
-  public modifyComment(item:CommentCudRequestModel):void
+
+  public modifyComment(item: CommentCudRequestModel): void
   {
     this.__commentCUD(item);
   }
 
   private __commentCUD(item: CommentCudRequestModel): void
   {
-    console.log('__commentCUD',item);
     this.toDb(item,
               input => this._restService.commentCUD(input),
               data =>
               {
                 this.serviceBus.showMessages(data);
-                console.log('private __commentCUD(item: CommentCudRequestModel): void=>',data);
                 this.serviceBus.sendEvent(EActionType.SUCCESS_MODIFY_COMMENT, isAllOperationsSuccess(data));
               },
               `Can't update comment`)

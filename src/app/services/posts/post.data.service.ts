@@ -95,7 +95,7 @@ export class PostDataService extends BaseService
               {
                 this._onLoadUserPostsUniversalSubject.next(<ILoadPostUniversalResult>{userView: item.selectedUserView, posts: !isEmptyArray(data) ? data : []});
               },
-              `Can\t load user posts`);
+              `Can't load user posts`);
   }
 
   public postCUD(item: PostCudRequestModel): void

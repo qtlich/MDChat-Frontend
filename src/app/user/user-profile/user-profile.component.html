@@ -14,11 +14,9 @@
       </p-tabPanel>
 
       <p-tabPanel header = "Comments">
-        <p-panel>
-          <p-header>
-            Your comments
-          </p-header>
-        </p-panel>
+        <ng-template pTemplate = "content">
+            <user-comments></user-comments>
+        </ng-template>
       </p-tabPanel>
 
       <p-tabPanel header = "Saved">

@@ -2,11 +2,11 @@ import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {BaseComponent} from '../../common/components/base.component/base.component';
 import {toNumber}      from '../../common/core/core.free.functions';
 import {EActionType}   from '../../common/models/event.type';
-import {GlobalBusService}                    from '../../common/services/global.bus.service';
-import {GetAllCommentsRequestModel}          from './models/get.all.comments.request.model';
-import {GetAllCommentsResponseModel}         from './models/get.all.comments.response.model';
-import {ViewPostCommentsScreenDataModel}     from './models/view.post.comments.screen.data.model';
-import {CommentDataService}                  from './services/comment.data.service';
+import {GlobalBusService}                from '../../common/services/global.bus.service';
+import {GetAllCommentsRequestModel}      from '../../services/comments/models/get.all.comments.request.model';
+import {GetAllCommentsResponseModel}     from '../../services/comments/models/get.all.comments.response.model';
+import {ViewPostCommentsScreenDataModel} from './models/view.post.comments.screen.data.model';
+import {CommentDataService}              from '../../services/comments/comment.data.service';
 
 @Component({
              selector:    'view-post-comments',

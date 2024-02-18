@@ -1,8 +1,7 @@
-import {CommonUserPostResponseInterface} from '../interfaces/common.user.post.response.interface';
-import {CommonUserPostResponse}          from './common/common.user.post.response';
+import {CommonUserPostResponse} from './common/common.user.post.response';
 
 /**
- * POST posts/user-posts-universal
+ * POST posts/universal-posts
  */
 export class GetUserPostsUniversalResponseModel extends CommonUserPostResponse
 {

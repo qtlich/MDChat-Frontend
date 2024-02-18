@@ -2,10 +2,12 @@
   display: flex;
   justify-content: flex-end;
 }
+
 .footer-center-content {
   display: flex;
   justify-content: center;
 }
+
 .custom-button {
   cursor: pointer;
   display: inline-block;
@@ -21,10 +23,10 @@
 }
 
 a {
-  color: inherit; /* Устанавливаем цвет текста как у родительского элемента */
-  text-decoration: none; /* Убираем подчеркивание у ссылок */
+  color: inherit;
+  text-decoration: none;
 }
 
 a:hover {
-  text-decoration: underline; /* Подчеркиваем ссылку при наведении */
+  text-decoration: underline;
 }

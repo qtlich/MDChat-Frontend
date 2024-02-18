@@ -38,7 +38,6 @@ export abstract class BaseUserPostsComponent extends BaseComponent implements On
                                             {label: 'Hot', value: 'Hot', icon: 'fa fa-eye-slash'},];
   public selectedSortBy: string = this.existingSortingDD[0].value;
   public selectedItem: GetUserPostsUniversalResponseModel;
-  //public readonly totalRecords: number = 5;
   private _first: number;
   private _rows: number;
   public hoverPostId: number;
@@ -72,7 +71,7 @@ export abstract class BaseUserPostsComponent extends BaseComponent implements On
 
   public onRowSelect(item: GetUserPostsUniversalResponseModel): void
   {
-    // this.goToPost(item);
+
   }
 
   public goToPost(item: GetUserPostsUniversalResponseModel): void

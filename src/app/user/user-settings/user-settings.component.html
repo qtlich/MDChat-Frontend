@@ -10,7 +10,7 @@
 
           <div class="p-grid">
             <!-- BEGIN: Row 1 -->
-            <div class="p-col-3">
+            <div class="p-col-2">
               <b>Email</b>
             </div>
             <div class="p-col-5 ui-fluid">
@@ -26,12 +26,13 @@
             <div class="p-col-4"></div>
             <!-- END: Row 1 -->
             <!-- BEGIN: Row 2 -->
-            <div class="p-col-3">
+            <div class="p-col-2">
               <b>Username</b>
             </div>
             <div class="p-col-5 ui-fluid">
               <input [(ngModel)]="newUserName"
                      maxlength="100"
+                     readonly
                      pInputText
                      placeholder="Username"
                      required
@@ -40,7 +41,7 @@
             <div class="p-col-4"></div>
             <!-- END: Row 2 -->
             <!-- BEGIN: Row 3 -->
-            <div class="p-col-3">
+            <div class="p-col-2">
               <b>Password</b>
             </div>
             <div class="p-col-5 ui-fluid">
@@ -54,7 +55,7 @@
             <div class="p-col-4"></div>
             <!-- END: Row 3 -->
             <!-- BEGIN: Row 4 -->
-            <div class="p-col-3">
+            <div class="p-col-2">
               <b>Confirm password</b>
             </div>
             <div class="p-col-5 ui-fluid">
@@ -67,11 +68,53 @@
             </div>
             <div class="p-col-4"></div>
             <!-- END: Row 4 -->
+             <!-- BEGIN: Row 5 -->
+            <div class="p-col-2">
+              <b>Confirm password</b>
+            </div>
+            <div class="p-col-10 ui-fluid">
+              <p-editor [(ngModel)] = "description" placeholder = "About user" [style] = "{'height':'200px'}">
+                <p-header>
+              <span class = "ql-formats">
+                <button class = "ql-clean" pTooltip = "Clear text format"></button>
+                <button class = "ql-bold" pTooltip = "Bold"></button>
+                <button class = "ql-italic" pTooltip = "Italic"></button>
+                <button class = "ql-underline" pTooltip = "Underline"></button>
+                <button class = "ql-strike"></button>
+                <select class = "ql-font" pTooltip = "Select font"></select>
+                <select class = "ql-size" pTooltip = "Select font size"></select>
+              </span>
+                  <span class = "ql-formats">
+                <select class = "ql-color" pTooltip = "Set font color"></select>
+                <select class = "ql-background" pTooltip = "Set background color"></select>
+              </span>
+                  <span class = "ql-formats">
+                <button class = "ql-header" value = "1" pTooltip = "Header 1 block"></button>
+                <button class = "ql-blockquote" pTooltip = "Quote block"></button>
+                <button class = "ql-code-block" pTooltip = "Code block"></button>
+              </span>
+                  <span class = "ql-formats">
+                <button class = "ql-list" value = "ordered" pTooltip = "Order list block"></button>
+                <button class = "ql-list" value = "bullet"></button>
+                <button class = "ql-indent" value = "-1"></button>
+                <button class = "ql-indent" value = "+1"></button>
+              </span>
+                  <span class = "ql-formats">
+                <button class = "ql-direction" value = "rtl"></button>
+                <select class = "ql-align"></select>
+              </span>
+                  <span class = "ql-formats">
+                <button class = "ql-link"></button>
+              </span>
+                </p-header>
+              </p-editor>
+
+            </div>
+            <div class="p-col-5"></div>
+            <!-- END: Row 4 -->
           </div>
           <p-footer>
-            <!--          <p-footer class="align-content-center footer-center-content">-->
             <button (click)="onChangeUserInfoClick()" label="Save" pButton type="button"></button>
-            <!--                  <span style="padding-left: 15px">Existing user?&nbsp;<a routerLink="/login">Login</a></span>-->
           </p-footer>
 
         </p-panel>

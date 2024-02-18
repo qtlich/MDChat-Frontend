@@ -1,9 +1,9 @@
 import {SimpleChanges}        from '@angular/core';
 import {Router}               from '@angular/router';
 import {Observable, Observer} from 'rxjs';
-import {MessageType}          from './message.type';
 import {OperationResult}      from '../models/operation.result.model';
 import {GlobalBusService}     from '../services/global.bus.service';
+import {MessageType}          from './message.type';
 
 //*************************************************************************************************
 export function round(value: number, decimals: number)
@@ -18,9 +18,17 @@ export function booleanToNumber(value: boolean): number
 }
 
 //*************************************************************************************************
+export function trim(value: string): string | null
+{
+  return !isEmptyStringField(value) ? value.trim() : null;
+}
+
+//*************************************************************************************************
 export function showOperationResultMessages(serviceBus: GlobalBusService, items: OperationResult[]): void
 {
-  !isEmptyArray(items) && items.forEach(item => serviceBus.showMessage(item.id >= 0 ? MessageType.SUCCESS : MessageType.ERROR, toString(item.message)));
+  !isEmptyArray(items) ?
+  items.forEach(item => serviceBus.showMessage(item.id >= 0 ? MessageType.SUCCESS : MessageType.ERROR, toString(item.message))) :
+  serviceBus.showError(`Result from server is empty`);
 }
 
 //*************************************************************************************************
@@ -56,7 +64,7 @@ export function operationResultToString(items: OperationResult[]): string
 //*************************************************************************************************
 export function NSD(a: number, b: number): number
 {
-  while (a * b != 0)
+  while(a * b != 0)
   {
     a >= b ? a = a % b : b = b % a;
   }
@@ -143,7 +151,7 @@ export function invalidateGetCache(): string
 //*********************************************************************************************
 export function cloneItemValues<TSource>(source: TSource, newItem: TSource): TSource
 {
-  for (let prop in source)
+  for(let prop in source)
   {
     newItem[prop] = source[prop];
   }
@@ -174,11 +182,11 @@ export function setAllObjectProperties<T>(obj: T, value: any): any
  */
 export function deepCloneModel<T>(value: T): T
 {
-  if (typeof value !== 'object' || value === null)
+  if(typeof value !== 'object' || value === null)
   {
     return value
   }
-  if (Array.isArray(value))
+  if(Array.isArray(value))
   {
     return deepArray(value)
   }
@@ -265,7 +273,7 @@ export function tryExecute<V>(execFunc: () => V, errorCallBack: (error) => any =
   try
   {
     return execFunc();
-  } catch (error)
+  } catch(error)
   {
     errorCallBack(error);
   }

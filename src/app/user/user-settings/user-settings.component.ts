@@ -1,12 +1,12 @@
-import {Component, OnDestroy, OnInit}                                                                       from '@angular/core';
-import {Router}                                                                                             from '@angular/router';
-import {AuthDataService}                                                                                    from '../../auth/shared/auth.data.service';
-import {ChangeUserInfoRequestModel}                                                                         from '../../auth/shared/models/change.user.info.request.model';
-import {BaseComponent}                                                                                      from '../../common/components/base.component/base.component';
-import {errorToText, isAllOperationsSuccess, isEmptyArray, isEmptyStringField, showOperationResultMessages} from '../../common/core/core.free.functions';
-import {GlobalBusService}                                                                                   from '../../common/services/global.bus.service';
-import {UserInfoRequestModel}                                                                               from './models/user.info.request.model';
-import {UserInfoResponseModel}                                                                              from './models/user.info.response.model';
+import {Component, OnDestroy, OnInit}                                                                             from '@angular/core';
+import {Router}                                                                                                   from '@angular/router';
+import {AuthDataService}                                                                                          from '../../auth/shared/auth.data.service';
+import {ChangeUserInfoRequestModel}                                                                               from '../../auth/shared/models/change.user.info.request.model';
+import {BaseComponent}                                                                                            from '../../common/components/base.component/base.component';
+import {errorToText, isAllOperationsSuccess, isEmptyArray, isEmptyStringField, showOperationResultMessages, trim} from '../../common/core/core.free.functions';
+import {GlobalBusService}                                                                                         from '../../common/services/global.bus.service';
+import {UserInfoRequestModel}                                                                                     from './models/user.info.request.model';
+import {UserInfoResponseModel}                                                                                    from './models/user.info.response.model';
 
 @Component({
              selector:    'user-settings',
@@ -21,6 +21,7 @@ export class UserSettingsComponent extends BaseComponent implements OnInit, OnDe
   public modified: string;
   public newPassword: string;
   public newConfirmPassword: string;
+  public description: string;
   public enabled: boolean;
   private _userId: number;
 
@@ -34,19 +35,19 @@ export class UserSettingsComponent extends BaseComponent implements OnInit, OnDe
 
   public onChangeUserInfoClick(): void
   {
+    this.__prepareInputData();
     if(this.__isValidInputData())
     {
       this.authService
           .changeUserInfo(this.__prepareDataForSave())
           .subscribe(data =>
                      {
+                       showOperationResultMessages(this.serviceBus, data);
                        if(isAllOperationsSuccess(data))
                        {
                          this.__loadUserParameters(this.newUserName);
-                         this.userName = this.newUserName;
-                         this._router.navigateByUrl(`/user/${this.newUserName}`);
                        }
-                     }, error => this.showError(`Can'nt change user info:` + errorToText(error)));
+                     }, error => this.showError(`Can't change user info:` + errorToText(error)));
     }
     else
     {
@@ -54,12 +55,21 @@ export class UserSettingsComponent extends BaseComponent implements OnInit, OnDe
     }
   }
 
+  private __prepareInputData(): void
+  {
+    this.newUserName = trim(this.newUserName);
+    this.newPassword = trim(this.newPassword);
+    this.newConfirmPassword = trim(this.newConfirmPassword);
+    this.description = trim(this.description);
+  }
+
   private __prepareDataForSave(): ChangeUserInfoRequestModel
   {
     return new ChangeUserInfoRequestModel(this._userId,
                                           this.newUserName,
                                           this.newEmail,
-                                          this.newPassword);
+                                          this.newPassword,
+                                          this.description);
   }
 
   private __loadUserParameters(userName: string): void
@@ -74,6 +84,7 @@ export class UserSettingsComponent extends BaseComponent implements OnInit, OnDe
                        const item: UserInfoResponseModel = data[0];
                        this._userId = item.id;
                        this.newUserName = item.username;
+                       this.description = item.description;
                        this.newEmail = item.email;
                        this.created = item.created;
                        this.modified = item.modified;
@@ -97,12 +108,11 @@ export class UserSettingsComponent extends BaseComponent implements OnInit, OnDe
   {
     this.clearInformationMessages();
     let i: number = 0;
-    isEmptyStringField(this.newUserName) && this.addInformationMessage(--i, 'Please input Username');
     isEmptyStringField(this.newEmail) && this.addInformationMessage(--i, `Please input email`);
     isEmptyStringField(this.newUserName) && this.addInformationMessage(--i, `Please input username`);
     isEmptyStringField(this.newPassword) && this.addInformationMessage(--i, `Please input password`);
     isEmptyStringField(this.newConfirmPassword) && this.addInformationMessage(--i, `Please input confirmation password`);
-    (this.newPassword !== this.newConfirmPassword) && this.addInformationMessage(--i, `Passwords do not match`);
+    (this.newPassword !== this.newConfirmPassword) && this.addInformationMessage(--i, `Passwords don't match`);
     return isEmptyArray(this.informationMessages);
   }
 }

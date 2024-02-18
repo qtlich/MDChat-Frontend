@@ -1,7 +1,4 @@
-<!--         (onRowSelect)="onRowSelect($event)"
-         selectionMode="single"-->
 <div class="page-content" style="height: calc(100vh - 150px)">
-<!--  {{posts.length}}-->
   <p-table #dt
            (onLazyLoad)="loadPostsLazy($event)"
            [(selection)]="selectedItem"
@@ -97,7 +94,7 @@
     </ng-template>
     <ng-template pTemplate="emptymessage">
       <tr>
-        <td colspan="2" style="text-align:left">No posts found.</td>
+        <td colspan="2" style="text-align:left"><b>No posts found.</b></td>
       </tr>
     </ng-template>
   </p-table>

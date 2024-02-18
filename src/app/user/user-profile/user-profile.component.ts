@@ -1,8 +1,8 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router}       from '@angular/router';
-import {AuthDataService}              from '../../auth/shared/auth.data.service';
-import {CommentDataService}           from '../../comment/view-post-comments/services/comment.data.service';
-import {BaseComponent}                from '../../common/components/base.component/base.component';
+import {AuthDataService}    from '../../auth/shared/auth.data.service';
+import {CommentDataService} from '../../services/comments/comment.data.service';
+import {BaseComponent}      from '../../common/components/base.component/base.component';
 import {GlobalBusService}             from '../../common/services/global.bus.service';
 import {PostDataService}              from '../../services/posts/post.data.service';
 

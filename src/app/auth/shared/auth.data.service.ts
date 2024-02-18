@@ -119,6 +119,7 @@ export class AuthDataService extends BaseService
                        this._router.navigateByUrl('/');
                        this.loggedIn.next(false);
                        this.userName.next(null);
+                       this.__clearStorage();
                        this.serviceBus.sendEvent(EActionType.ON_LOGOUT_ACTION, true);
                      }
                      else

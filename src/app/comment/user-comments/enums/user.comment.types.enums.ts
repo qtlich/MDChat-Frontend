@@ -1,0 +1,5 @@
+export enum USER_COMMENT_TYPES
+{
+  NOT_SELECTED = -1,
+  PROFILE_COMMENTS = 1
+}

@@ -1,15 +1,15 @@
-import {USER_POSTS_TYPES} from '../enums/user.posts.types.enum';
-
 /**
- * POST posts/universal-posts
+ * POST posts/universal-comments
  */
-export class GetUserPostsUniversalRequestModel
+export class GetUserCommentsUniverseRequestModel
 {
-  constructor(public userId: number,
-              public selectedUserView:USER_POSTS_TYPES,
+  constructor(public userId?: number,
+              public selectedUserView?: number,
               public sortMode?: string,
               public offset?: number,
               public limit?: number,
+              // -1 don't trim
+              public commentMaxTextLength?: number,
               // -1 don't trim
               public postNameMaxLength?: number,
               // -1 don't trim

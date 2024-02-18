@@ -3,10 +3,10 @@ import {BaseComponent}                                                          
 import {isEmptyArray, isEmptyStringField, isNullOrUndefined, showWarningMessages, toNumber} from '../../common/core/core.free.functions';
 import {OPERATION_TYPES}                                                                    from '../../common/core/enums/operation.types';
 import {EActionType}                                                                        from '../../common/models/event.type';
-import {GlobalBusService}                                                                   from '../../common/services/global.bus.service';
-import {CommentCudRequestModel}                                                             from '../view-post-comments/models/comment.cud.request.model';
-import {CommentDataService}                                                                 from '../view-post-comments/services/comment.data.service';
-import {CreateCommentScreenDataModel}                                                       from './models/create.comment.screen.data.model';
+import {GlobalBusService}       from '../../common/services/global.bus.service';
+import {CommentCudRequestModel} from '../../services/comments/models/comment.cud.request.model';
+import {CommentDataService}     from '../../services/comments/comment.data.service';
+import {CreateCommentScreenDataModel} from './models/create.comment.screen.data.model';
 
 export type OnSuccessModifyCommentItem = { success: boolean, item: CommentCudRequestModel };
 
