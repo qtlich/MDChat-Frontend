@@ -16,6 +16,11 @@
                           [suggestions] = "sD.filteredChannelsFromServer"
                           field = "channelName"
                           placeholder = "Select channel">
+            <ng-template let-channel pTemplate = "item">
+              <span style = "font-size:1em;margin-right:10px; font-weight:bold;">{{channel.channelName}}</span>
+              <channel-state [channelTypeId] = "channel.channelType"></channel-state>
+              <join-to-channel [channelId] = "channel.channelId"></join-to-channel>
+            </ng-template>
           </p-autoComplete>&nbsp;
         </div>
         <div class = "p-col-12 ui-fluid">

@@ -1,85 +1,90 @@
-<p-toolbar class="fixed-toolbar">
-  <div class="ui-toolbar-group-left">
+<p-toolbar class = "fixed-toolbar">
+  <div class = "ui-toolbar-group-left">
     <!-- BEGIN: MDChat Avatar -->
-    <a aria-label="Home" class="logo" routerLink="/" (click)="onClickMDChat()">
-      <svg class="channel-icon-svg" fill="none" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
-        <g clip-path="url(#clip0_0_1)">
-          <circle cx="250" cy="250" fill="#FFB300" r="250"/>
+    <a aria-label = "Home" class = "logo" routerLink = "/" (click) = "onClickMDChat()">
+      <svg class = "channel-icon-svg" fill = "none" viewBox = "0 0 500 500" xmlns = "http://www.w3.org/2000/svg">
+        <g clip-path = "url(#clip0_0_1)">
+          <circle cx = "250" cy = "250" fill = "#FFB300" r = "250"/>
           <path
-            d="M357 159C357 153.477 361.477 149 367 149H387C392.523 149 397 153.477 397 159V409.67C397 412.033 396.163 414.319 394.639 416.124L384.639 427.959C380.644 432.687 373.356 432.687 369.361 427.959L359.361 416.124C357.837 414.319 357 412.033 357 409.67V159Z"
-            fill="white"/>
+            d = "M357 159C357 153.477 361.477 149 367 149H387C392.523 149 397 153.477 397 159V409.67C397 412.033 396.163 414.319 394.639 416.124L384.639 427.959C380.644 432.687 373.356 432.687 369.361 427.959L359.361 416.124C357.837 414.319 357 412.033 357 409.67V159Z"
+            fill = "white"/>
           <path
-            d="M243 114C243 108.399 243 105.599 244.09 103.46C245.049 101.578 246.578 100.049 248.46 99.0899C250.599 98 253.399 98 259 98H267C272.601 98 275.401 98 277.54 99.0899C279.422 100.049 280.951 101.578 281.91 103.46C283 105.599 283 108.399 283 114V403.989C283 405.9 283 406.856 282.826 407.776C282.672 408.593 282.416 409.387 282.065 410.141C281.67 410.99 281.113 411.766 279.998 413.319L275.998 418.892C271.612 425.002 269.419 428.058 266.703 429.14C264.325 430.088 261.675 430.088 259.297 429.14C256.581 428.058 254.388 425.002 250.002 418.892L246.002 413.319C244.887 411.766 244.33 410.99 243.935 410.141C243.584 409.387 243.328 408.593 243.174 407.776C243 406.856 243 405.9 243 403.989V114Z"
-            fill="white"/>
+            d = "M243 114C243 108.399 243 105.599 244.09 103.46C245.049 101.578 246.578 100.049 248.46 99.0899C250.599 98 253.399 98 259 98H267C272.601 98 275.401 98 277.54 99.0899C279.422 100.049 280.951 101.578 281.91 103.46C283 105.599 283 108.399 283 114V403.989C283 405.9 283 406.856 282.826 407.776C282.672 408.593 282.416 409.387 282.065 410.141C281.67 410.99 281.113 411.766 279.998 413.319L275.998 418.892C271.612 425.002 269.419 428.058 266.703 429.14C264.325 430.088 261.675 430.088 259.297 429.14C256.581 428.058 254.388 425.002 250.002 418.892L246.002 413.319C244.887 411.766 244.33 410.99 243.935 410.141C243.584 409.387 243.328 408.593 243.174 407.776C243 406.856 243 405.9 243 403.989V114Z"
+            fill = "white"/>
           <path
-            d="M119 108C119 102.477 123.477 98 129 98H149C154.523 98 159 102.477 159 108V405.92C159 408.012 158.344 410.051 157.124 411.751L147.124 425.682C143.134 431.241 134.866 431.241 130.876 425.682L120.876 411.751C119.656 410.051 119 408.012 119 405.92V108Z"
-            fill="white"/>
-          <path d="M273 201.652L440 139" stroke="white" stroke-linecap="square" stroke-width="40"/>
+            d = "M119 108C119 102.477 123.477 98 129 98H149C154.523 98 159 102.477 159 108V405.92C159 408.012 158.344 410.051 157.124 411.751L147.124 425.682C143.134 431.241 134.866 431.241 130.876 425.682L120.876 411.751C119.656 410.051 119 408.012 119 405.92V108Z"
+            fill = "white"/>
+          <path d = "M273 201.652L440 139" stroke = "white" stroke-linecap = "square" stroke-width = "40"/>
           <path
-            d="M111.702 62.1834L91.8857 59.4811L86.4811 99.1143L106.298 101.817L111.702 62.1834ZM260.298 122.817C271.242 124.309 281.324 116.647 282.817 105.702C284.309 94.7579 276.647 84.6758 265.702 83.1834L260.298 122.817ZM106.298 101.817L260.298 122.817L265.702 83.1834L111.702 62.1834L106.298 101.817Z"
-            fill="white"/>
+            d = "M111.702 62.1834L91.8857 59.4811L86.4811 99.1143L106.298 101.817L111.702 62.1834ZM260.298 122.817C271.242 124.309 281.324 116.647 282.817 105.702C284.309 94.7579 276.647 84.6758 265.702 83.1834L260.298 122.817ZM106.298 101.817L260.298 122.817L265.702 83.1834L111.702 62.1834L106.298 101.817Z"
+            fill = "white"/>
         </g>
         <defs>
-          <clipPath id="clip0_0_1">
-            <rect fill="white" height="500" width="500"/>
+          <clipPath id = "clip0_0_1">
+            <rect fill = "white" height = "500" width = "500"/>
           </clipPath>
         </defs>
       </svg>
-      <span class="channel-text" style="margin-right: 1em;">MdChat</span>
+      <span class = "channel-text" style = "margin-right: 1em;">MdChat</span>
     </a>
     <!-- END: MDChat Avatar -->
     <!-- BEGIN: Channels -->
-    <p-dropdown (onChange)="onChangeChannel($event.value)"
-                [(ngModel)]="selectedChannel"
-                [style]="{'width':'16em'}"
-                [filter]="true"
-                [options]="channelItems"
-                class="align-middle"
-                filterBy="label"
-                placeholder="Select">
-      <ng-template let-it pTemplate="item">
-        <i class={{it.icon}} style="width: 2em;"></i>
-        <span class="align-middle">{{it.label}}</span>
+    <p-dropdown (onChange) = "onChangeChannel($event.value)"
+                [(ngModel)] = "selectedChannel"
+                [style] = "{'width':'16em'}"
+                [filter] = "true"
+                [options] = "channelItems"
+                class = "align-middle"
+                filterBy = "label"
+                placeholder = "Select">
+      <ng-template let-it pTemplate = "item">
+        <i class = {{it.icon}} style = "width: 2em;"></i>
+        <span class = "align-middle">{{it.label}}</span>
       </ng-template>
-      <ng-template let-it pTemplate="selectedItem">
-        <i class={{it.icon}} style="width: 2em;"></i>
-        <span class="align-middle">{{it.label}}</span>
+      <ng-template let-it pTemplate = "selectedItem">
+        <i class = {{it.icon}} style = "width: 2em;"></i>
+        <span class = "align-middle">{{it.label}}</span>
       </ng-template>
     </p-dropdown>&nbsp;
     <!-- END: Channels -->
     <!-- BEGIN: Search component -->
-    <p-autoComplete (completeMethod)="filterChannelsMultiple($event)"
-                    (onKeyUp)="onKeyUp($event)"
-                    (onClear)="onClearAutoComplete()"
-                    (onSelect)="onSelectChannel($event)"
-                    [(ngModel)]="channels"
-                    [inputStyle]="{'min-width':'20em'}"
-                    [minLength]="1"
-                    [size]="120"
-                    [dropdownMode]="true"
-                    [suggestions]="filteredChannelsMultiple"
-                    field="channelName"
-                    placeholder="Fillin channel">
+    <p-autoComplete (completeMethod) = "filterChannelsMultiple($event)"
+                    (onKeyUp) = "onKeyUp($event)"
+                    (onClear) = "onClearAutoComplete()"
+                    (onSelect) = "onSelectChannel($event)"
+                    [(ngModel)] = "channels"
+                    [inputStyle] = "{'min-width':'20em'}"
+                    [minLength] = "1"
+                    [size] = "120"
+                    [dropdownMode] = "'true'"
+                    [suggestions] = "filteredChannelsMultiple"
+                    field = "channelName"
+                    placeholder = "Fillin channel">
+      <ng-template let-channel pTemplate = "item">
+        <span style = "font-size:1em;margin-right:10px; font-weight:bold;">{{channel.channelName}}</span>
+        <channel-state [channelTypeId] = "channel.channelType"></channel-state>
+        <join-to-channel [channelId] = "channel.channelId"></join-to-channel>
+      </ng-template>
     </p-autoComplete>&nbsp;
     <!-- END: Search component -->
   </div>
 
-  <div class="ui-toolbar-group-right">
-    <div *ngIf="isLoggedIn">
-      <p-slideMenu #usermenu [model]="items" [popup]="true" appendTo="body"></p-slideMenu>
+  <div class = "ui-toolbar-group-right">
+    <div *ngIf = "isLoggedIn">
+      <p-slideMenu #usermenu [model] = "items" [popup] = "true" appendTo = "body"></p-slideMenu>
       <button #btn
-              (click)="onUserMenuClick($event)"
-              [label]="userName"
-              class="ui-button-rounded"
-              icon="pi pi-user"
+              (click) = "onUserMenuClick($event)"
+              [label] = "userName"
+              class = "ui-button-rounded"
+              icon = "pi pi-user"
               pButton
-              type="button">
+              type = "button">
       </button>
 
     </div>
-    <div *ngIf="!isLoggedIn">
-      <button icon="pi pi-sign-in" label="Login" pButton routerLink="/login" type="button"></button>
-      <button icon="pi pi-user-plus" label="Register" pButton routerLink="/sign-up" type="button"></button>
+    <div *ngIf = "!isLoggedIn">
+      <button icon = "pi pi-sign-in" label = "Login" pButton routerLink = "/login" type = "button"></button>
+      <button icon = "pi pi-user-plus" label = "Register" pButton routerLink = "/sign-up" type = "button"></button>
     </div>
   </div>
 </p-toolbar>
