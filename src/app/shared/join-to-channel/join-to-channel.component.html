@@ -1,0 +1,6 @@
+<button [ngClass] = "{'joined': isSubscribed, 'join': !isSubscribed}"
+        (click) = "toggleSubscription()"
+        (mouseover) = "onMouseOver()"
+        (mouseleave) = "onMouseLeave()">
+  {{ buttonText }}
+</button>

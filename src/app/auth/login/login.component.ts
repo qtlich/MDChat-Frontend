@@ -42,7 +42,7 @@ export class LoginComponent extends BaseComponent implements OnInit
     }
   }
 
-  ngOnInit(): void
+  public ngOnInit(): void
   {
     this._activatedRoute
         .queryParams

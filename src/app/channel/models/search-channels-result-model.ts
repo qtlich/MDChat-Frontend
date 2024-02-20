@@ -1,14 +1,8 @@
-import {ChannelResponseModel} from './channel.response.model';
+import {GetChannelDescriptionResponseModel} from './get.channel.description.response.model';
 
-export class SearchChannelsResultModel extends ChannelResponseModel
+export class SearchChannelsResultModel extends GetChannelDescriptionResponseModel
 {
-  constructor(public id?: number,
-              public channelName?: string,
-              public channelDescription?: number,
-              public channelType?: number,
-              public created?: string,
-              public author?: string,
-              public countPosts?: number)
+  constructor()
   {
     super();
   }

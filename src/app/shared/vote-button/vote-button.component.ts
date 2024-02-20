@@ -1,13 +1,13 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges}                               from '@angular/core';
-import {Router}                                                                           from '@angular/router';
+import {Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
+import {Router}                                                        from '@angular/router';
 import {faArrowDown, faArrowUp, faChevronDown, faChevronUp}                               from '@fortawesome/free-solid-svg-icons';
 import {LocalStorageService}                                                              from 'ngx-webstorage';
 import {take}                                                                             from 'rxjs/operators';
 import {AuthDataService}                                                                  from '../../auth/shared/auth.data.service';
 import {BaseComponent}                                                                    from '../../common/components/base.component/base.component';
-import {redirectUrlStorageNameConst}                                                      from '../../common/constants/core.free.constants';
-import {errorToText, executeIf, isChangedAndNullOrUndefined, isNullOrUndefined, toNumber} from '../../common/core/core.free.functions';
-import {EActionType}                                                                      from '../../common/models/event.type';
+import {redirectUrlStorageNameConst}                                                                                      from '../../common/constants/core.free.constants';
+import {errorToText, executeIf, isChangedAndNotNullOrUndefined, isChangedAndNullOrUndefined, isNullOrUndefined, toNumber} from '../../common/core/core.free.functions';
+import {EActionType}                                                                                                      from '../../common/models/event.type';
 import {OperationResult}                                                                  from '../../common/models/operation.result.model';
 import {GlobalBusService}                                                                 from '../../common/services/global.bus.service';
 import {GetUserVotesRequestModel}                                                         from './models/get.user.votes.request.model';
@@ -23,7 +23,7 @@ import {VoteRestService}                                                        
              templateUrl: './vote-button.component.html',
              styleUrls:   ['./vote-button.component.css']
            })
-export class VoteButtonComponent extends BaseComponent implements OnInit, OnChanges
+export class VoteButtonComponent extends BaseComponent implements OnInit, OnDestroy, OnChanges
 {
 
   @Input() postId: number;
@@ -54,15 +54,9 @@ export class VoteButtonComponent extends BaseComponent implements OnInit, OnChan
     this.__getVotes();
   }
 
-  ngOnInit(): void
-  {
-    this.__getVotes();
-    this.isLoggedIn = this._authService.isLoggedIn();
-  }
-
   public ngOnChanges(changes: SimpleChanges)
   {
-    executeIf(isChangedAndNullOrUndefined(changes, 'postId'), () => this.__getVotes());
+    executeIf(isChangedAndNotNullOrUndefined(changes, 'postId'), () => this.__getVotes());
   }
 
   public onUpVoteClick(): void
@@ -100,7 +94,6 @@ export class VoteButtonComponent extends BaseComponent implements OnInit, OnChan
   {
     if (this.isLoggedIn)
     {
-      // this._dataService.vote(this.__prepareDataForVote(voteType));
       this.voteService
           .vote(this.__prepareDataForVote(voteType))
           .pipe(take(1))

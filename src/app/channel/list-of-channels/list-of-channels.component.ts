@@ -1,6 +1,6 @@
-import {Component, OnInit}    from '@angular/core';
-import {ChannelResponseModel} from '../models/channel.response.model';
-import {ChannelRestService}   from '../../services/channels/channel.rest.service';
+import {Component, OnInit}                  from '@angular/core';
+import {GetChannelDescriptionResponseModel} from '../models/get.channel.description.response.model';
+import {ChannelRestService}                 from '../../services/channels/channel.rest.service';
 import {throwError}           from 'rxjs';
 import {PostModel}            from '../../shared/post-model';
 import {LazyLoadEvent}        from 'primeng/api';
@@ -13,7 +13,7 @@ import {LazyLoadEvent}        from 'primeng/api';
 export class ListOfChannelsComponent implements OnInit
 {
 
-  channelItems: Array<ChannelResponseModel>;
+  channelItems: Array<GetChannelDescriptionResponseModel>;
   posts: Array<PostModel>;
 
   constructor(private _channelService: ChannelRestService)

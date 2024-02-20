@@ -1,8 +1,10 @@
 export class SearchChannelsInputModel
 {
-  constructor(public channelName?:string,
-              public descLength?:number,
-              public searchMode?:number)
+  constructor(public userId?: number,
+              public channelName?: string,
+              public maxNameLength: number        = 100,
+              public maxDescriptionLength: number = 100,
+              public limit: number                = 20)
   {
   }
 }

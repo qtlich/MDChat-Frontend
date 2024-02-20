@@ -46,7 +46,7 @@ import {SignupComponent}                            from './auth/signup/signup.c
 import {CreateChannelComponent}                     from './channel/create-channel/create-channel.component';
 import {ListOfChannelsComponent}                    from './channel/list-of-channels/list-of-channels.component';
 import {ViewChannelDescriptionComponent}            from './channel/view-channel-description/view-channel-description.component';
-import {ViewChannelPostsComponent}                  from './channel/view-channel-posts/view-channel-posts.component';
+import {ViewChannelPostsComponent}                  from './channel/view-channel/view-channel-posts/view-channel-posts.component';
 import {ViewChannelComponent}                       from './channel/view-channel/view-channel.component';
 import {CreateCommentComponent}                     from './comment/create-comment/create-comment.component';
 import {UserCommentsComponent}                      from './comment/user-comments/user-comments.component';
@@ -63,6 +63,8 @@ import {CreatePostLittleComponent}                  from './post/create-post-lit
 import {CreatePostComponent}                        from './post/create-post/create-post.component';
 import {ViewPostComponent}                          from './post/view-post/view-post.component';
 import {ChannelSideBarComponent}                    from './shared/channel-side-bar/channel-side-bar.component';
+import {ChannelStateComponent}                      from './shared/channel-state/channel.state.component';
+import {JoinToChannelComponent}                     from './shared/join-to-channel/join-to-channel.component';
 import {MainPostTileComponent}                      from './shared/main-post-tile/main-post-tile.component';
 import {SideBarComponent}                           from './shared/side-bar/side-bar.component';
 import {DownVotedUserPostsTileComponent}            from './shared/user.posts/downvoted-user-post-tile/upvoted-user-posts-tile.component';
@@ -94,7 +96,6 @@ import {UserSettingsComponent}                      from './user/user-settings/u
                            ViewPostComponent,
                            UserProfileComponent,
                            CreatePostLittleComponent,
-                           ViewChannelPostsComponent,
                            ViewChannelDescriptionComponent,
                            ViewCommentsComponent,
                            CreateCommentComponent,
@@ -108,7 +109,10 @@ import {UserSettingsComponent}                      from './user/user-settings/u
                            UserProfileComponent,
                            UserSettingsComponent,
                            ColorSchemeComponent,
-                           UserCommentsComponent],
+                           UserCommentsComponent,
+                           ViewChannelPostsComponent,
+                           ChannelStateComponent,
+                           JoinToChannelComponent],
             imports:      [BrowserModule,
                            NgxWebstorageModule.forRoot(),
                            ToastrComponentlessModule.forRoot(),

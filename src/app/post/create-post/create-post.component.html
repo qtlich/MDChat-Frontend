@@ -1,68 +1,70 @@
-<div class="p-grid">
-  <div class="p-col-6 p-offset-2">
+<div class = "p-grid">
+  <div class = "p-col-6 p-offset-2">
     <p-panel>
       <p-header>
-        Create post
+        Create new post
       </p-header>
-      <div class="p-grid">
-        <div class="p-col-12 ui-fluid">
-          <p-dropdown [(ngModel)]="sD.channelId"
-                      [filter]="true"
-                      [options]="sD.channelItems"
-                      [required]="true"
-                      [style]="{'width':'100%'}"
-                      filterBy="label"
-                      pTooltip="Channels"
-                      placeholder="Select channel">
-          </p-dropdown>
+      <div class = "p-grid">
+        <div class = "p-col-12 ui-fluid">
+          <p-autoComplete (completeMethod) = "filterChannels($event.query)"
+                          (onClear)="onClearChannel()"
+                          (onSelect) = "onSelectChannel($event)"
+                          [(ngModel)] = "sD.selectedChannel"
+                          [dropdown] = "true"
+                          [minLength] = "1"
+                          [size] = "50"
+                          [suggestions] = "sD.filteredChannelsFromServer"
+                          field = "channelName"
+                          placeholder = "Select channel">
+          </p-autoComplete>&nbsp;
         </div>
-        <div class="p-col-12 ui-fluid">
-          <input [(ngModel)]="sD.postName"
+        <div class = "p-col-12 ui-fluid">
+          <input [(ngModel)] = "sD.postName"
                  pInputText
-                 placeholder="Fill in post name"
-                 style="margin-top: 5px"
-                 type="text">
+                 placeholder = "Fill in post name"
+                 style = "margin-top: 5px"
+                 type = "text">
         </div>
-        <div class="p-col-12 ui-fluid">
-          <input [(ngModel)]="sD.url"
+        <div class = "p-col-12 ui-fluid">
+          <input [(ngModel)] = "sD.url"
                  pInputText
-                 placeholder="Fill in URL"
-                 style="margin-top: 5px"
-                 type="text">
+                 placeholder = "Fill in URL"
+                 style = "margin-top: 5px"
+                 type = "text">
         </div>
-        <div class="p-col-12 ui-fluid">
-          <p-checkbox [(ngModel)]="sD.commentsLocked"
-                      [binary]="true"
-                      label="Lock comments">
+        <div class = "p-col-12 ui-fluid">
+          <p-checkbox [(ngModel)] = "sD.commentsLocked"
+                      [binary] = "true"
+                      label = "Lock comments">
           </p-checkbox>
         </div>
-        <div class="p-col-12 ui-fluid">
-          <p-editor [(ngModel)]="sD.postDescription"
-                    [required]="true"
-                    [style]="{'height':'400px'}"
-                    class="ui-fluid">
+        <div class = "p-col-12 ui-fluid">
+          <p-editor [(ngModel)] = "sD.postDescription"
+                    [required] = "true"
+                    [style] = "{'height':'400px'}"
+                    class = "ui-fluid">
           </p-editor>
         </div>
       </div>
       <p-footer>
-        <button (click)="onCreatePostClick()"
-                class="ui-button-success ui-button-rounded"
-                label="Post"
+        <button (click) = "onCreatePostClick()"
+                class = "ui-button-success ui-button-rounded"
+                label = "Post"
                 pButton
-                pTooltip="Create post"
-                type="button">
+                pTooltip = "Create post"
+                type = "button">
         </button>
-        <button (click)="onDiscardClick()"
-                class="ui-button-secondary ui-button-rounded"
-                label="Discard"
+        <button (click) = "onDiscardClick()"
+                class = "ui-button-secondary ui-button-rounded"
+                label = "Discard"
                 pButton
-                type="button">
+                type = "button">
         </button>
       </p-footer>
     </p-panel>
   </div>
-  <div class="p-col-3">
+  <div class = "p-col-3">
     <create-channel-post-side-bar></create-channel-post-side-bar>
   </div>
-  <div class="p-col-1"></div>
+  <div class = "p-col-1"></div>
 </div>

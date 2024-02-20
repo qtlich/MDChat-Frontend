@@ -32,8 +32,8 @@
             <div class = "p-col-12">
               <p-editor [(ngModel)]="item.commentText" readonly="readonly">
                 <p-header>
-                  <b>{{userName}}</b> commented on <a class = "post-name" href = "/view-post/{{item.postId}}"><b>{{item.postName}}</b></a><br>
-                  {{item.commentTimeAgo}}
+                  <div >{{userName}}</div> commented on <a class = "post-name" href = "/view-post/{{item.postId}}"><div class="postname-badge">{{item.postName}}</div></a><br>
+                  <div class="timesago-badge">{{item.commentTimeAgo}}</div>
                 </p-header>
               </p-editor>
             </div>

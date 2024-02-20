@@ -7,8 +7,8 @@
         <div *ngIf="post" class="flex-grow-1 ml-2">
           <p-editor [(ngModel)]="post.postDescription" readonly="readonly">
             <p-header>
-              Posted by {{post.userName}} - {{post.createdTimeAgo}}<br>
-              <b>{{post.postName}}</b>&nbsp;
+              Posted by<div class="user-badge">{{post.userName}}</div> - <div class="timesago-badge">{{post.createdTimeAgo}}</div><br>
+              <span class="postname-badge">{{post.postName}}</span>&nbsp;
               <a (click)="onEditClick()" *ngIf="post.canEdit" class="custom-button" role="button">
                 <fa-icon [icon]="faEdit" pTooltip="Edit post"></fa-icon>
               </a>&nbsp;

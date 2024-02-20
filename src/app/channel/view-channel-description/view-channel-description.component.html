@@ -1,14 +1,19 @@
-<p-panel [toggleable]="true">
+<p-panel [toggleable] = "true" *ngIf = "channel">
   <p-header>
-    Channel description
+    About channel
+    <div class = "channel-badge" [routerLink] = "['/view-channel/',channel.channelId]">{{channel.channelName}}</div>
+    <channel-state [channelTypeId] = "channel.channelType"></channel-state>
+    <div class = "timesago-badge">Created {{channel.createdTimeAgo}}</div>
+    <join-to-channel [channelId] = "channel.channelId"></join-to-channel>
   </p-header>
-  <div class="p-grid">
-    <div class="p-col-12 ui-fluid">
+  <div class = "p-grid">
+    <div class = "p-col-12 ui-fluid">
       <!--      <p-editor [(ngModel)]="channel.description" readonly="true" [modules]="modules">-->
       <!--        <ng-template pTemplate="header">-->
       <!--        </ng-template>-->
       <!--      </p-editor>-->
-      <p [appInnerHTML]="channel?.description" style="word-wrap: break-word;white-space: pre-wrap;"></p>
+      <span [appInnerHTML] = "channel.channelDescription" style = "word-wrap: break-word;white-space: pre-wrap;"></span><br>
+
     </div>
   </div>
 </p-panel>

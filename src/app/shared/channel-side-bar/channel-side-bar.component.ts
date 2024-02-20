@@ -1,6 +1,6 @@
-import {Component, OnInit}    from '@angular/core';
-import {ChannelResponseModel} from '../../channel/models/channel.response.model';
-import {ChannelRestService}   from '../../services/channels/channel.rest.service';
+import {Component, OnInit}                  from '@angular/core';
+import {GetChannelDescriptionResponseModel} from '../../channel/models/get.channel.description.response.model';
+import {ChannelRestService}                 from '../../services/channels/channel.rest.service';
 
 @Component({
              selector:    'channel-side-bar',
@@ -9,7 +9,7 @@ import {ChannelRestService}   from '../../services/channels/channel.rest.service
            })
 export class ChannelSideBarComponent implements OnInit
 {
-  channels: Array<ChannelResponseModel> = [];
+  channels: Array<GetChannelDescriptionResponseModel> = [];
   displayViewAll: boolean;
 
   constructor(private channelService: ChannelRestService)
