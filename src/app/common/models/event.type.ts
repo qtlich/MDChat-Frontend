@@ -20,5 +20,5 @@ export const enum EActionType
   ON_LOGIN_ACTION                       = 'ON_LOGIN_ACTION', // type boolean
   ON_LOGOUT_ACTION                      = 'ON_LOGOUT_ACTION', // type boolean
   ON_VOTE_ACTION                        = 'ON_VOTE_ACTION', // type true
-  ON_CHANGE_CHANNEL_SUBSCRIPTION_ACTION = 'ON_CHANGE_CHANNEL_SUBSCRIPTION_ACTION', // type boolean
+  ON_CHANGE_CHANNEL_SUBSCRIPTION_ACTION = 'ON_CHANGE_CHANNEL_SUBSCRIPTION_ACTION', // type OnChangeUserChannelSubscriptionResult
 }

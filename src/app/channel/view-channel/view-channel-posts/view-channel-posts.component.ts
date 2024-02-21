@@ -33,7 +33,7 @@ export class ViewChannelPostsComponent extends BaseComponent implements OnInit, 
   readonly faEyeSlash: any = faEyeSlash;
   readonly faTrashAlt: any = faTrashAlt; //IconDefinition
   @Input() channelId: number;
-  @Input() showSortBar: boolean = false;
+  @Input() showSortBar: boolean = true;
   public selectedView: number = 0;
   public posts: GetChannelPostsUniversalResponseModel[] = [];
   public existingSortingDD: SelectItem[] = [{label: 'New', value: 'New', icon: 'pi pi-sort-amount-down'},

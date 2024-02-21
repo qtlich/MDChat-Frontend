@@ -1,11 +1,14 @@
 import {Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
-import {Router}                                                        from '@angular/router';
-import {BaseComponent}                                                                       from '../../common/components/base.component/base.component';
-import {errorToText, executeIf, isChangedAndNotNullOrUndefined, isChangedAndNullOrUndefined} from '../../common/core/core.free.functions';
-import {GlobalBusService}                                                                    from '../../common/services/global.bus.service';
-import {ChannelRestService}                 from '../../services/channels/channel.rest.service';
-import {GetChannelDescriptionRequestModel} from '../models/get.channel.description.request.model';
-import {GetChannelDescriptionResponseModel} from '../models/get.channel.description.response.model';
+import {BaseComponent}                                                 from '../../common/components/base.component/base.component';
+import {errorToText, executeIf, isChangedAndNotNullOrUndefined}        from '../../common/core/core.free.functions';
+import {EActionType}                                                   from '../../common/models/event.type';
+import {GlobalBusService}                                              from '../../common/services/global.bus.service';
+import {ChannelDataService, OnChangeUserChannelSubscriptionResult}     from '../../services/channels/channel.data.service';
+import {ChannelRestService}                                            from '../../services/channels/channel.rest.service';
+import {GetChannelCountSubscribersRequestModel}                        from '../../services/channels/models/get.channel.count.subscribers.request.model';
+import {GetChannelCountSubscribersResponseModel}                       from '../../services/channels/models/get.channel.count.subscribers.response.model';
+import {GetChannelDescriptionRequestModel}                             from '../models/get.channel.description.request.model';
+import {GetChannelDescriptionResponseModel}                            from '../models/get.channel.description.response.model';
 
 @Component({
              selector:    'channel-description-side-bar',
@@ -15,10 +18,12 @@ import {GetChannelDescriptionResponseModel} from '../models/get.channel.descript
 export class ViewChannelDescriptionComponent extends BaseComponent implements OnInit, OnDestroy, OnChanges
 {
   public channel: GetChannelDescriptionResponseModel;
-  @Input() channelId: number;
+  public countSubscribers: number;
+  @Input() channelId: number = 0;
 
-  constructor(private _channelService:ChannelRestService,
-              serviceBus:GlobalBusService)
+  constructor(private _channelService: ChannelRestService,
+              private _channelDataService: ChannelDataService,
+              serviceBus: GlobalBusService)
   {
     super(serviceBus);
   }
@@ -28,20 +33,42 @@ export class ViewChannelDescriptionComponent extends BaseComponent implements On
     executeIf(isChangedAndNotNullOrUndefined(changes, 'channelId'), () => this.__load());
   }
 
-  public ngOnInit()
+  protected onSubscribeData()
   {
-    super.ngOnInit();
-    // this.__load();
+    super.onSubscribeData();
+    this.subscribe(this.serviceBus.onEvent<OnChangeUserChannelSubscriptionResult>(EActionType.ON_CHANGE_CHANNEL_SUBSCRIPTION_ACTION, (result: OnChangeUserChannelSubscriptionResult) =>
+                                                                                  {
+                                                                                    if(result.success && result.item.channelId == this.channelId)
+                                                                                    {
+                                                                                      this.__loadChannelCountSubscriptions();
+                                                                                    }
+                                                                                  }
+    ));
+    this.subscribe(this._channelDataService.onLoadChannelSubscribersEvent().subscribe((result: GetChannelCountSubscribersResponseModel) =>
+                                                                                      {
+                                                                                        console.log('onLoadChannelSubscribersEvent=>', result);
+                                                                                        if(result.channelId = this.channelId)
+                                                                                        {
+                                                                                          this.countSubscribers = result.countSubscribers;
+                                                                                        }
+                                                                                      }));
+  }
+
+  private __loadChannelCountSubscriptions(): void
+  {
+    this._channelDataService.getChannelCountSubscribers(new GetChannelCountSubscribersRequestModel(null,
+                                                                                                   this.channelId));
   }
 
   private __load(): void
   {
-    this._channelService.getChannelDescription(new GetChannelDescriptionRequestModel(this.channelId)).subscribe((channel:GetChannelDescriptionResponseModel) =>
-                                                             {
-                                                               this.channel = channel;
-                                                             }, error =>
-                                                             {
-                                                               this.showError(errorToText(error));
-                                                             });
+    this.__loadChannelCountSubscriptions();
+    this._channelService.getChannelDescription(new GetChannelDescriptionRequestModel(this.channelId)).subscribe((channel: GetChannelDescriptionResponseModel) =>
+                                                                                                                {
+                                                                                                                  this.channel = channel;
+                                                                                                                }, error =>
+                                                                                                                {
+                                                                                                                  this.showError(errorToText(error));
+                                                                                                                });
   }
 }
