@@ -36,7 +36,7 @@ export class ThemeService
   {
     this._selectedTheme = this.__findThemeElement(themePath);
     const themeLink = this.document.getElementById('app-theme') as HTMLLinkElement;
-    if (themeLink)
+    if(themeLink)
     {
       themeLink.href = window.location.origin + '/assets/resources/themes/' + themePath + '/theme.css';
     }

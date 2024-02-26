@@ -46,7 +46,7 @@ import {SignupComponent}                            from './auth/signup/signup.c
 import {CreateChannelComponent}                     from './channel/create-channel/create-channel.component';
 import {ListOfChannelsComponent}                    from './channel/list-of-channels/list-of-channels.component';
 import {ViewChannelDescriptionComponent}            from './channel/view-channel-description/view-channel-description.component';
-import {ViewChannelPostsComponent}                  from './channel/view-channel-posts/view-channel-posts.component';
+import {ViewChannelPostsComponent}                  from './channel/view-channel/view-channel-posts/view-channel-posts.component';
 import {ViewChannelComponent}                       from './channel/view-channel/view-channel.component';
 import {CreateCommentComponent}                     from './comment/create-comment/create-comment.component';
 import {UserCommentsComponent}                      from './comment/user-comments/user-comments.component';
@@ -58,12 +58,20 @@ import {CleanHtmlAndTruncateModule}                 from './common/directives/tr
 import {TruncateAndSafeHtmlDirectiveModule}         from './common/directives/truncate-and-safe-html-directive';
 import {AppConfigService}                           from './common/services/app.config.service';
 import {HeaderComponent}                            from './header/header.component';
-import {HomeComponent}                              from './home/home.component';
+import {HomeComponent}          from './home/home.component';
+import {ChannelManagementComponent}                 from './moderate.tools/channel.management/channel.management.component';
+import {EditChannelComponent}   from './moderate.tools/channel.management/edit.channel/edit.channel.component';
+import {ModerateToolsComponent} from './moderate.tools/moderate.tools.component';
+import {UserManagementComponent}                    from './moderate.tools/user.management/user.management.component';
 import {CreatePostLittleComponent}                  from './post/create-post-little/create-post-little.component';
 import {CreatePostComponent}                        from './post/create-post/create-post.component';
 import {ViewPostComponent}                          from './post/view-post/view-post.component';
 import {ChannelSideBarComponent}                    from './shared/channel-side-bar/channel-side-bar.component';
+import {ChannelStateComponent}                      from './shared/channel-state/channel.state.component';
+import {JoinToChannelComponent}                     from './shared/join-to-channel/join-to-channel.component';
 import {MainPostTileComponent}                      from './shared/main-post-tile/main-post-tile.component';
+import {ModerateToolsButtonComponent}               from './shared/moderate-tools-button/moderate.tools.button.component';
+import {RecentPostsComponent}                       from './shared/side-bar/recent-posts/recent.posts.component';
 import {SideBarComponent}                           from './shared/side-bar/side-bar.component';
 import {DownVotedUserPostsTileComponent}            from './shared/user.posts/downvoted-user-post-tile/upvoted-user-posts-tile.component';
 import {HiddenUserPostsTileComponent}               from './shared/user.posts/hidden-user-posts-tile/hidden-user-posts-tile.component';
@@ -94,7 +102,6 @@ import {UserSettingsComponent}                      from './user/user-settings/u
                            ViewPostComponent,
                            UserProfileComponent,
                            CreatePostLittleComponent,
-                           ViewChannelPostsComponent,
                            ViewChannelDescriptionComponent,
                            ViewCommentsComponent,
                            CreateCommentComponent,
@@ -108,7 +115,16 @@ import {UserSettingsComponent}                      from './user/user-settings/u
                            UserProfileComponent,
                            UserSettingsComponent,
                            ColorSchemeComponent,
-                           UserCommentsComponent],
+                           UserCommentsComponent,
+                           ViewChannelPostsComponent,
+                           ChannelStateComponent,
+                           JoinToChannelComponent,
+                           RecentPostsComponent,
+                           ModerateToolsComponent,
+                           UserManagementComponent,
+                           ModerateToolsButtonComponent,
+                           EditChannelComponent,
+                           ChannelManagementComponent],
             imports:      [BrowserModule,
                            NgxWebstorageModule.forRoot(),
                            ToastrComponentlessModule.forRoot(),

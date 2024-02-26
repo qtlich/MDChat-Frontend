@@ -3,7 +3,7 @@
     <p-panel>
       <p-header>Create channel</p-header>
       <div class="p-grid">
-        <div class="p-col-3">Channel name:</div>
+        <div class="p-col-3 font-weight-bold">Channel name:</div>
         <div class="p-col-9 ui-fluid">
           <input (input)="countRemaining()"
                  [(ngModel)]="sD.channelName"
@@ -13,15 +13,7 @@
                  required>
         </div>
         <div class="p-col-12 text-right small">{{sD.remaining}} Characters remaining</div>
-        <div class="p-col-12">Description:</div>
-        <div class="p-col-12 ui-fluid">
-          <p-editor [(ngModel)]="sD.channelDescription"
-                    [required]="true"
-                    [style]="{'height':'400px'}"
-                    class="ui-fluid">
-          </p-editor>
-        </div>
-        <div class="p-col-12">Channel type</div>
+        <div class="p-col-12 font-weight-bold">Channel type</div>
         <div class="p-col-4">
           <p-radioButton [(ngModel)]="sD.channelTypeString"
                          label="Public"
@@ -46,6 +38,15 @@
                          value="private">
           </p-radioButton>
         </div>
+
+        <div class="p-col-12 font-weight-bold">Description:</div>
+        <div class="p-col-12 ui-fluid">
+          <p-editor [(ngModel)]="sD.channelDescription"
+                    [required]="true"
+                    [style]="{'height':'400px'}"
+                    class="ui-fluid">
+          </p-editor>
+        </div>
       </div>
       <p-footer>
         <button (click)="onCreateChannelClick()"
@@ -66,6 +67,8 @@
   </div>
   <div class="p-col-3">
     <create-channel-post-side-bar></create-channel-post-side-bar>
+    <br>
+    <recent-posts></recent-posts>
   </div>
   <div class="p-col-1"></div>
 </div>

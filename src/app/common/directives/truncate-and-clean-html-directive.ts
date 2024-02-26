@@ -8,6 +8,7 @@ export class CleanHtmlAndTruncateDirective implements AfterViewInit
 {
   @Input() text: string = '';
   @Input() maxLength: number = 1000;
+  @Input() addDots: boolean = true;
 
   constructor(private el: ElementRef,
               private renderer: Renderer2,
@@ -19,19 +20,23 @@ export class CleanHtmlAndTruncateDirective implements AfterViewInit
   {
     // Удаляем HTML-теги
     const cleanText = this.stripHtmlTags(this.text);
-
     // Обрезаем текст
     let truncatedText: string;
-
-    if (cleanText.length > this.maxLength)
+    if(cleanText.length > this.maxLength)
     {
-      truncatedText = cleanText.substring(0, this.maxLength) + '...';
+      if(this.addDots)
+      {
+        truncatedText = cleanText.substring(0, this.maxLength) + '...';
+      }
+      else
+      {
+        truncatedText = cleanText.substring(0, this.maxLength);
+      }
     }
     else
     {
       truncatedText = cleanText;
     }
-
     // Очищаем содержимое элемента
     this.renderer.setProperty(this.el.nativeElement, 'textContent', truncatedText);
   }

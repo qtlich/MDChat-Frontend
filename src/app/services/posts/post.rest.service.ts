@@ -51,7 +51,7 @@ export class PostRestService extends BaseRestApi
     return this.post<ShowHidePostRequestModel, ShowHidePostResponseModel[]>(`/posts/hide-post`, item);
   }
 
-  public saveUnsavePost(item: BookmarkPostRequestModel): Observable<SaveUnsavePostResponsetModel[]>
+  public bookmarkPost(item: BookmarkPostRequestModel): Observable<SaveUnsavePostResponsetModel[]>
   {
     return this.post<ShowHidePostRequestModel, ShowHidePostResponseModel[]>(`/posts/bookmark-post`, item);
   }

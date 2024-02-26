@@ -1,8 +1,8 @@
 import {Component, OnDestroy, OnInit}                                                          from '@angular/core';
 import {Router}                                                                                from '@angular/router';
-import {SelectItem}                                                                            from 'primeng/api';
-import {ChannelResponseModel}                                                                  from '../../channel/models/channel.response.model';
-import {BaseComponent}                                                                         from '../../common/components/base.component/base.component';
+import {SelectItem}                         from 'primeng/api';
+import {GetChannelDescriptionResponseModel} from '../../channel/models/get.channel.description.response.model';
+import {BaseComponent}                      from '../../common/components/base.component/base.component';
 import {errorToText, isEmptyArray, isEmptyStringField, isNullOrUndefined, showWarningMessages} from '../../common/core/core.free.functions';
 import {OPERATION_TYPES}                                                                       from '../../common/core/enums/operation.types';
 import {GlobalBusService}                                                                      from '../../common/services/global.bus.service';
@@ -31,9 +31,9 @@ export class CreatePostLittleComponent extends BaseComponent implements OnInit, 
 
   private __loadDirectories(): void
   {
-    this.channelService.getAllChannels().subscribe((data: ChannelResponseModel[]) =>
+    this.channelService.getAllChannels().subscribe((data: GetChannelDescriptionResponseModel[]) =>
                                                    {
-                                                     this.sD.channelItems = data.map(item => <SelectItem>{label: item.name, value: item.id, title: item.description});
+                                                     this.sD.channelItems = data.map(item => <SelectItem>{label: item.channelName, value: item.channelId, title: item.channelDescription});
                                                    }, error => this.showError(errorToText(error)));
   }
 

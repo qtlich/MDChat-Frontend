@@ -1,37 +1,33 @@
-<div class="p-grid">
-  <div class="p-col-6 p-offset-2">
-    <p-panel [showHeader]="false" *ngIf="channel">
-      <div class="p-grid">
-        <div class="p-col-12 ui-fluid">
+<div class = "p-grid">
+  <div class = "p-col-6 p-offset-2">
+    <p-panel [showHeader] = "false" *ngIf = "channel">
+      <div class = "p-grid">
+        <div class = "p-col-12 ui-fluid">
           <p-tabView>
-            <p-tabPanel header={{channel.name}}>
-              <span class="number-of-posts">Number of posts: {{channel.numberOfPosts + 1}}</span>
-
-              <div *ngFor="let item of channelPosts" style="margin-top: 0.3em;">
-                <p-panel>
-                  <p-header><span class="post-text">{{item.postName}}</span>&nbsp;
-                    <span class="posted-by">Posted by: {{item.userName}}</span>
-                  </p-header>
-                  <a class="post-text" href="/view-post/{{item.id}}">
-                    <p [appMaxCharacters]="400" [appTruncateAndSafeHtml]="item.description"></p>
-                  </a>
-                </p-panel>
+            <p-tabPanel header = "{{channel.channelName}}">
+              <div class = "p-grid">
+                <div class = "p-col-12">
+                  <span class = "number-of-posts">Number of posts: {{channel.countPosts}}</span>
+                </div>
+                <div class = "p-col-12">
+                  <view-channel-posts [channelId] = "channel.channelId"></view-channel-posts>
+                </div>
               </div>
             </p-tabPanel>
-            <!--            <p-tabPanel header="Description">-->
-            <!--              <p [innerHtml]="channel.description"></p>-->
-            <!--            </p-tabPanel>-->
+
           </p-tabView>
         </div>
       </div>
     </p-panel>
   </div>
-  <div class="p-col-3">
+  <div class = "p-col-3">
     <create-channel-post-side-bar></create-channel-post-side-bar>
     <br>
-    <channel-description-side-bar [channelId]="channelId"></channel-description-side-bar>
+    <channel-description-side-bar [channelId] = "channelId"></channel-description-side-bar>
+    <br>
+    <recent-posts></recent-posts>
   </div>
-  <div class="p-col-1"></div>
+  <div class = "p-col-1"></div>
 </div>
 
 <!--<div class="container">-->

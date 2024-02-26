@@ -1,0 +1,23 @@
+<p-panel *ngIf = "isLoggedIn">
+  <p-header>
+    Recent posts
+  </p-header>
+  <div class = "p-grid">
+    <div *ngFor = "let item of sD.posts" class = "p-col-12 ui-fluid">
+      <div class = "p-grid">
+        <div class = "p-col-12 recent-item-post-name">
+          <!--          <span CleanHtmlAndTruncate [addDots]="false" [pTooltip]="item.postName" [routerLink] = "['/view-post/',item.postId]" [text]="item.postName"></span>-->
+          <!--          <channel-state [channelTypeId]="item.channelType"></channel-state>-->
+          <!--        </div>-->
+          <div class = "p-col-12 recent-item-post-name">
+            <a [pTooltip] = "item.postName" href = "/view-post/{{item.postId}}"><span CleanHtmlAndTruncate [addDots] = "false" [text] = "item.postName"></span></a>
+            <channel-state [channelTypeId] = "item.channelType"></channel-state>
+          </div>
+          <div class = "p-col-12 recent-item-post-comment-time-ago">
+            <a href = "/view-post/{{item.postId}}"><span>{{item.postCountComments}} comments {{item.postTimeAgo}}</span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</p-panel>

@@ -1,0 +1,65 @@
+<div class="p-grid">
+  <div class="p-col-12">
+    <p-panel [showHeader]="false">
+      <p-header>Edit channel</p-header>
+      <div class="p-grid">
+        <div class="p-col-3 font-weight-bold">Channel name:</div>
+        <div class="p-col-9 ui-fluid">
+          <input (input)="countRemaining()"
+                 [(ngModel)]="sD.channelName"
+                 maxlength="30"
+                 pInputText
+                 placeholder="Channel name"
+                 required>
+        </div>
+        <div class="p-col-12 text-right small">{{sD.remaining}} Characters remaining</div>
+        <div class="p-col-12 font-weight-bold">Channel type</div>
+        <div class="p-col-4">
+          <p-radioButton [(ngModel)]="sD.channelTypeString"
+                         [disabled]="true"
+                         label="Public"
+                         name="groupname"
+                         pTooltip="Anyone can view, post, and comment to this community"
+                         value="public">
+          </p-radioButton>
+        </div>
+        <div class="p-col-4">
+          <p-radioButton [(ngModel)]="sD.channelTypeString"
+                         [disabled]="true"
+                         label="Restricted"
+                         name="groupname"
+                         pTooltip="Anyone can view this community, but only approved users can post"
+                         value="restricted">
+          </p-radioButton>
+        </div>
+        <div class="p-col-4">
+          <p-radioButton [(ngModel)]="sD.channelTypeString"
+                         [disabled]="true"
+                         label="Private"
+                         name="groupname"
+                         pTooltip="Only approved users can view and submit to this community"
+                         value="private">
+          </p-radioButton>
+        </div>
+
+        <div class="p-col-12 font-weight-bold">Description:</div>
+        <div class="p-col-12 ui-fluid">
+          <p-editor [(ngModel)]="sD.channelDescription"
+                    [required]="true"
+                    [style]="{'height':'400px'}"
+                    class="ui-fluid">
+          </p-editor>
+        </div>
+      </div>
+      <p-footer>
+        <button (click)="onModifyChannelClick()"
+                class="ui-button-success ui-button-rounded"
+                label="Save"
+                pButton
+                pTooltip="Modify channel info"
+                type="button">
+        </button>
+      </p-footer>
+    </p-panel>
+  </div>
+</div>

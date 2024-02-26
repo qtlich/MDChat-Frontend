@@ -23,7 +23,6 @@ export type TRefreshTokenPayload = { refreshToken: string, username: string };
 @Injectable({providedIn: 'root'})
 export class AuthDataService extends BaseService
 {
-
   public loggedIn: ReplaySubject<boolean> = new ReplaySubject<boolean>(1);
   public userName: ReplaySubject<string> = new ReplaySubject<string>(1);
 
@@ -45,6 +44,11 @@ export class AuthDataService extends BaseService
   public getUserInfo(item: UserInfoRequestModel): Observable<UserInfoResponseModel[]>
   {
     return this._restService.getUserInfo(item);
+  }
+
+  public isChannelModerator(channelId: number): boolean
+  {
+    return true;
   }
 
   public changeUserInfo(item: ChangeUserInfoRequestModel): Observable<ChangeUserInfoResponseModel[]>
@@ -71,6 +75,7 @@ export class AuthDataService extends BaseService
                            this.loggedIn.next(true);
                            this.userName.next(data.username);
                            this.serviceBus.sendEvent(EActionType.ON_LOGIN_ACTION, true);
+                           this.__loadUserPermissions();
                            return true;
                          },
                          error =>
@@ -79,6 +84,12 @@ export class AuthDataService extends BaseService
                            this.serviceBus.showError(`An error occurred during the login operation`);
                            return false;
                          }));
+  }
+
+  private __loadUserPermissions(): void
+  {
+    // load user permissions
+    this.getUserId;
   }
 
   public getJwtToken(): any
@@ -94,7 +105,7 @@ export class AuthDataService extends BaseService
                          {
                            this._localStorage.clear('authenticationToken');
                            this._localStorage.clear('expiresAt');
-                           if (!isNullOrUndefined(response))
+                           if(!isNullOrUndefined(response))
                            {
                              this._localStorage.store('authenticationToken', response.authenticationToken);
                              this._localStorage.store('expiresAt', response.expiresAt);
@@ -113,7 +124,7 @@ export class AuthDataService extends BaseService
         .logout({refreshToken: this.getRefreshToken(), username: this.getUserName()})
         .subscribe(message =>
                    {
-                     if (!isEmptyStringField(message))
+                     if(!isEmptyStringField(message))
                      {
                        this.serviceBus.showInfo(message);
                        this._router.navigateByUrl('/');
@@ -132,7 +143,6 @@ export class AuthDataService extends BaseService
                      this.serviceBus.showError(`An error occurred during the logout operation`);
                      this.__clearStorage();
                    })
-
   }
 
   public getUserName(): string

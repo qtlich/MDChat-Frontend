@@ -1,0 +1,29 @@
+
+button {
+  display: inline-block;
+  padding: 1px 10px;
+  font-size: 0.8em;
+  font-weight: bold;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  margin-left: 10px;
+}
+
+button.join {
+  background-color: #3498db;
+  color: #fff;
+}
+
+button.joined {
+  background-color: blue;
+  color: yellow;
+}
+
+button:hover {
+  background-color: inherit;
+  color: #e91224;
+  border: 1px solid black;
+}

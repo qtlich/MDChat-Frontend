@@ -1,4 +1,4 @@
-<div class="page-content" style="height: calc(100vh - 150px)">
+<div class="page-content" style="height: calc(100vh - 100px)">
   <p-table #dt
            (onLazyLoad)="loadPostsLazy($event)"
            [(selection)]="selectedItem"
@@ -24,14 +24,7 @@
         <col style="width: 4em;">
         <col>
       </colgroup>
-
     </ng-template>
-    <!--  <ng-template let-columns pTemplate="header">-->
-    <!--    <tr>-->
-    <!--      <th>votes</th>-->
-    <!--      <th></th>-->
-    <!--    </tr>-->
-    <!--  </ng-template>-->
     <ng-template let-columns="columns" let-item let-rowIndex="rowIndex" pTemplate="body">
       <tr [pSelectableRowIndex]="rowIndex" [pSelectableRow]="item" class="ui-selectable-row">
         <td class="center-cell">
@@ -42,19 +35,17 @@
             <div class="p-col-12">
               <div class="p-grid">
                 <div class="p-col-12">
-                  <a class="post-name" href="/view-post/{{item.postId}}">
-                    <p CleanHtmlAndTruncate [text]="item.postName" class="post-title"></p>
-                  </a>
+                  <a class="postname-badge" href="/view-post/{{item.postId}}"><span CleanHtmlAndTruncate [text]="item.postName"></span></a>
+                  <channel-state [channelTypeId]="item.channelType"></channel-state>
                 </div>
                 <div class="p-col-12">
                   <a class="post-name" href="/view-post/{{item.postId}}">
-                    <p CleanHtmlAndTruncate [maxLength]="100" [text]="item.postDescription" class="post-text"></p>
+                    <span CleanHtmlAndTruncate [maxLength]="100" [text]="item.postDescription" class="post-short-badge"></span>
                   </a>
                 </div>
                 <div class="p-col-12">
-                  <a pTooltip="Channel" routerLink="view-channel/{{item.postChannelId}}">{{item.channelName}}</a>&nbsp;
-                  Posted by <a routerLink="/user/{{item.postUserName}}">{{item.postUserName}} </a>{{item.postTimeAgo}}&nbsp;
-                  {{item.duration}}
+                  <div (click)="navigateToChannel(item.postChannelId)" class="channel-badge">{{item.channelName}}</div>
+                  Posted by <div [routerLink]="['/user/',item.postUserName]" class="user-badge">{{item.postUserName}}</div> <div class="timesago-badge">{{item.postTimeAgo}}</div> {{item.duration}}
                 </div>
                 <div class="p-col-12 buttons-bottom">
                   <a class="custom-button" href="/view-post/{{item.postId}}#comments" role="button">
@@ -73,11 +64,11 @@
                     <fa-icon [icon]="faSolidBookMark" pTooltip="Unsave"></fa-icon>
                     Unsave
                   </a>
-                  <a (click)="onHidePostClick(item.postId)" *ngIf="isLoggedIn && item.hidden" class="custom-button" role="button">
+                  <a (click)="onShowHidePostClick(item.postId)" *ngIf="isLoggedIn && item.hidden" class="custom-button" role="button">
                     <fa-icon [icon]="faEye" pTooltip="Unhide"></fa-icon>
                     Unhide
                   </a>&nbsp;
-                  <a (click)="onHidePostClick(item.postId,false)" *ngIf="isLoggedIn && !item.hidden" class="custom-button" role="button">
+                  <a (click)="onShowHidePostClick(item.postId,false)" *ngIf="isLoggedIn && !item.hidden" class="custom-button" role="button">
                     <fa-icon [icon]="faEyeSlash" pTooltip="Hide"></fa-icon>
                     Hide
                   </a>

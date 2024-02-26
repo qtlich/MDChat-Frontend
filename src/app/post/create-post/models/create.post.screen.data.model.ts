@@ -1,9 +1,11 @@
-import {PostCudRequestModel} from './post.cud.request.model';
-import {SelectItem}          from 'primeng/api';
+import {SearchChannelsResultModel} from '../../../channel/models/search-channels-result-model';
+import {PostCudRequestModel}       from './post.cud.request.model';
 
 export class CreatePostScreenDataModel extends PostCudRequestModel
 {
-  public channelItems: SelectItem[] = [];
+  public selectedChannel: SearchChannelsResultModel;
+  public filteredChannelsFromServer: SearchChannelsResultModel[];
+
   constructor()
   {
     super();

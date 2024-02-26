@@ -14,6 +14,8 @@ import {GetUserPostsUniversalRequestModel}                                      
 import {GetUserPostsUniversalResponseModel}                                                                     from '../../../services/posts/models/get.user.posts.universal.response.model';
 import {ShowHidePostRequestModel}                                                                               from '../../../services/posts/models/show.hide.post.request.model';
 import {IBookmarkPostResult, IDeletePostResult, ILoadPostUniversalResult, IShowHidePostResult, PostDataService} from '../../../services/posts/post.data.service';
+import {VOTE_TYPE_ACTION}                                                                                       from '../../vote-button/models/vote-type';
+import {IVoteResult}                                                                                            from '../../vote-button/services/vote.data.service';
 
 @Component({
              selector:    'base-user-post',
@@ -38,9 +40,9 @@ export abstract class BaseUserPostsComponent extends BaseComponent implements On
                                             {label: 'Hot', value: 'Hot', icon: 'fa fa-eye-slash'},];
   public selectedSortBy: string = this.existingSortingDD[0].value;
   public selectedItem: GetUserPostsUniversalResponseModel;
+  public hoverPostId: number;
   private _first: number;
   private _rows: number;
-  public hoverPostId: number;
 
   protected constructor(protected router: Router,
                         protected confirmationService: ConfirmationService,
@@ -49,29 +51,38 @@ export abstract class BaseUserPostsComponent extends BaseComponent implements On
                         authService: AuthDataService)
   {
     super(serviceBus, authService);
-    this.__clear();
+    this.clear();
   }
 
   public onBookmarkPostClick(postId: number, bookmarkPost: boolean = true): void
   {
-    this.postService.bookmarkPost(new BookmarkPostRequestModel(postId, bookmarkPost))
+    this.postService.bookmarkPost(new BookmarkPostRequestModel(postId), bookmarkPost);
   }
 
-  public copyLink(link: string): void
+  public navigateToChannel(channelId: number): void
+  {
+    this.router.navigate(['/view-channel/', channelId]);
+  }
+
+  public navigateToUser(userName: string): void
+  {
+    this.router.navigate(['/view-user/', userName]);
+  }
+
+  public copyLink(link?: string): void
   {
     console.log('Link=>', this.hoverPostId);
     this.showInfo('Link is copied');
     // document.clipcopy(this.hoverPostId.toString());
   }
 
-  public onHidePostClick(postId: number, showPost: boolean = true): void
+  public onShowHidePostClick(postId: number, showPost: boolean = true): void
   {
     this.postService.showHidePost(new ShowHidePostRequestModel(postId, showPost));
   }
 
   public onRowSelect(item: GetUserPostsUniversalResponseModel): void
   {
-
   }
 
   public goToPost(item: GetUserPostsUniversalResponseModel): void
@@ -87,7 +98,7 @@ export abstract class BaseUserPostsComponent extends BaseComponent implements On
 
   public onChangeSortMode(value: string): void
   {
-    this.__clear();
+    this.clear();
     this.__refreshPosts();
   }
 
@@ -102,13 +113,21 @@ export abstract class BaseUserPostsComponent extends BaseComponent implements On
   protected onAfterLoginAction(value: boolean)
   {
     super.onAfterLoginAction(value);
-    value && this.__refreshPosts();
+    if(value)
+    {
+      this.clear();
+      this.__refreshPosts();
+    }
   }
 
   protected onAfterLogoutAction(value: boolean)
   {
     super.onAfterLogoutAction(value);
-    value && this.__refreshPosts();
+    if(value)
+    {
+      this.clear();
+      this.__refreshPosts();
+    }
   }
 
   protected onRefreshAllDataAction(value: boolean)
@@ -122,7 +141,7 @@ export abstract class BaseUserPostsComponent extends BaseComponent implements On
     super.onSubscribeData();
     this.subscribe(this.postService.onLoadUserPostsUniversalEvent().subscribe((result: ILoadPostUniversalResult) =>
                                                                               {
-                                                                                if (this.selectedView == result.userView)
+                                                                                if(this.selectedView == result.userView)
                                                                                 {
                                                                                   this.__updatePostsNew(result.posts);
                                                                                 }
@@ -130,54 +149,22 @@ export abstract class BaseUserPostsComponent extends BaseComponent implements On
     this.subscribe(this.serviceBus.onEvent(EActionType.ON_DELETE_POST_ACTION, (result: IDeletePostResult) => this.onAfterDeletePost(result)));
     this.subscribe(this.serviceBus.onEvent(EActionType.ON_SHOW_HIDE_POST_ACTION, (result: IShowHidePostResult) => this.onAfterShowHidePost(result)));
     this.subscribe(this.serviceBus.onEvent(EActionType.ON_BOOKMARK_POST_ACTION, (result: IBookmarkPostResult) => this.onAfterBookmarkPost(result)));
-    this.subscribe(this.serviceBus.onEvent(EActionType.ON_VOTE_ACTION, (result: IBookmarkPostResult) => this.onAfterVotePost(result)));
+    this.subscribe(this.serviceBus.onEvent(EActionType.ON_VOTE_ACTION, (result: IVoteResult) => this.onAfterVotePost(result)));
     this.subscribe(this.postService.onLoadingEvent().subscribe(loading => this.loading = loading));
     this.subscribe(this.postService.onBlockButtonEvent().subscribe(blockButton => this.blockButton = blockButton));
-  }
-
-  private __updatePosts(newPosts: GetUserPostsUniversalResponseModel[]): void
-  {
-    this.posts = this.__updateExistingPosts(newPosts);
-    this.__addNewPosts(newPosts);
-  }
-
-  private __addNewPosts(newPosts: GetUserPostsUniversalResponseModel[]): void
-  {
-    newPosts.filter(newPost => !this.posts.some(post => post.postId === newPost.postId))
-            .forEach(newPost => this.posts.push(newPost));
-  }
-
-  private __updateExistingPosts(newPosts: GetUserPostsUniversalResponseModel[]): GetUserPostsUniversalResponseModel[]
-  {
-    return this.posts.map(post =>
-                          {
-                            const updatedPost = newPosts.find(newPost => newPost.postId === post.postId);
-                            return updatedPost ? {...post, ...updatedPost} : post;
-                          });
-  }
-
-  private __updatePostsNew(newPosts: GetUserPostsUniversalResponseModel[]): void {
-    this.posts = [...this.__updateExistingPostsNew(newPosts), ...this.__addNewPostsNew(newPosts)];
-  }
-
-  private __updateExistingPostsNew(newPosts: GetUserPostsUniversalResponseModel[]): GetUserPostsUniversalResponseModel[] {
-    return this.posts.map(post => {
-      const updatedPost = newPosts.find(newPost => newPost.postId === post.postId);
-      return updatedPost ? { ...post, ...updatedPost } : post;
-    });
-  }
-
-  private __addNewPostsNew(newPosts: GetUserPostsUniversalResponseModel[]): GetUserPostsUniversalResponseModel[] {
-    return newPosts.filter(newPost => !this.posts.some(post => post.postId === newPost.postId));
   }
 
   protected onAfterBookmarkPost(item: IBookmarkPostResult): void
   {
     this.__onBookmarkPost(item);
   }
-  protected onAfterVotePost(item: IBookmarkPostResult): void
+
+  protected onAfterVotePost(item: IVoteResult): void
   {
-    this.__onBookmarkPost(item);
+    if(item.success && item.voteType == VOTE_TYPE_ACTION.VOTE_ON_POST)
+    {
+      this.__onVotePost(item);
+    }
   }
 
   protected onAfterDeletePost(item: IDeletePostResult): void
@@ -190,18 +177,43 @@ export abstract class BaseUserPostsComponent extends BaseComponent implements On
     item.success && this.__deletePostFromList(item.postId);
   }
 
+  private __updatePostsNew(newPosts: GetUserPostsUniversalResponseModel[]): void
+  {
+    this.posts = [...this.__updateExistingPostsNew(newPosts), ...this.__addNewPostsNew(newPosts)];
+  }
+
+  private __updateExistingPostsNew(newPosts: GetUserPostsUniversalResponseModel[]): GetUserPostsUniversalResponseModel[]
+  {
+    return this.posts.map(post =>
+                          {
+                            const updatedPost = newPosts.find(newPost => newPost.postId === post.postId);
+                            return updatedPost ? {...post, ...updatedPost} : post;
+                          });
+  }
+
+  private __addNewPostsNew(newPosts: GetUserPostsUniversalResponseModel[]): GetUserPostsUniversalResponseModel[]
+  {
+    return newPosts.filter((newPost: GetUserPostsUniversalResponseModel) => !this.posts.some((post: GetUserPostsUniversalResponseModel) => post.postId === newPost.postId));
+  }
+
   private __onBookmarkPost(it: IBookmarkPostResult): void
   {
-    if (it.success && !isEmptyArray(this.posts))
+    if(it.success && !isEmptyArray(this.posts))
     {
       this.posts.forEach((item: GetUserPostsUniversalResponseModel) =>
                          {
-                           if (item.postId == it.postId)
+                           if(item.postId == it.postId)
                            {
                              item.saved = it.bookmarkPost;
                            }
                          });
     }
+  }
+
+  private __onVotePost(it: IVoteResult): void
+  {
+    this.clear();
+    this.__refreshPosts();
   }
 
   private __load(first: number, rows: number): void
@@ -213,7 +225,7 @@ export abstract class BaseUserPostsComponent extends BaseComponent implements On
 
   private __refreshPosts(): void
   {
-    if (this.__isValidDataForRefresh())
+    if(this.__isValidDataForRefresh())
     {
       this.postService
           .getUserPostsUniversal(new GetUserPostsUniversalRequestModel(null,
@@ -237,9 +249,9 @@ export abstract class BaseUserPostsComponent extends BaseComponent implements On
     (isNullOrUndefined(this.selectedView) || this.selectedView == USER_POSTS_TYPES.NOT_SELECTED) && this.addInformationMessage(--i, `You should select needed view`)
     return isEmptyArray(this.informationMessages);
   }
-
-  private __clear(): void
+  protected clear(): void
   {
+
     this.posts = [];
   }
 

@@ -8,7 +8,7 @@ import {SearchChannelsResultModel}               from '../channel/models/search-
 import {BaseComponent}                           from '../common/components/base.component/base.component';
 import {GlobalBusService}                        from '../common/services/global.bus.service';
 import {ChannelRestService}                      from '../services/channels/channel.rest.service';
-import {ThemeItem, themes, ThemeService}         from '../services/theme.service';
+import {ThemeService}                            from '../services/theme.service';
 
 enum EItems
 {
@@ -17,7 +17,8 @@ enum EItems
   CREATE_CHANNEL = -3,
   SEARCH_RESULT  = -4,
   VIEW_PROFILE   = -5,
-  USER_SETTINGS  = -6
+  USER_SETTINGS  = -6,
+  NOT_SELECTED   = -10
 }
 
 @Component({
@@ -28,15 +29,14 @@ enum EItems
 export class HeaderComponent extends BaseComponent implements OnInit, OnDestroy
 {
   @ViewChild('usermenu') userMenu: SlideMenu;
-  public themes: ThemeItem[] = themes;
   public items: MenuItem[] = [{label: 'Profile', icon: 'pi pi-user', command: (event) => this.goToUserProfile()},
                               {label: 'User settings', icon: 'pi pi-cog', command: (event) => this.goToSettings()},
                               {label: 'Logout', icon: 'pi pi-sign-out', command: (event) => this.logout()}];
   public searchString: string;
-  filteredChannelsMultiple: SearchChannelsResultModel[];
-  channels: SearchChannelsResultModel[];
+  public filteredChannelsMultiple: SearchChannelsResultModel[];
+  public channels: SearchChannelsResultModel[];
   public channelItems: Array<SelectItem> = [];
-  public selectedChannel: number;
+  public selectedChannel: EItems;
   private readonly channelDefaultItems: Array<SelectItem> = [{label: 'Home', value: EItems.HOME, icon: 'pi pi-home'},
                                                              {label: 'Create channel', value: EItems.CREATE_CHANNEL, icon: 'pi pi-plus'},
                                                              {label: 'Create post', value: EItems.CREATE_POST, icon: 'pi pi-plus'},
@@ -45,7 +45,8 @@ export class HeaderComponent extends BaseComponent implements OnInit, OnDestroy
                                                              {label: 'User settings', value: EItems.USER_SETTINGS, icon: 'pi pi-cog'},];
 
   constructor(private _router: Router,
-              private _channelService: ChannelRestService,
+              private _channelRestService: ChannelRestService,
+              private _themeService: ThemeService,
               serviceBus: GlobalBusService,
               authService: AuthDataService)
   {
@@ -56,7 +57,10 @@ export class HeaderComponent extends BaseComponent implements OnInit, OnDestroy
   {
     this.userMenu && this.userMenu.toggle(event);
   }
-
+  public onClickMDChat():void
+  {
+    this.selectedChannel = EItems.HOME;
+  }
   public onKeyUp(event): void
   {
     console.log('onKeyUp=>', event);
@@ -69,13 +73,13 @@ export class HeaderComponent extends BaseComponent implements OnInit, OnDestroy
 
   public onSelectChannel(item: SearchChannelsResultModel): void
   {
-    this.selectedChannel = 3;
-    this._router.navigateByUrl(`/view-channel/${item.id}`);
+    this.selectedChannel = EItems.SEARCH_RESULT;
+    this._router.navigateByUrl(`/view-channel/${item.channelId}`);
   }
 
   public onSearch(event: KeyboardEvent): void
   {
-    if (['Enter'].includes(event.key))
+    if(['Enter'].includes(event.key))
     {
       this.__search();
     }
@@ -106,9 +110,9 @@ export class HeaderComponent extends BaseComponent implements OnInit, OnDestroy
 
   public filterChannelsMultiple(event: any): void
   {
-    let channelMask = event.query;
-    this._channelService
-        .searchChannels(new SearchChannelsInputModel(channelMask, 0))
+    const channelMask = event.query;
+    this._channelRestService
+        .searchChannels(new SearchChannelsInputModel(null, channelMask))
         .subscribe((channelsFromServer: SearchChannelsResultModel[]) =>
                    {
                      this.filteredChannelsMultiple = this.__filterChannels(channelMask, channelsFromServer);
@@ -117,7 +121,7 @@ export class HeaderComponent extends BaseComponent implements OnInit, OnDestroy
 
   public onChangeChannel(value: number): void
   {
-    switch (value)
+    switch(value)
     {
       case EItems.HOME:
         this.__gotoHome();
@@ -148,12 +152,18 @@ export class HeaderComponent extends BaseComponent implements OnInit, OnDestroy
     this.channelItems = this.channelDefaultItems;
   }
 
+  /**
+   * Need for multiply
+   * @param query
+   * @param channels
+   * @private
+   */
   private __filterChannels(query: string, channels: SearchChannelsResultModel[]): any[]
   {
     const filtered: SearchChannelsResultModel[] = [];
-    for (const channel of channels)
+    for(const channel of channels)
     {
-      if (channel.channelName.toLowerCase().indexOf(query.toLowerCase()) != -1)
+      if(channel.channelName.toLowerCase().indexOf(query.toLowerCase()) != -1)
       {
         filtered.push(channel);
       }
@@ -163,13 +173,14 @@ export class HeaderComponent extends BaseComponent implements OnInit, OnDestroy
 
   private __gotoHome(): void
   {
+    this.selectedChannel = EItems.HOME;
     this._router.navigateByUrl('/');
   }
 
   private __search(): void
   {
-    this._channelService.searchChannels(new SearchChannelsInputModel(this.searchString))
-        .subscribe(data => console.log('Data=>', data));
+    this._channelRestService.searchChannels(new SearchChannelsInputModel(null, this.searchString))
+        .subscribe((data: SearchChannelsResultModel[]) => console.log('Data=>', data));
     this.__selectSearch();
   }
 

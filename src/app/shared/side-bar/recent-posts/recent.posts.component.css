@@ -1,0 +1,11 @@
+@import "../side-bar.component.css";
+
+.recent-item-post-name {
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.recent-item-post-comment-time-ago {
+  font-size: 0.8em;
+  border-bottom: 1px solid black;
+}

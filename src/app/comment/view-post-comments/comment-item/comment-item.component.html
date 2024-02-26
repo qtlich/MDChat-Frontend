@@ -9,7 +9,7 @@
       <div class="flex-grow-1 ml-2">
         <p-editor [(ngModel)]="item.comment" readonly="readonly">
           <p-header>
-            {{item.userName}} - {{item.createdTimeAgo}}
+            <div class="user-badge">{{item.userName}}</div> - <div class="timesago-badge">{{item.createdTimeAgo}}</div>
             <a (click)="onReplayClick()" class="custom-button" role="button">
               <fa-icon [icon]="faReply" pTooltip="Replay"></fa-icon>
             </a>&nbsp;

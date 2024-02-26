@@ -124,14 +124,14 @@ export class PostDataService extends BaseService
               `Can't show/hide post`);
   }
 
-  public bookmarkPost(item: BookmarkPostRequestModel): void
+  public bookmarkPost(item: BookmarkPostRequestModel, bookmarkPost:boolean = true): void
   {
     this.toDb(item,
-              input => this._restService.saveUnsavePost(input),
+              input => this._restService.bookmarkPost(input),
               (data: ShowHidePostResponseModel[]) =>
               {
                 showOperationResultMessages(this.serviceBus, data);
-                this.serviceBus.sendEvent<IBookmarkPostResult>(EActionType.ON_BOOKMARK_POST_ACTION, <IBookmarkPostResult>{success: isAllOperationsSuccess(data), postId: item.postId, bookmarkPost: item.bookmarkPost});
+                this.serviceBus.sendEvent<IBookmarkPostResult>(EActionType.ON_BOOKMARK_POST_ACTION, <IBookmarkPostResult>{success: isAllOperationsSuccess(data), postId: item.postId, bookmarkPost: bookmarkPost});
                 this.serviceBus.sendEvent<boolean>(EActionType.ON_REFRESH_ALL_DATA_ACTION, isAllOperationsSuccess(data));
               },
               `Can't show/hide post`);
