@@ -16,6 +16,7 @@ import {BookmarkPostRequestModel}                                               
 import {GetUserPostsUniversalResponseModel}                                                                                          from '../../../services/posts/models/get.user.posts.universal.response.model';
 import {ShowHidePostRequestModel}                                                                                                    from '../../../services/posts/models/show.hide.post.request.model';
 import {IBookmarkPostResult, IDeletePostResult, IShowHidePostResult, PostDataService}                                                from '../../../services/posts/post.data.service';
+import {IVoteResult}                                                                                                                 from '../../../shared/vote-button/services/vote.data.service';
 
 @Component({
              selector:    'view-channel-posts',
@@ -73,7 +74,7 @@ export class ViewChannelPostsComponent extends BaseComponent implements OnInit, 
 
   public onBookmarkPostClick(postId: number, bookmarkPost: boolean = true): void
   {
-    this.postService.bookmarkPost(new BookmarkPostRequestModel(postId, bookmarkPost))
+    this.postService.bookmarkPost(new BookmarkPostRequestModel(postId),bookmarkPost)
   }
 
   public copyLink(link?: string): void
@@ -142,7 +143,7 @@ export class ViewChannelPostsComponent extends BaseComponent implements OnInit, 
     this.subscribe(this.serviceBus.onEvent(EActionType.ON_DELETE_POST_ACTION, (result: IDeletePostResult) => this.onAfterDeletePost(result)));
     this.subscribe(this.serviceBus.onEvent(EActionType.ON_SHOW_HIDE_POST_ACTION, (result: IShowHidePostResult) => this.onAfterShowHidePost(result)));
     this.subscribe(this.serviceBus.onEvent(EActionType.ON_BOOKMARK_POST_ACTION, (result: IBookmarkPostResult) => this.onAfterBookmarkPost(result)));
-    this.subscribe(this.serviceBus.onEvent(EActionType.ON_VOTE_ACTION, (result: IBookmarkPostResult) => this.onAfterVotePost(result)));
+    this.subscribe(this.serviceBus.onEvent(EActionType.ON_VOTE_ACTION, (result: IVoteResult) => this.onAfterVotePost(result)));
     this.subscribe(this.channelService.onLoadingEvent().subscribe(loading => this.loading = loading));
     this.subscribe(this.channelService.onBlockButtonEvent().subscribe(blockButton => this.blockButton = blockButton));
   }
@@ -152,11 +153,14 @@ export class ViewChannelPostsComponent extends BaseComponent implements OnInit, 
     this.__onBookmarkPost(item);
   }
 
-  protected onAfterVotePost(item: IBookmarkPostResult): void
+  protected onAfterVotePost(item: IVoteResult): void
   {
-    this.__onBookmarkPost(item);
+    this.__onVotePost(item);
   }
+  private __onVotePost(item: IVoteResult):void
+  {
 
+  }
   protected onAfterDeletePost(item: IDeletePostResult): void
   {
     item.success && this.__deletePostFromList(item.postId);

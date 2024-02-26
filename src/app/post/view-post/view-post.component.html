@@ -56,6 +56,8 @@
     <create-channel-post-side-bar></create-channel-post-side-bar>
     <br>
     <channel-description-side-bar *ngIf="post" [channelId]="post.channelId"></channel-description-side-bar>
+    <br>
+    <recent-posts></recent-posts>
   </div>
 </div>
 <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>

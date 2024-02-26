@@ -14,6 +14,8 @@ import {GetUserPostsUniversalRequestModel}                                      
 import {GetUserPostsUniversalResponseModel}                                                                     from '../../../services/posts/models/get.user.posts.universal.response.model';
 import {ShowHidePostRequestModel}                                                                               from '../../../services/posts/models/show.hide.post.request.model';
 import {IBookmarkPostResult, IDeletePostResult, ILoadPostUniversalResult, IShowHidePostResult, PostDataService} from '../../../services/posts/post.data.service';
+import {VOTE_TYPE_ACTION}                                                                                       from '../../vote-button/models/vote-type';
+import {IVoteResult}                                                                                            from '../../vote-button/services/vote.data.service';
 
 @Component({
              selector:    'base-user-post',
@@ -49,12 +51,12 @@ export abstract class BaseUserPostsComponent extends BaseComponent implements On
                         authService: AuthDataService)
   {
     super(serviceBus, authService);
-    this.__clear();
+    this.clear();
   }
 
   public onBookmarkPostClick(postId: number, bookmarkPost: boolean = true): void
   {
-    this.postService.bookmarkPost(new BookmarkPostRequestModel(postId, bookmarkPost))
+    this.postService.bookmarkPost(new BookmarkPostRequestModel(postId), bookmarkPost);
   }
 
   public navigateToChannel(channelId: number): void
@@ -74,7 +76,7 @@ export abstract class BaseUserPostsComponent extends BaseComponent implements On
     // document.clipcopy(this.hoverPostId.toString());
   }
 
-  public onHidePostClick(postId: number, showPost: boolean = true): void
+  public onShowHidePostClick(postId: number, showPost: boolean = true): void
   {
     this.postService.showHidePost(new ShowHidePostRequestModel(postId, showPost));
   }
@@ -96,7 +98,7 @@ export abstract class BaseUserPostsComponent extends BaseComponent implements On
 
   public onChangeSortMode(value: string): void
   {
-    this.__clear();
+    this.clear();
     this.__refreshPosts();
   }
 
@@ -111,13 +113,21 @@ export abstract class BaseUserPostsComponent extends BaseComponent implements On
   protected onAfterLoginAction(value: boolean)
   {
     super.onAfterLoginAction(value);
-    value && this.__refreshPosts();
+    if(value)
+    {
+      this.clear();
+      this.__refreshPosts();
+    }
   }
 
   protected onAfterLogoutAction(value: boolean)
   {
     super.onAfterLogoutAction(value);
-    value && this.__refreshPosts();
+    if(value)
+    {
+      this.clear();
+      this.__refreshPosts();
+    }
   }
 
   protected onRefreshAllDataAction(value: boolean)
@@ -139,7 +149,7 @@ export abstract class BaseUserPostsComponent extends BaseComponent implements On
     this.subscribe(this.serviceBus.onEvent(EActionType.ON_DELETE_POST_ACTION, (result: IDeletePostResult) => this.onAfterDeletePost(result)));
     this.subscribe(this.serviceBus.onEvent(EActionType.ON_SHOW_HIDE_POST_ACTION, (result: IShowHidePostResult) => this.onAfterShowHidePost(result)));
     this.subscribe(this.serviceBus.onEvent(EActionType.ON_BOOKMARK_POST_ACTION, (result: IBookmarkPostResult) => this.onAfterBookmarkPost(result)));
-    this.subscribe(this.serviceBus.onEvent(EActionType.ON_VOTE_ACTION, (result: IBookmarkPostResult) => this.onAfterVotePost(result)));
+    this.subscribe(this.serviceBus.onEvent(EActionType.ON_VOTE_ACTION, (result: IVoteResult) => this.onAfterVotePost(result)));
     this.subscribe(this.postService.onLoadingEvent().subscribe(loading => this.loading = loading));
     this.subscribe(this.postService.onBlockButtonEvent().subscribe(blockButton => this.blockButton = blockButton));
   }
@@ -149,9 +159,12 @@ export abstract class BaseUserPostsComponent extends BaseComponent implements On
     this.__onBookmarkPost(item);
   }
 
-  protected onAfterVotePost(item: IBookmarkPostResult): void
+  protected onAfterVotePost(item: IVoteResult): void
   {
-    this.__onBookmarkPost(item);
+    if(item.success && item.voteType == VOTE_TYPE_ACTION.VOTE_ON_POST)
+    {
+      this.__onVotePost(item);
+    }
   }
 
   protected onAfterDeletePost(item: IDeletePostResult): void
@@ -197,6 +210,12 @@ export abstract class BaseUserPostsComponent extends BaseComponent implements On
     }
   }
 
+  private __onVotePost(it: IVoteResult): void
+  {
+    this.clear();
+    this.__refreshPosts();
+  }
+
   private __load(first: number, rows: number): void
   {
     this._first = first;
@@ -230,9 +249,9 @@ export abstract class BaseUserPostsComponent extends BaseComponent implements On
     (isNullOrUndefined(this.selectedView) || this.selectedView == USER_POSTS_TYPES.NOT_SELECTED) && this.addInformationMessage(--i, `You should select needed view`)
     return isEmptyArray(this.informationMessages);
   }
-
-  private __clear(): void
+  protected clear(): void
   {
+
     this.posts = [];
   }
 

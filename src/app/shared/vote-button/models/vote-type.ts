@@ -6,6 +6,6 @@ export enum VoteType
 
 export enum VOTE_TYPE_ACTION
 {
-  ON_POST    = 0,
-  ON_COMMENT = 1
+  VOTE_ON_POST    = 0,
+  VOTE_ON_COMMENT = 1
 }

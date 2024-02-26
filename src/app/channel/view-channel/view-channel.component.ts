@@ -4,7 +4,6 @@ import {BaseComponent}                       from '../../common/components/base.
 import {errorToText, toNumber}               from '../../common/core/core.free.functions';
 import {GlobalBusService}                    from '../../common/services/global.bus.service';
 import {ChannelDataService}                  from '../../services/channels/channel.data.service';
-import {ChannelRestService}                  from '../../services/channels/channel.rest.service';
 import {PostDataService}                     from '../../services/posts/post.data.service';
 import {PostModel}                           from '../../shared/post-model';
 import {GetChannelDescriptionRequestModel}   from '../models/get.channel.description.request.model';

@@ -6,6 +6,7 @@ import {GlobalBusService}             from '../../common/services/global.bus.ser
 import {USER_POSTS_TYPES}             from '../../services/posts/enums/user.posts.types.enum';
 import {PostDataService}              from '../../services/posts/post.data.service';
 import {BaseUserPostsComponent}       from '../user.posts/common/base.user.posts.component';
+import {IVoteResult}                  from '../vote-button/services/vote.data.service';
 
 @Component({
              selector:    'main-post-tile',
@@ -23,5 +24,11 @@ export class MainPostTileComponent extends BaseUserPostsComponent implements OnI
   {
     super(router, confirmationService, postService, serviceBus, authService);
     this.selectedView = USER_POSTS_TYPES.MAIN_POSTS;
+    this.showSortBar = true;
+  }
+
+  protected onAfterVotePost(item: IVoteResult)
+  {
+
   }
 }

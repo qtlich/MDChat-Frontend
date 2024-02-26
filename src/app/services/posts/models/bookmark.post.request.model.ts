@@ -1,11 +1,10 @@
 /**
  * Bookmark post
- * /posts/bookmark
+ * /posts/bookmark-post
  */
 export class BookmarkPostRequestModel
 {
-  constructor(public postId:number,
-              public bookmarkPost:boolean)
+  constructor(public postId:number)
   {
   }
 }

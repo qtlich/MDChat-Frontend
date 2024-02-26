@@ -37,7 +37,7 @@
                 <div class = "p-col-12">
                   <a class = "post-name" href = "/view-post/{{item.postId}}">
                     <span CleanHtmlAndTruncate [text] = "item.postName" class = "postname-badge"></span>
-                    <channel-state [channelTypeId]="item.channelType"></channel-state>
+                    <channel-state [channelTypeId] = "item.channelType"></channel-state>
                   </a>
                 </div>
                 <div class = "p-col-12">
@@ -46,8 +46,11 @@
                   </a>
                 </div>
                 <div class = "p-col-12">
-                  <div (click)="navigateToChannel(item.postChannelId)" class="channel-badge">{{item.channelName}}</div>
-                  Posted by <a routerLink = "/user/{{item.postUserName}}"><div class="user-badge">{{item.postUserName}}</div></a> <div class="timesago-badge">{{item.postTimeAgo}}</div>
+                  <div (click) = "navigateToChannel(item.postChannelId)" class = "channel-badge">{{item.channelName}}</div>
+                  Posted by <a routerLink = "/user/{{item.postUserName}}">
+                  <div class = "user-badge">{{item.postUserName}}</div>
+                </a>
+                  <div class = "timesago-badge">{{item.postTimeAgo}}</div>
                   {{item.duration}}
                 </div>
                 <div class = "p-col-12 buttons-bottom">

@@ -19,6 +19,6 @@ export const enum EActionType
   ON_BOOKMARK_POST_ACTION               = 'ON_BOOKMARK_POST_ACTION', // type IBookmarkPostResult
   ON_LOGIN_ACTION                       = 'ON_LOGIN_ACTION', // type boolean
   ON_LOGOUT_ACTION                      = 'ON_LOGOUT_ACTION', // type boolean
-  ON_VOTE_ACTION                        = 'ON_VOTE_ACTION', // type true
+  ON_VOTE_ACTION                        = 'ON_VOTE_ACTION', // type IVoteResult
   ON_CHANGE_CHANNEL_SUBSCRIPTION_ACTION = 'ON_CHANGE_CHANNEL_SUBSCRIPTION_ACTION', // type OnChangeUserChannelSubscriptionResult
 }

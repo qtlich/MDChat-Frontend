@@ -64,11 +64,11 @@
                     <fa-icon [icon]="faSolidBookMark" pTooltip="Unsave"></fa-icon>
                     Unsave
                   </a>
-                  <a (click)="onHidePostClick(item.postId)" *ngIf="isLoggedIn && item.hidden" class="custom-button" role="button">
+                  <a (click)="onShowHidePostClick(item.postId)" *ngIf="isLoggedIn && item.hidden" class="custom-button" role="button">
                     <fa-icon [icon]="faEye" pTooltip="Unhide"></fa-icon>
                     Unhide
                   </a>&nbsp;
-                  <a (click)="onHidePostClick(item.postId,false)" *ngIf="isLoggedIn && !item.hidden" class="custom-button" role="button">
+                  <a (click)="onShowHidePostClick(item.postId,false)" *ngIf="isLoggedIn && !item.hidden" class="custom-button" role="button">
                     <fa-icon [icon]="faEyeSlash" pTooltip="Hide"></fa-icon>
                     Hide
                   </a>

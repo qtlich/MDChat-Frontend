@@ -66,6 +66,7 @@ import {ChannelSideBarComponent}                    from './shared/channel-side-
 import {ChannelStateComponent}                      from './shared/channel-state/channel.state.component';
 import {JoinToChannelComponent}                     from './shared/join-to-channel/join-to-channel.component';
 import {MainPostTileComponent}                      from './shared/main-post-tile/main-post-tile.component';
+import {RecentPostsComponent}                       from './shared/side-bar/recent-posts/recent.posts.component';
 import {SideBarComponent}                           from './shared/side-bar/side-bar.component';
 import {DownVotedUserPostsTileComponent}            from './shared/user.posts/downvoted-user-post-tile/upvoted-user-posts-tile.component';
 import {HiddenUserPostsTileComponent}               from './shared/user.posts/hidden-user-posts-tile/hidden-user-posts-tile.component';
@@ -112,7 +113,8 @@ import {UserSettingsComponent}                      from './user/user-settings/u
                            UserCommentsComponent,
                            ViewChannelPostsComponent,
                            ChannelStateComponent,
-                           JoinToChannelComponent],
+                           JoinToChannelComponent,
+                           RecentPostsComponent],
             imports:      [BrowserModule,
                            NgxWebstorageModule.forRoot(),
                            ToastrComponentlessModule.forRoot(),
