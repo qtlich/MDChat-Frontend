@@ -1,4 +1,5 @@
-<button [ngClass] = "{'joined': isSubscribed, 'join': !isSubscribed}"
+<button *ngIf = "isLoggedIn"
+        [ngClass] = "{'joined': isSubscribed, 'join': !isSubscribed}"
         (click) = "toggleSubscription()"
         (mouseover) = "onMouseOver()"
         (mouseleave) = "onMouseLeave()">

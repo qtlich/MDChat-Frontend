@@ -1,4 +1,4 @@
-<button *ngIf = "channelId"
+<button *ngIf = "channelId && isLoggedIn"
         pTooltip = "Moderate channel"
         (click) = "goToModerateChannelTool()">ModCh
 </button>
