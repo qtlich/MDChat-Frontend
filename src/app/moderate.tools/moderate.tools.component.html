@@ -1,0 +1,19 @@
+<div class = "p-grid">
+  <div class = "p-col-9">
+    <p-tabView orientation = "left">
+      <p-tabPanel header = "Channel management">
+        <channel-management [channelId] = "sD.channelId"></channel-management>
+      </p-tabPanel>
+      <p-tabPanel header = "User managment">
+        <user-management [channelId] = "sD.channelId"></user-management>
+      </p-tabPanel>
+    </p-tabView>
+  </div>
+  <div class = "p-col-3">
+    <create-channel-post-side-bar></create-channel-post-side-bar>
+    <br>
+    <recent-posts></recent-posts>
+  </div>
+  <div class = "p-col-1"></div>
+</div>
+

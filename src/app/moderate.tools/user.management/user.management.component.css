@@ -1,0 +1,6 @@
+@import "../moderate.tools.component.css";
+
+.user-management-header {
+  font-size: large;
+  font-weight: bold;
+}

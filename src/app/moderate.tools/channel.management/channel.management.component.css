@@ -1,0 +1,6 @@
+@import "../moderate.tools.component.css";
+
+.channel-management-header {
+  font-size: large;
+  font-weight: bold;
+}

@@ -25,7 +25,6 @@ export class CreateChannelComponent extends BaseComponent implements OnInit, OnD
               serviceBus: GlobalBusService)
   {
     super(serviceBus);
-
   }
 
   public ngOnInit()

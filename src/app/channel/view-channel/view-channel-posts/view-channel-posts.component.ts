@@ -215,6 +215,7 @@ export class ViewChannelPostsComponent extends BaseComponent implements OnInit, 
   {
     if(this.__isValidDataForRefresh())
     {
+      this.__clear();
       this.channelService
           .getChannelPostsUniversal(new GetChannelPostsUniversalRequestModel(null,
                                                                              this.channelId,

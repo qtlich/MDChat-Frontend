@@ -39,21 +39,21 @@ export class ViewChannelComponent extends BaseComponent implements OnInit, OnDes
     this.subscribe(this.channelService.onLoadChannelDescriptionEvent().subscribe((data: GetChannelDescriptionResponseModel) => this.channel = data));
   }
 
-  public refreshChannel(id: number): void
-  {
-    this.postService.getPostsByChannel(id).subscribe(data =>
-                                                     {
-                                                       this.channelPosts = data;
-                                                     },
-                                                     error =>
-                                                     {
-                                                       this.showError(errorToText(error));
-                                                     });
-  }
+  // public refreshChannel(id: number): void
+  // {
+  //   this.postService.getPostsByChannel(id).subscribe(data =>
+  //                                                    {
+  //                                                      this.channelPosts = data;
+  //                                                    },
+  //                                                    error =>
+  //                                                    {
+  //                                                      this.showError(errorToText(error));
+  //                                                    });
+  // }
 
   private __loadChannelData(): void
   {
     this.channelService.getChannelDescription(new GetChannelDescriptionRequestModel(this.channelId))
-    this.refreshChannel(this.channelId)
+    // this.refreshChannel(this.channelId)
   }
 }
