@@ -7,6 +7,10 @@
 #RUN NODE_OPTIONS=--openssl-legacy-provider npm run build #|| cat /tmp/ng-*/angular-errors.log
 
 FROM nginx:stable
-COPY ./dist/ /usr/share/nginx/html
+
+ARG DIST=D:/Projects/mdchat-front/dist
+ARG NGINX_CONF=D:/Projects/mdchat-front/nginx.conf
+
+COPY $NGINX_CONF /etc/nginx
+COPY $DIST/browser/* /usr/share/nginx/html
 EXPOSE 80
-c
