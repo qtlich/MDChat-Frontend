@@ -33,7 +33,7 @@ export class ViewChannelDescriptionComponent extends BaseComponent implements On
     executeIf(isChangedAndNotNullOrUndefined(changes, 'channelId'), () => this.__load());
   }
 
-  protected onSubscribeData()
+  protected onSubscribeData():void
   {
     super.onSubscribeData();
     this.subscribe(this.serviceBus.onEvent<OnChangeUserChannelSubscriptionResult>(EActionType.ON_CHANGE_CHANNEL_SUBSCRIPTION_ACTION, (result: OnChangeUserChannelSubscriptionResult) =>
@@ -47,7 +47,7 @@ export class ViewChannelDescriptionComponent extends BaseComponent implements On
     this.subscribe(this._channelDataService.onLoadChannelSubscribersEvent().subscribe((result: GetChannelCountSubscribersResponseModel) =>
                                                                                       {
                                                                                         console.log('onLoadChannelSubscribersEvent=>', result);
-                                                                                        if(result.channelId = this.channelId)
+                                                                                        if(result.channelId == this.channelId)
                                                                                         {
                                                                                           this.countSubscribers = result.countSubscribers;
                                                                                         }

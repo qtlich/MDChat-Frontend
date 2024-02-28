@@ -1,9 +1,9 @@
 import {OnDestroy, OnInit} from '@angular/core';
 import {Subscription}      from 'rxjs';
+import {BaseTableColumn}   from './base.table.column';
 import {isNullOrUndefined} from './core.free.functions';
-import {BaseClone}         from './base.clone';
 
-export abstract class BaseSubscription extends BaseClone implements OnInit, OnDestroy
+export abstract class BaseSubscription extends BaseTableColumn implements OnInit, OnDestroy
 {
   private _subscriptions: Subscription[] = [];
 

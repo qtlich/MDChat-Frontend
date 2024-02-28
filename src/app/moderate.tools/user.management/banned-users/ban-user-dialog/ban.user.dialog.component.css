@@ -1,0 +1,10 @@
+@import "../banned.users.component.css";
+
+.loading-text {
+  display: block;
+  background-color: #f1f1f1;
+  min-height: 19px;
+  animation: pulse 1s infinite ease-in-out;
+  text-indent: -99999px;
+  overflow: hidden;
+}

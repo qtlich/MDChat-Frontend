@@ -21,17 +21,16 @@ import {IVoteResult}                                                            
              selector:    'base-user-post',
              templateUrl: './base.user.posts.component.html',
              styleUrls:   ['./base.user.posts.component.css'],
-             providers:   [ConfirmationService]
            })
 export abstract class BaseUserPostsComponent extends BaseComponent implements OnInit, OnDestroy
 {
-  readonly faComments: any = faComment;
-  readonly faShare: any = faShare;
-  readonly faSolidBookMark: any = faSolidBookmark;
-  readonly faEmptyBookMark: any = faRegularBookmark;
-  readonly faEye: any = faEye;
-  readonly faEyeSlash: any = faEyeSlash;
-  readonly faTrashAlt: any = faTrashAlt; //IconDefinition
+  public faComments: any = faComment;
+  public faShare: any = faShare;
+  public faSolidBookMark: any = faSolidBookmark;
+  public faEmptyBookMark: any = faRegularBookmark;
+  public faEye: any = faEye;
+  public faEyeSlash: any = faEyeSlash;
+  public faTrashAlt: any = faTrashAlt; //IconDefinition
   @Input() selectedView: USER_POSTS_TYPES = USER_POSTS_TYPES.NOT_SELECTED;
   @Input() showSortBar: boolean = false;
   public posts: GetUserPostsUniversalResponseModel[] = [];
@@ -245,13 +244,13 @@ export abstract class BaseUserPostsComponent extends BaseComponent implements On
   private __isValidDataForRefresh(): boolean
   {
     this.clearInformationMessages();
-    let i: number;
+    let i: number = 0;
     (isNullOrUndefined(this.selectedView) || this.selectedView == USER_POSTS_TYPES.NOT_SELECTED) && this.addInformationMessage(--i, `You should select needed view`)
     return isEmptyArray(this.informationMessages);
   }
+
   protected clear(): void
   {
-
     this.posts = [];
   }
 

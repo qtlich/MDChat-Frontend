@@ -1,4 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
+import {MenuItem}                     from 'primeng/api';
 import {AuthDataService}              from '../../../auth/shared/auth.data.service';
 import {BaseSubscription}             from '../../core/base.subscription';
 import {isEmptyArray}                 from '../../core/core.free.functions';
@@ -17,13 +18,22 @@ export abstract class BaseComponent extends BaseSubscription implements OnInit, 
   public informationMessages: OperationResult[] = [];
   public isLoggedIn: boolean = false;
   public userName: string;
-  public loading:boolean = false;
-  public blockButton:boolean = false;
+  public loading: boolean = false;
+  public blockButton: boolean = false;
+  public contextMenuItems: MenuItem[] = [];
+
   protected constructor(protected serviceBus: GlobalBusService,
                         protected authService?: AuthDataService)
   {
     super();
     this.__loadUserInfo();
+    this.clearContextMenu();
+    this.onCreateContextMenu();
+  }
+
+  protected clearContextMenu(): void
+  {
+    this.contextMenuItems = [];
   }
 
   protected clearInformationMessages(): void
@@ -31,10 +41,10 @@ export abstract class BaseComponent extends BaseSubscription implements OnInit, 
     this.informationMessages = [];
   }
 
-  protected onSubscribeData()
+  protected onSubscribeData(): void
   {
     super.onSubscribeData();
-    if (this.authService)
+    if(this.authService)
     {
       this.subscribe(this.authService.loggedIn.subscribe(isLoggedIn => this.isLoggedIn = isLoggedIn));
       this.subscribe(this.authService.userName.subscribe((userName: string) => this.userName = userName))
@@ -46,17 +56,18 @@ export abstract class BaseComponent extends BaseSubscription implements OnInit, 
 
   protected onAfterLoginAction(value: boolean): void
   {
+  }
 
+  protected onCreateContextMenu(): void
+  {
   }
 
   protected onAfterLogoutAction(value: boolean): void
   {
-
   }
 
   protected onRefreshAllDataAction(value: boolean): void
   {
-
   }
 
   protected addInformationMessage(id: number, message: string): void

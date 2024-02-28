@@ -5,10 +5,18 @@
   <div class = "p-col-12">
     <p-tabView>
       <p-tabPanel header = "Approved">
+        <ng-template pTemplate = "content">
+        </ng-template>
       </p-tabPanel>
-      <p-tabPanel header = "Banned">
+      <p-tabPanel header = "Banned" leftIcon = "pi pi-ban">
+        <ng-template pTemplate = "content">
+          <banned-users [channelId] = "channelId"></banned-users>
+        </ng-template>
       </p-tabPanel>
       <p-tabPanel header = "Moderators">
+        <ng-template pTemplate = "content">
+          <moderators-users [channelId] = "channelId"></moderators-users>
+        </ng-template>
       </p-tabPanel>
     </p-tabView>
   </div>

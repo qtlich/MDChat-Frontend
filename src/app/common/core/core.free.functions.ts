@@ -50,6 +50,12 @@ export function showsInfoMessages(serviceBus: GlobalBusService, items: Operation
 }
 
 //*************************************************************************************************
+export function createInstance<T>(constructor: { new(): T }): T
+{
+  return new constructor();
+}
+
+//*************************************************************************************************
 export function isEmptyArray(array: any): boolean
 {
   return !(!isNullOrUndefined(array) && !isNullOrUndefined(array.length) && array.length > 0);

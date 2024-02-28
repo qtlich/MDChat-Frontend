@@ -54,7 +54,7 @@ export class CreatePostComponent extends BaseComponent implements OnInit, OnDest
     this.router.navigateByUrl('../');
   }
 
-  protected onSubscribeData()
+  protected onSubscribeData():void
   {
     super.onSubscribeData();
     this.subscribe(this.postService.onCudPostEvent().subscribe((result: ICUDPostResult) => result.success && this.router.navigateByUrl('/')));

@@ -19,9 +19,9 @@ export class CommentItemComponent extends BaseComponent implements OnInit, OnDes
   @Input() item: GetAllCommentsResponseModel;
   public readonly: boolean = true;
   public needReplay: boolean = false;
-  readonly faReply: IconDefinition = faReply;
-  readonly faEdit: IconDefinition = faEdit;
-  readonly faTrash: IconDefinition = faTrash;
+  public faReply: IconDefinition = faReply;
+  public faEdit: IconDefinition = faEdit;
+  public faTrash: IconDefinition = faTrash;
 
   constructor(private commentService: CommentDataService,
               private confirmationService: ConfirmationService,

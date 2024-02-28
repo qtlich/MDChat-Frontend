@@ -75,7 +75,7 @@ export class UserCommentsComponent extends BaseComponent implements OnInit, OnDe
     this.showInfo('Link is copied=>', link);
   }
 
-  protected onSubscribeData()
+  protected onSubscribeData():void
   {
     super.onSubscribeData();
     this.subscribe(this.commentService.onLoadUserCommentsUniversalEvent().subscribe((data: GetUserCommentsUniverseResponseModel[]) => this.comments = data));
@@ -117,7 +117,7 @@ export class UserCommentsComponent extends BaseComponent implements OnInit, OnDe
   private __isValidDataForRefresh(): boolean
   {
     this.clearInformationMessages();
-    let i: number;
+    let i: number = 0;
     (isNullOrUndefined(this.selectedView) || this.selectedView == USER_COMMENT_TYPES.NOT_SELECTED) && this.addInformationMessage(--i, `You should select needed view`)
     return isEmptyArray(this.informationMessages);
   }

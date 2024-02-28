@@ -21,6 +21,6 @@ export class UserManagementComponent extends BaseComponent implements OnInit, On
 
   public ngOnChanges(changes: SimpleChanges)
   {
-    executeIf(isChangedAndNotNullOrUndefined(changes, 'channelId'), () => console.log('IN user management channelId===>', this.channelId));
+    executeIf(isChangedAndNotNullOrUndefined(changes, 'channelId'), () => this.channelId);
   }
 }

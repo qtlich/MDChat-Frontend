@@ -1,0 +1,105 @@
+<div class = "page-content" style = "height: calc(100vh - 200px)">
+  <div class = "p-grid">
+    <div class = "p-col-12">
+      <!--                     [virtualScroll] = "true"-->
+      <p-table #dt
+               (onLazyLoad) = "loadUsersLazy($event)"
+               (onRowSelect) = "onRowSelect($event.data)"
+               [(selection)] = "selectedItem"
+               [autoLayout] = "true"
+               [columns] = "selectedColumns"
+               [contextMenuSelection]="selectedItem"
+               [contextMenu] = "contextMenu"
+               [lazy] = "true"
+               [loading] = "loading"
+               [metaKeySelection] = "true"
+               [rows] = "100"
+               [scrollable] = "true"
+               [totalRecords] = "10"
+               [value] = "items"
+               dataKey = "id"
+               rowHover = "true"
+               scrollHeight = "flex"
+               selectionMode = "single">
+        <ng-template pTemplate = "caption">
+          <tr>
+            <th>
+              <button (click) = "load()"
+                      class = "ui-button-rounded ui-button-rounded"
+                      label = "Refresh"
+                      pButton
+                      pTooltip = "Refresh data">
+              </button>
+              <button (click) = "onBanUserClick()"
+                      class = "ui-button-danger ui-button-rounded"
+                      icon = "pi pi-ban"
+                      label = "Ban user"
+                      pButton
+                      pTooltip = "Ban user"
+                      type = "button">
+              </button>
+            </th>
+          </tr>
+        </ng-template>
+        <ng-template let-columns pTemplate = "colgroup">
+          <colgroup>
+            <col style = "width: 4em;text-align: center;">
+            <col *ngFor = "let col of columns" [style.width] = "col.width">
+          </colgroup>
+        </ng-template>
+        <ng-template let-columns pTemplate = "header">
+          <tr>
+            <th style = "width: 4em;text-align: center;"></th>
+            <th *ngFor = "let col of columns" [pSortableColumn] = "col.field" pReorderableColumn pResizableColumn style = "text-align: center">
+              <span pTooltip = {{col.header_col_hint}}>{{col.header}}</span>
+            </th>
+          </tr>
+<!--          <tr *ngIf = "useTableFilter">-->
+<!--            <th></th>-->
+<!--            <th *ngFor = "let col of columns" [ngSwitch]="col.field" class = "ui-fluid">-->
+<!--              <input (input) = "dt.filter($event.target.value, col.field, 'contains')" *ngSwitchDefault pInputText type = "text">-->
+<!--            </th>-->
+<!--          </tr>-->
+        </ng-template>
+        <ng-template let-columns = "columns" let-rowData let-rowIndex = "rowIndex" pTemplate = "body">
+          <tr [pContextMenuRow] = "rowData"
+              [pSelectableRow] = "rowData">
+            <td [style.textAlign] = "'center'">
+              <button (click) = "onManageUserClick(rowData)"
+                      class = "ui-button-secondary"
+                      icon = "pi pi-user-minus"
+                      pButton
+                      pTooltip = "Unban user">
+              </button>
+            </td>
+            <td *ngFor = "let col of columns" [ngSwitch] = "col.field" [style.textAlign] = "col.text_align" class = "ui-resizable-column">
+
+              <span *ngSwitchCase = "'note'" CleanHtmlAndTruncate [addDots] = "false" [text] = "rowData[col.field]"></span>
+<!--              <span *ngSwitchCase = "'note'" [appTruncateAndSafeHtml] = "rowData[col.field]"></span>-->
+              <span *ngSwitchCase = "'permanentBanned'">{{rowData[col.field] == true ? 'Yes' : 'No'}}</span>
+              <span *ngSwitchDefault>{{rowData[col.field]}}</span>
+            </td>
+          </tr>
+        </ng-template>
+
+        <ng-template let-columns pTemplate = "emptymessage">
+          <tr>
+            <td [attr.colspan] = "columns.length+1" style = "text-align:left"><b>No banned users found.</b></td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+</div>
+<p-overlayPanel #overlayPanel appendTo = "body">
+  <div>
+    <!--    <a (click) = "copyLink()" class = "custom-button" role = "button">Copy link</a>-->
+  </div>
+</p-overlayPanel>
+<p-confirmDialog header = "Confirmation" icon = "pi pi-exclamation-triangle"></p-confirmDialog>
+<ban-user-dialog (onClose) = "onCloseDialog()"
+                 *ngIf = "sD.displayBanDialog"
+                 [channelId] = "channelId"
+                 [displayDialog] = "sD.displayBanDialog">
+</ban-user-dialog>
+<p-contextMenu #contextMenu [model] = "contextMenuItems" appendTo = "body"></p-contextMenu>

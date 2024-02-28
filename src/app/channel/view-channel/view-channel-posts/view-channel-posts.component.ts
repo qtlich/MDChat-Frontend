@@ -136,7 +136,7 @@ export class ViewChannelPostsComponent extends BaseComponent implements OnInit, 
     value && this.__refreshPosts();
   }
 
-  protected onSubscribeData()
+  protected onSubscribeData():void
   {
     super.onSubscribeData();
     this.subscribe(this.channelService.onLoadChannelPostsUniversalEvent().subscribe((data: GetChannelPostsUniversalResponseModel[]) => this.__updatePostsNew(data)));
@@ -236,7 +236,7 @@ export class ViewChannelPostsComponent extends BaseComponent implements OnInit, 
   private __isValidDataForRefresh(): boolean
   {
     this.clearInformationMessages();
-    let i: number;
+    let i: number = 0;
     (isNullOrUndefined(this.selectedView) || this.selectedView == USER_POSTS_TYPES.NOT_SELECTED) && this.addInformationMessage(--i, `You should select needed view`)
     return isEmptyArray(this.informationMessages);
   }

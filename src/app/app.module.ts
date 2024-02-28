@@ -14,6 +14,7 @@ import {CalendarModule}                             from 'primeng/calendar';
 import {CardModule}                                 from 'primeng/card';
 import {CheckboxModule}                             from 'primeng/checkbox';
 import {ConfirmDialogModule}                        from 'primeng/confirmdialog';
+import {ContextMenuModule}                          from 'primeng/contextmenu';
 import {DialogModule}                               from 'primeng/dialog';
 import {DropdownModule}                             from 'primeng/dropdown';
 import {EditorModule}                               from 'primeng/editor';
@@ -30,6 +31,7 @@ import {PickListModule}                             from 'primeng/picklist';
 import {RadioButtonModule}                          from 'primeng/radiobutton';
 import {SelectButtonModule}                         from 'primeng/selectbutton';
 import {SlideMenuModule}                            from 'primeng/slidemenu';
+import {SpinnerModule}                              from 'primeng/spinner';
 import {SplitButtonModule}                          from 'primeng/splitbutton';
 import {TableModule}                                from 'primeng/table';
 import {TabViewModule}                              from 'primeng/tabview';
@@ -58,11 +60,15 @@ import {CleanHtmlAndTruncateModule}                 from './common/directives/tr
 import {TruncateAndSafeHtmlDirectiveModule}         from './common/directives/truncate-and-safe-html-directive';
 import {AppConfigService}                           from './common/services/app.config.service';
 import {HeaderComponent}                            from './header/header.component';
-import {HomeComponent}          from './home/home.component';
+import {HomeComponent}                              from './home/home.component';
 import {ChannelManagementComponent}                 from './moderate.tools/channel.management/channel.management.component';
-import {EditChannelComponent}   from './moderate.tools/channel.management/edit.channel/edit.channel.component';
-import {ModerateToolsComponent} from './moderate.tools/moderate.tools.component';
+import {EditChannelComponent}                       from './moderate.tools/channel.management/edit.channel/edit.channel.component';
+import {ModerateToolsComponent}                     from './moderate.tools/moderate.tools.component';
+import {BanUserDialogComponent}                     from './moderate.tools/user.management/banned-users/ban-user-dialog/ban.user.dialog.component';
+import {BannedUsersComponent}                       from './moderate.tools/user.management/banned-users/banned.users.component';
 import {UserManagementComponent}                    from './moderate.tools/user.management/user.management.component';
+import {AddModeratorDialogComponent}                from './moderate.tools/user.management/users-moderators/add-moderator-dialog/add.moderator.dialog.component';
+import {UsersModeratorsComponent}                   from './moderate.tools/user.management/users-moderators/users.moderators.component';
 import {CreatePostLittleComponent}                  from './post/create-post-little/create-post-little.component';
 import {CreatePostComponent}                        from './post/create-post/create-post.component';
 import {ViewPostComponent}                          from './post/view-post/view-post.component';
@@ -124,7 +130,11 @@ import {UserSettingsComponent}                      from './user/user-settings/u
                            UserManagementComponent,
                            ModerateToolsButtonComponent,
                            EditChannelComponent,
-                           ChannelManagementComponent],
+                           ChannelManagementComponent,
+                           BannedUsersComponent,
+                           BanUserDialogComponent,
+                           UsersModeratorsComponent,
+                           AddModeratorDialogComponent],
             imports:      [BrowserModule,
                            NgxWebstorageModule.forRoot(),
                            ToastrComponentlessModule.forRoot(),
@@ -168,7 +178,9 @@ import {UserSettingsComponent}                      from './user/user-settings/u
                            SelectButtonModule,
                            ConfirmDialogModule,
                            InnerHtmlDirectivesModule,
-                           OverlayPanelModule],
+                           OverlayPanelModule,
+                           SpinnerModule,
+                           ContextMenuModule],
             providers:    [{
               provide:    APP_INITIALIZER,
               useFactory: initializer,

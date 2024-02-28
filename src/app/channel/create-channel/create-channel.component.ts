@@ -50,7 +50,7 @@ export class CreateChannelComponent extends BaseComponent implements OnInit, OnD
     }
   }
 
-  protected onSubscribeData()
+  protected onSubscribeData():void
   {
     super.onSubscribeData();
     this.subscribe(this.serviceBus.onEvent(EActionType.SUCCESS_MODIFY_CHANNEL, (data: OnSuccessModifyChannelItem) =>
@@ -70,7 +70,7 @@ export class CreateChannelComponent extends BaseComponent implements OnInit, OnD
   private __isValidData(): boolean
   {
     this.clearInformationMessages();
-    let i: number;
+    let i: number = 0;
     isEmptyStringField(this.sD.channelName) && this.addInformationMessage(--i, 'Channel name is required');
     isEmptyStringField(this.sD.channelDescription) && this.addInformationMessage(--i, 'Channel description is required');
     return isEmptyArray(this.informationMessages);

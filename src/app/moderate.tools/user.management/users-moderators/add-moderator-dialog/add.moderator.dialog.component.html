@@ -1,0 +1,77 @@
+<p-dialog (onHide) = "onHideDialog()" [(visible)] = "displayDialog" [modal] = "modal" [style] = "{width: '36vw'}" appendTo = "body">
+  <p-header><b>Add user as a moderator</b></p-header>
+  <div class = "p-grid">
+    <div class = "p-col-12"><b>Enter username</b></div>
+    <div class = "p-col-12 ui-fluid">
+      <p-autoComplete (completeMethod) = "filterUsers($event.query)"
+                      (onClear) = "onClearUser()"
+                      (onSelect) = "onSelectUser($event)"
+                      [(ngModel)] = "sD.selectedUser"
+                      [dropdown] = "true"
+                      [minLength] = "1"
+                      [required] = "true"
+                      [size] = "50"
+                      [suggestions] = "sD.filteredUsersFromServer"
+                      appendTo = "body"
+                      field = "userName"
+                      placeholder = "Select user">
+      </p-autoComplete>
+    </div>
+    <div class = "p-col-12"><b>Reason for ban</b></div>
+    <div class = "p-col-12 ui-fluid">
+      <p-dropdown [(ngModel)] = "sD.banReasonId"
+                  [options] = "sD.banReasonsDD"
+                  [required] = "true"
+                  appendTo = "body"
+                  placeholder = "Select ban reason">
+      </p-dropdown>
+    </div>
+    <div class = "p-col-12"><b>Mod note</b></div>
+    <div class = "p-col-12 ui-fluid">
+      <p-editor [(ngModel)] = "sD.note"
+                [required] = "true"
+                [style] = "{'height':'100px'}"
+                class = "ui-fluid"
+                placeholder = "Fill something if need">
+      </p-editor>
+    </div>
+    <div class = "p-col-12"><b>How long</b></div>
+    <div class = "p-col-3">
+      <div class = "ui-inputgroup">
+        <p-spinner [(ngModel)] = "sD.daysBanned"
+                   [disabled] = "sD.permanentBanned"
+                   [formatInput] = "true"
+                   [max] = "999"
+                   [min] = "1"
+                   [size] = "3"
+                   [step] = "1"
+                   maxlength = "3">
+        </p-spinner>
+        <span class = "ui-inputgroup-addon">Days</span>
+      </div>
+    </div>
+    <div class = "p-col-9">
+      <p-checkbox (onChange) = "onChangePermanent()"
+                  [(ngModel)] = "sD.permanentBanned"
+                  [binary] = "true"
+                  label = "Permanent">
+      </p-checkbox>
+    </div>
+  </div>
+  <p-footer>
+    <button (click) = "onBanUserClick()"
+            [disabled] = "blockButton"
+            class = "ui-button-danger ui-button-rounded"
+            icon = "pi pi-save"
+            label = "Add"
+            pButton
+            type = "button">
+    </button>
+    <button (click) = "onDiscardClick()"
+            class = "ui-button-rounded"
+            label = "Discard"
+            pButton
+            type = "button">
+    </button>
+  </p-footer>
+</p-dialog>

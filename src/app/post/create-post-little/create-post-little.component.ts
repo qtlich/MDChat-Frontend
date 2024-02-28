@@ -37,7 +37,7 @@ export class CreatePostLittleComponent extends BaseComponent implements OnInit, 
                                                    }, error => this.showError(errorToText(error)));
   }
 
-  protected onSubscribeData()
+  protected onSubscribeData():void
   {
     super.onSubscribeData();
     this.subscribe(this.postService.onCudPostEvent().subscribe((result: ICUDPostResult) => result.success && this.router.navigateByUrl('/')));

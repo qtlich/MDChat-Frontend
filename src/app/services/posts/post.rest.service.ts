@@ -3,28 +3,21 @@ import {Injectable}                         from '@angular/core';
 import {Observable}                         from 'rxjs';
 import {BaseRestApi}                        from '../../common/core/base.rest.api';
 import {AppConfigService}                   from '../../common/services/app.config.service';
-import {CreatePostPayload}                  from '../../post/create-post/create-post.payload';
 import {PostCudRequestModel}                from '../../post/create-post/models/post.cud.request.model';
 import {PostCudResponseModel}               from '../../post/create-post/models/post.cud.response.model';
 import {PostModel}                          from '../../shared/post-model';
-import {GetAllPostsRequestModel}            from './models/get.all.posts.request.model';
-import {GetAllPostsResponseModel}           from './models/get.all.posts.response.model';
-import {GetAllUserPostsRequestModel}        from './models/get.all.user.posts.request.model';
+import {BookmarkPostRequestModel}           from './models/bookmark.post.request.model';
 import {GetPostByIdDtoRequestModel}         from './models/get.post.by.id.dto.request.model';
 import {GetPostByIdDtoResponseModel}        from './models/get.post.by.id.dto.response.model';
 import {GetUserPostsUniversalRequestModel}  from './models/get.user.posts.universal.request.model';
 import {GetUserPostsUniversalResponseModel} from './models/get.user.posts.universal.response.model';
-import {BookmarkPostRequestModel}           from './models/bookmark.post.request.model';
 import {SaveUnsavePostResponsetModel}       from './models/save.unsave.post.response.model';
 import {ShowHidePostRequestModel}           from './models/show.hide.post.request.model';
 import {ShowHidePostResponseModel}          from './models/show.hide.post.response.model';
 
-@Injectable({
-              providedIn: 'root'
-            })
+@Injectable({providedIn: 'root'})
 export class PostRestService extends BaseRestApi
 {
-
   constructor(httpClient: HttpClient,
               configService: AppConfigService)
   {

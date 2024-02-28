@@ -34,11 +34,6 @@ export class EditChannelComponent extends BaseComponent implements OnInit, OnDes
     executeIf(isChangedAndNotNullOrUndefined(changes, 'channelId'), () => this.__loadChannelDescription());
   }
 
-  private __loadChannelDescription(): void
-  {
-    this._channelService.getChannelDescription(new GetChannelDescriptionRequestModel(this.channelId));
-  }
-
   public ngOnInit()
   {
     super.ngOnInit();
@@ -62,7 +57,17 @@ export class EditChannelComponent extends BaseComponent implements OnInit, OnDes
     }
   }
 
-  protected onSubscribeData()
+  public countRemaining(): void
+  {
+    this.sD.remaining = this.MAX_CHANNEL_NAME_LENGTH - (!isEmptyStringField(this.sD.channelName) ? this.sD.channelName.length : 0);
+  }
+
+  discard()
+  {
+    this._router.navigateByUrl('/');
+  }
+
+  protected onSubscribeData(): void
   {
     super.onSubscribeData();
     this.subscribe(this.serviceBus.onEvent(EActionType.SUCCESS_MODIFY_CHANNEL, (data: OnSuccessModifyChannelItem) =>
@@ -81,24 +86,19 @@ export class EditChannelComponent extends BaseComponent implements OnInit, OnDes
                                                                                   }));
   }
 
-  public countRemaining(): void
+  private __loadChannelDescription(): void
   {
-    this.sD.remaining = this.MAX_CHANNEL_NAME_LENGTH - (!isEmptyStringField(this.sD.channelName) ? this.sD.channelName.length : 0);
+    this._channelService.getChannelDescription(new GetChannelDescriptionRequestModel(this.channelId));
   }
 
   private __isValidData(): boolean
   {
     this.clearInformationMessages();
-    let i: number;
+    let i: number = 0;
     isNullOrUndefined(this.channelId) && this.addInformationMessage(--i, 'Channel is null');
     isEmptyStringField(this.sD.channelName) && this.addInformationMessage(--i, 'Channel name is required');
     isEmptyStringField(this.sD.channelDescription) && this.addInformationMessage(--i, 'Channel description is required');
     return isEmptyArray(this.informationMessages);
-  }
-
-  discard()
-  {
-    this._router.navigateByUrl('/');
   }
 
   private __ModifyChannel()
@@ -136,7 +136,7 @@ export class EditChannelComponent extends BaseComponent implements OnInit, OnDes
         return 'public';
       case 1:
         return 'restricted';
-      case 1:
+      case 2:
         return 'private';
     }
   }

@@ -3,12 +3,12 @@ import {ActivatedRoute, Router}                                                f
 import {faBookmark, faComments, faEdit, faEyeSlash, faReply, faShare, faTrash} from '@fortawesome/free-solid-svg-icons';
 import {ConfirmationService}                                                   from 'primeng/api';
 import {AuthDataService}                                                       from '../../auth/shared/auth.data.service';
-import {OnSuccessModifyCommentItem} from '../../comment/create-comment/create-comment.component';
-import {CommentDataService}         from '../../services/comments/comment.data.service';
-import {BaseComponent}              from '../../common/components/base.component/base.component';
+import {OnSuccessModifyCommentItem}                                            from '../../comment/create-comment/create-comment.component';
+import {BaseComponent}                                                         from '../../common/components/base.component/base.component';
 import {toNumber}                                                              from '../../common/core/core.free.functions';
 import {EActionType}                                                           from '../../common/models/event.type';
 import {GlobalBusService}                                                      from '../../common/services/global.bus.service';
+import {CommentDataService}                                                    from '../../services/comments/comment.data.service';
 import {GetPostByIdDtoRequestModel}                                            from '../../services/posts/models/get.post.by.id.dto.request.model';
 import {GetPostByIdDtoResponseModel}                                           from '../../services/posts/models/get.post.by.id.dto.response.model';
 import {IDeletePostResult, PostDataService}                                    from '../../services/posts/post.data.service';
@@ -21,16 +21,15 @@ import {IDeletePostResult, PostDataService}                                    f
            })
 export class ViewPostComponent extends BaseComponent implements OnInit, OnDestroy
 {
-
-  readonly faComments: any = faComments; //IconDefinition
-  readonly faShare: any = faShare;
-  readonly faBookMark: any = faBookmark;
-  readonly faEyeSlash: any = faEyeSlash;
+  public faComments: any = faComments; //IconDefinition
+  public faShare: any = faShare;
+  public faBookMark: any = faBookmark;
+  public faEyeSlash: any = faEyeSlash;
   public postId: number;
   public post: GetPostByIdDtoResponseModel;
-  protected readonly faTrash = faTrash;
-  protected readonly faReply = faReply;
-  protected readonly faEdit = faEdit;
+  public faTrash = faTrash;
+  public faReply = faReply;
+  public faEdit = faEdit;
 
   constructor(private _postService: PostDataService,
               private _activateRoute: ActivatedRoute,
@@ -52,7 +51,6 @@ export class ViewPostComponent extends BaseComponent implements OnInit, OnDestro
 
   public onEditClick(): void
   {
-
   }
 
   public onDeleteClick(): void
@@ -63,7 +61,7 @@ export class ViewPostComponent extends BaseComponent implements OnInit, OnDestro
                                       });
   }
 
-  protected onSubscribeData()
+  protected onSubscribeData(): void
   {
     super.onSubscribeData();
     this.subscribe(this.serviceBus.onEvent(EActionType.SUCCESS_MODIFY_COMMENT, (data: OnSuccessModifyCommentItem) => this.__loadCommentsCount()));

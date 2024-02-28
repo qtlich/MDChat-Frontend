@@ -18,9 +18,7 @@ export class CleanHtmlAndTruncateDirective implements AfterViewInit
 
   ngAfterViewInit()
   {
-    // Удаляем HTML-теги
     const cleanText = this.stripHtmlTags(this.text);
-    // Обрезаем текст
     let truncatedText: string;
     if(cleanText.length > this.maxLength)
     {

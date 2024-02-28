@@ -1,7 +1,7 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute}                      from '@angular/router';
 import {BaseComponent}                       from '../../common/components/base.component/base.component';
-import {errorToText, toNumber}               from '../../common/core/core.free.functions';
+import {toNumber}                            from '../../common/core/core.free.functions';
 import {GlobalBusService}                    from '../../common/services/global.bus.service';
 import {ChannelDataService}                  from '../../services/channels/channel.data.service';
 import {PostDataService}                     from '../../services/posts/post.data.service';
@@ -28,7 +28,7 @@ export class ViewChannelComponent extends BaseComponent implements OnInit, OnDes
     super(serviceBus);
   }
 
-  protected onSubscribeData()
+  protected onSubscribeData(): void
   {
     super.onSubscribeData();
     this.subscribe(this._aR.params.subscribe(params =>
@@ -50,7 +50,6 @@ export class ViewChannelComponent extends BaseComponent implements OnInit, OnDes
   //                                                      this.showError(errorToText(error));
   //                                                    });
   // }
-
   private __loadChannelData(): void
   {
     this.channelService.getChannelDescription(new GetChannelDescriptionRequestModel(this.channelId))
