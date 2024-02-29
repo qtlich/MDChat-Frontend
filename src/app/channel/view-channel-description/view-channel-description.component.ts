@@ -46,7 +46,6 @@ export class ViewChannelDescriptionComponent extends BaseComponent implements On
     ));
     this.subscribe(this._channelDataService.onLoadChannelSubscribersEvent().subscribe((result: GetChannelCountSubscribersResponseModel) =>
                                                                                       {
-                                                                                        console.log('onLoadChannelSubscribersEvent=>', result);
                                                                                         if(result.channelId == this.channelId)
                                                                                         {
                                                                                           this.countSubscribers = result.countSubscribers;

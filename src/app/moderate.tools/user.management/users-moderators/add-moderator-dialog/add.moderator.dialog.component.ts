@@ -1,16 +1,18 @@
-import {Component, Input, OnDestroy, OnInit}                                     from '@angular/core';
-import {SelectItem}                                                              from 'primeng-lts';
-import {AuthDataService}                                                         from '../../../../auth/shared/auth.data.service';
-import {BaseDialogComponent}                                                     from '../../../../common/components/base.dialog.component/base.dialog.component';
-import {isEmptyArray, isEmptyNumberField, isEmptyStringField, isNullOrUndefined} from '../../../../common/core/core.free.functions';
-import {GlobalBusService}                                                        from '../../../../common/services/global.bus.service';
-import {GetIsUserBannedInChannelRequestModel}                                    from '../../../../services/user.management/models/get.is.user.banned.in.channel.request.model';
-import {GetIsUserBannedInChannelResponseModel}                                   from '../../../../services/user.management/models/get.is.user.banned.in.channel.response.model';
-import {ManageUserChannelBanningRequestModel}                                    from '../../../../services/user.management/models/manage.user.channel.banning.request.model';
-import {SearchUsersRequestModel}                                                 from '../../../../services/user.management/models/search.users.request.model';
-import {SearchUsersResponseModel}                                                from '../../../../services/user.management/models/search.users.response.model';
-import {OnManageUserChannelBanningResult, UserManagementDataService}             from '../../../../services/user.management/user.management.data.service';
-import {BanUserDialogScreenDataModel}                                            from './models/ban.user.dialog.screen.data.model';
+import {Component, Input, OnDestroy, OnInit}                         from '@angular/core';
+import {AuthDataService}                                             from '../../../../auth/shared/auth.data.service';
+import {BaseDialogComponent}                                         from '../../../../common/components/base.dialog.component/base.dialog.component';
+import {isEmptyArray, isNullOrUndefined}                             from '../../../../common/core/core.free.functions';
+import {GlobalBusService}                                            from '../../../../common/services/global.bus.service';
+import {MANAGE_USER_PERMISSION_OPERATION_TYPES}                      from '../../../../services/user.management/enums/manage.user.permission.operation.types.enum';
+import {GetIsUserBannedInChannelRequestModel}                        from '../../../../services/user.management/models/get.is.user.banned.in.channel.request.model';
+import {GetIsUserBannedInChannelResponseModel}                       from '../../../../services/user.management/models/get.is.user.banned.in.channel.response.model';
+import {GetIsUserModeratorInChannelRequestModel}                     from '../../../../services/user.management/models/get.is.user.moderator.in.channel.request.model';
+import {GetIsUserModeratorInChannelResponseModel}                    from '../../../../services/user.management/models/get.is.user.moderator.in.channel.response.model';
+import {ManageUserChannelPermissionsRequestModel}                    from '../../../../services/user.management/models/manage.user.channel.permissions.request.model';
+import {SearchUsersRequestModel}                                     from '../../../../services/user.management/models/search.users.request.model';
+import {SearchUsersResponseModel}                                    from '../../../../services/user.management/models/search.users.response.model';
+import {OnManageUserChannelBanningResult, UserManagementDataService} from '../../../../services/user.management/user.management.data.service';
+import {AddModeratorDialogScreenDataModel}                           from './models/add.moderator.dialog.screen.data.model';
 
 @Component({
              selector:    'add-moderator-dialog',
@@ -20,7 +22,7 @@ import {BanUserDialogScreenDataModel}                                           
 export class AddModeratorDialogComponent extends BaseDialogComponent implements OnInit, OnDestroy
 {
   @Input() channelId: number;
-  public sD: BanUserDialogScreenDataModel = new BanUserDialogScreenDataModel();
+  public sD: AddModeratorDialogScreenDataModel = new AddModeratorDialogScreenDataModel();
 
   constructor(private _userManagementService: UserManagementDataService,
               serviceBus: GlobalBusService,
@@ -35,11 +37,11 @@ export class AddModeratorDialogComponent extends BaseDialogComponent implements 
     this.closeForm();
   }
 
-  public onBanUserClick(): void
+  public onAddModeratorClick(): void
   {
     if(this.__isValidData())
     {
-      this._userManagementService.manageUserChannelBanning(this.__prepareDataForSave())
+      this._userManagementService.manageUserChannelPermissions(this.__prepareDataForSave())
     }
     else
     {
@@ -55,19 +57,18 @@ export class AddModeratorDialogComponent extends BaseDialogComponent implements 
 
   public filterUsers(value: string): void
   {
-    console.log('VALUE=>', value);
     this._userManagementService.searchUsers(new SearchUsersRequestModel(value));
   }
 
   public onSelectUser(item: SearchUsersResponseModel): void
   {
     this.sD.userId = item.id;
-    this.__checkUserBan();
+    this.__checkUserIsModerator();
   }
 
-  private __checkUserBan(): void
+  private __checkUserIsModerator(): void
   {
-    this._userManagementService.checkIsUserBannedInChannel(new GetIsUserBannedInChannelRequestModel(this.sD.userId, this.channelId));
+    this._userManagementService.checkIsUserModeratorInChannel(new GetIsUserModeratorInChannelRequestModel(this.sD.userId, this.channelId));
   }
 
   public onClearUser(): void
@@ -77,10 +78,6 @@ export class AddModeratorDialogComponent extends BaseDialogComponent implements 
 
   public onChangePermanent(): void
   {
-    if(this.sD.permanentBanned)
-    {
-      this.sD.daysBanned = 0;
-    }
   }
 
   protected onSubscribeData(): void
@@ -88,8 +85,7 @@ export class AddModeratorDialogComponent extends BaseDialogComponent implements 
     super.onSubscribeData();
     this.subscribe(this._userManagementService.onManageUserBanningEvent().subscribe((result: OnManageUserChannelBanningResult) => result.success && this.closeForm()));
     this.subscribe(this._userManagementService.onSearchUsersEvent().subscribe((data: SearchUsersResponseModel[]) => this.sD.filteredUsersFromServer = data));
-    this.subscribe(this._userManagementService.onLoadBanReasonsSIEvent().subscribe((data: SelectItem[]) => this.sD.banReasonsDD = data));
-    this.subscribe(this._userManagementService.onLoadIsUserBannedInChannelEvent().subscribe((result: GetIsUserBannedInChannelResponseModel) => this.blockButton = result.isBanned));
+    this.subscribe(this._userManagementService.onLoadIsUserModeratorInChannelEvent().subscribe((result: GetIsUserModeratorInChannelResponseModel) => this.blockButton = result.isModerator));
   }
 
   private __isValidData(): boolean
@@ -98,9 +94,6 @@ export class AddModeratorDialogComponent extends BaseDialogComponent implements 
     let i: number = 0;
     isNullOrUndefined(this.sD.channelId) && this.addInformationMessage(--i, `Channel not selected`);
     isNullOrUndefined(this.sD.userId) && this.addInformationMessage(--i, `Please select user`);
-    isNullOrUndefined(this.sD.banReasonId) && this.addInformationMessage(--i, `Please select reason for ban`);
-    isNullOrUndefined(this.sD.permanentBanned) && (isEmptyNumberField(this.sD.daysBanned) || this.sD.daysBanned == 0) && this.addInformationMessage(--i, `Please select how long ban`);
-    this.sD.permanentBanned == false && (isEmptyNumberField(this.sD.daysBanned) || this.sD.daysBanned == 0) && this.addInformationMessage(--i, `Please choose how long is banning`);
     return isEmptyArray(this.informationMessages);
   }
 
@@ -108,19 +101,19 @@ export class AddModeratorDialogComponent extends BaseDialogComponent implements 
   {
     this.sD.userId = null;
     this.sD.selectedUser = null;
-    this.sD.banReasonId = null;
-    this.sD.note = null;
-    this.sD.daysBanned = null;
-    this.sD.permanentBanned = false;
   }
 
-  private __prepareDataForSave(): ManageUserChannelBanningRequestModel
+  private __prepareDataForSave(): ManageUserChannelPermissionsRequestModel
   {
-    return new ManageUserChannelBanningRequestModel(!isNullOrUndefined(this.sD.userId) ? this.sD.userId : null,
-                                                    !isNullOrUndefined(this.sD.channelId) ? this.sD.channelId : null,
-                                                    !isNullOrUndefined(this.sD.banReasonId) ? this.sD.banReasonId : null,
-                                                    !isEmptyStringField(this.sD.note) ? this.sD.note : null,
-                                                    this.sD.permanentBanned == false && !isEmptyNumberField(this.sD.daysBanned) ? this.sD.daysBanned : null,
-                                                    !isNullOrUndefined(this.sD.permanentBanned) ? this.sD.permanentBanned : false);
+    return new ManageUserChannelPermissionsRequestModel(MANAGE_USER_PERMISSION_OPERATION_TYPES.CREATE_DELETE_MODERATOR,
+                                                        !isNullOrUndefined(this.sD.userId) ? this.sD.userId : null,
+                                                        !isNullOrUndefined(this.sD.channelId) ? this.sD.channelId : null,
+                                                        !isNullOrUndefined(this.sD.isAdministrator) ? this.sD.isAdministrator : false,
+                                                        !isNullOrUndefined(this.sD.isChannelModerator) ? this.sD.isChannelModerator : false,
+                                                        !isNullOrUndefined(this.sD.canViewChannel) ? this.sD.canViewChannel : false,
+                                                        !isNullOrUndefined(this.sD.canViewPosts) ? this.sD.canViewPosts : false,
+                                                        !isNullOrUndefined(this.sD.canCreatePosts) ? this.sD.canCreatePosts : false,
+                                                        !isNullOrUndefined(this.sD.canComment) ? this.sD.canComment : false,
+                                                        !isNullOrUndefined(this.sD.canVote) ? this.sD.canVote : false);
   }
 }

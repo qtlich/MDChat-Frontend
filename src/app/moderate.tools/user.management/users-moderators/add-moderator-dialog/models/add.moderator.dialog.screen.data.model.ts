@@ -1,11 +1,10 @@
-import {SelectItem}                           from 'primeng-lts';
 import {ManageUserChannelBanningRequestModel} from '../../../../../services/user.management/models/manage.user.channel.banning.request.model';
+import {ManageUserChannelPermissionsRequestModel} from '../../../../../services/user.management/models/manage.user.channel.permissions.request.model';
 import {SearchUsersResponseModel}             from '../../../../../services/user.management/models/search.users.response.model';
 
-export class BanUserDialogScreenDataModel extends ManageUserChannelBanningRequestModel
+export class AddModeratorDialogScreenDataModel extends ManageUserChannelPermissionsRequestModel
 {
   public filteredUsersFromServer: SearchUsersResponseModel[] = [];
-  public banReasonsDD: SelectItem[] = [];
   public selectedUser: SearchUsersResponseModel;
 
   constructor()

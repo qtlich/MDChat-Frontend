@@ -102,7 +102,6 @@ export class BannedUsersComponent extends BaseSearchComponent<GetChannelBannedUs
 
   private __manageUser(): void
   {
-    console.log('this.selectedItem=>', this.selectedItem);
     this._dataService.manageUserChannelBanning(new ManageUserChannelBanningRequestModel(this.selectedItem.userId,
                                                                                         this.selectedItem.channelId,
                                                                                         this.selectedItem.banReasonId,

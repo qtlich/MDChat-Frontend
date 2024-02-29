@@ -61,9 +61,9 @@
             <td [style.textAlign] = "'center'">
               <button (click) = "onManageUserClick(rowData)"
                       class = "ui-button-secondary"
-                      icon = "pi pi-trash"
+                      icon = "pi pi-user-minus"
                       pButton
-                      pTooltip = "Unban user">
+                      pTooltip = "Remove user from moderators">
               </button>
             </td>
             <td *ngFor = "let col of columns" [ngSwitch] = "col.field" [style.textAlign] = "col.text_align" class = "ui-resizable-column">

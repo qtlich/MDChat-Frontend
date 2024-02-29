@@ -11,8 +11,11 @@ import {GetChannelBannedUsersResponseModel}                                     
 import {GetChannelModeratorUsersRequestModel}                                                 from './models/get.channel.moderator.users.request.model';
 import {GetChannelModeratorUsersResponseModel}                                                from './models/get.channel.moderator.users.response.model';
 import {GetIsUserBannedInChannelRequestModel}                                                 from './models/get.is.user.banned.in.channel.request.model';
-import {GetIsUserBannedInChannelResponseModel}                                                from './models/get.is.user.banned.in.channel.response.model';
-import {ManageUserChannelBanningRequestModel}                                                 from './models/manage.user.channel.banning.request.model';
+import {GetIsUserBannedInChannelResponseModel}    from './models/get.is.user.banned.in.channel.response.model';
+import {GetIsUserModeratorInChannelRequestModel}                                              from './models/get.is.user.moderator.in.channel.request.model';
+import {GetIsUserModeratorInChannelResponseModel}                                             from './models/get.is.user.moderator.in.channel.response.model';
+import {ManageUserChannelPermissionsRequestModel} from './models/manage.user.channel.permissions.request.model';
+import {ManageUserChannelBanningRequestModel}     from './models/manage.user.channel.banning.request.model';
 import {ManageUserChannelBanningResponseModel}                                                from './models/manage.user.channel.banning.response.model';
 import {SearchUsersRequestModel}                                                              from './models/search.users.request.model';
 import {SearchUsersResponseModel}                                                             from './models/search.users.response.model';
@@ -40,6 +43,7 @@ export class UserManagementDataService extends BaseService
   private readonly _onLoadChannelModeratorUsersSubject: Subject<GetChannelModeratorUsersResponseModel[]> = new Subject<GetChannelModeratorUsersResponseModel[]>();
   private readonly _onManageUserBanningStateSubject: Subject<OnManageUserChannelBanningResult> = new Subject<OnManageUserChannelBanningResult>();
   private readonly _onLoadIsUserBannedInChannel: Subject<GetIsUserBannedInChannelResponseModel> = new Subject<GetIsUserBannedInChannelResponseModel>();
+  private readonly _onLoadIsUserModeratorInChannel: Subject<GetIsUserModeratorInChannelResponseModel> = new Subject<GetIsUserModeratorInChannelResponseModel>();
 
   constructor(private _restService: UserManagementRestService,
               serviceBus: GlobalBusService)
@@ -61,6 +65,10 @@ export class UserManagementDataService extends BaseService
   public onLoadIsUserBannedInChannelEvent(): Observable<GetIsUserBannedInChannelResponseModel>
   {
     return this._onLoadIsUserBannedInChannel;
+  }
+  public onLoadIsUserModeratorInChannelEvent(): Observable<GetIsUserModeratorInChannelResponseModel>
+  {
+    return this._onLoadIsUserModeratorInChannel;
   }
 
   public onLoadChannelBannedUsersEvent(): Observable<GetChannelBannedUsersResponseModel[]>
@@ -86,6 +94,19 @@ export class UserManagementDataService extends BaseService
               },
               `Can't manage user ban state`)
   }
+  public manageUserChannelPermissions(item: ManageUserChannelPermissionsRequestModel): void
+  {
+    this.toDb(item,
+              input => this._restService.manageChannelUserPermissions(input),
+              data =>
+              {
+                showOperationResultMessages(this.serviceBus, data);
+                const value: OnManageUserChannelBanningResult = {success: isAllOperationsSuccess(data), input: item, result: !isEmptyArray(data) ? data : []}
+                this.serviceBus.sendEvent<OnManageUserChannelBanningResult>(EActionType.ON_ADD_MODERATOR_USER_IN_CHANNEL_ACTION, value);
+                this._onManageUserBanningStateSubject.next(value);
+              },
+              `Can't manage user ban state`)
+  }
 
   public checkIsUserBannedInChannel(item: GetIsUserBannedInChannelRequestModel): void
   {
@@ -96,6 +117,20 @@ export class UserManagementDataService extends BaseService
                 if(!isNullOrUndefined(result) && result.isBanned)
                 {
                   this.showMessage(MessageType.WARNING, `User is already banned`);
+                }
+                this._onLoadIsUserBannedInChannel.next(!isNullOrUndefined(result) ? result : new GetIsUserBannedInChannelResponseModel(result.userId, result.channelId, true));
+              },
+              `Can't load user channel ban state`);
+  }
+  public checkIsUserModeratorInChannel(item: GetIsUserModeratorInChannelRequestModel): void
+  {
+    this.toDb(item,
+              input => this._restService.getIsUserModeratorInChannel(input),
+              result =>
+              {
+                if(!isNullOrUndefined(result) && result.isModerator)
+                {
+                  this.showMessage(MessageType.WARNING, `User is already a channel moderator`);
                 }
                 this._onLoadIsUserBannedInChannel.next(!isNullOrUndefined(result) ? result : new GetIsUserBannedInChannelResponseModel(result.userId, result.channelId, true));
               },

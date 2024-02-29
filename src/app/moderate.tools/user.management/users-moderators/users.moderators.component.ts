@@ -7,9 +7,10 @@ import {executeIf, isChangedAndNotNullOrUndefined, isNullOrUndefined}  from '../
 import {FieldType}                                                     from '../../../common/core/table.columns.model';
 import {EActionType}                                                   from '../../../common/models/event.type';
 import {GlobalBusService}                                              from '../../../common/services/global.bus.service';
-import {GetChannelBannedUsersRequestModel}                             from '../../../services/user.management/models/get.channel.banned.users.request.model';
+import {MANAGE_USER_PERMISSION_OPERATION_TYPES}                        from '../../../services/user.management/enums/manage.user.permission.operation.types.enum';
 import {GetChannelModeratorUsersRequestModel}                          from '../../../services/user.management/models/get.channel.moderator.users.request.model';
 import {GetChannelModeratorUsersResponseModel}                         from '../../../services/user.management/models/get.channel.moderator.users.response.model';
+import {ManageUserChannelPermissionsRequestModel}                      from '../../../services/user.management/models/manage.user.channel.permissions.request.model';
 import {OnManageUserChannelModeratorResult, UserManagementDataService} from '../../../services/user.management/user.management.data.service';
 import {UsersModeratorsScreenDataModel}                                from './models/users.moderators.screen.data.model';
 
@@ -30,8 +31,8 @@ export class UsersModeratorsComponent extends BaseSearchComponent<GetChannelMode
   {
     super(serviceBus, authService);
     this.setTableColumns([{field: 'userName', header: 'Username', width: '8em', text_align: 'left', field_type: FieldType.TEXT, header_col_hint: 'Username'},
-                          {field: 'authorName', header: 'Who banned', width: '10em', text_align: 'left', field_type: FieldType.TEXT, header_col_hint: 'Who ban user'},
-                          {field: 'created', header: 'Moment', width: '8em', text_align: 'center', field_type: FieldType.TEXT, header_col_hint: 'Moment ban'}]);
+                          {field: 'authorName', header: 'Author', width: '10em', text_align: 'left', field_type: FieldType.TEXT, header_col_hint: 'Who made a moderato'},
+                          {field: 'created', header: 'Moment', width: '8em', text_align: 'center', field_type: FieldType.TEXT, header_col_hint: 'Moment'}]);
   }
 
   public onAddModeratorClick(): void
@@ -69,9 +70,9 @@ export class UsersModeratorsComponent extends BaseSearchComponent<GetChannelMode
     this.contextMenuItems = [{label: 'Unban user', icon: 'pi pi-trash', command: () => this.__manageUser()}];
   }
 
-  protected loadData(item: GetChannelBannedUsersRequestModel)
+  protected loadData(item: GetChannelModeratorUsersRequestModel)
   {
-    this._dataService.loadChannelBannedUsers(item);
+    this._dataService.loadChannelModeratorUsers(item);
   }
 
   protected prepareDataForSearch(): GetChannelModeratorUsersRequestModel
@@ -84,7 +85,7 @@ export class UsersModeratorsComponent extends BaseSearchComponent<GetChannelMode
   protected onSubscribeData(): void
   {
     super.onSubscribeData();
-    this.subscribe(this._dataService.onLoadChannelBannedUsersEvent().subscribe((data) =>this.items = data));
+    this.subscribe(this._dataService.onLoadChannelModeratorUsersEvent().subscribe((data) =>this.items = data));
     this.subscribe(this._dataService.onLoadingEvent().subscribe((loading) => this.loading = loading));
     this.subscribe(this._dataService.onBlockButtonEvent().subscribe((blockButton) => this.blockButton = blockButton));
     this.subscribe(this.serviceBus.onEvent<OnManageUserChannelModeratorResult>(EActionType.ON_ADD_MODERATOR_USER_IN_CHANNEL_ACTION, (result: OnManageUserChannelModeratorResult) => result.success && this.load()));
@@ -98,12 +99,16 @@ export class UsersModeratorsComponent extends BaseSearchComponent<GetChannelMode
 
   private __manageUser(): void
   {
-    console.log('this.selectedItem=>', this.selectedItem);
-    // this._dataService.manageChannelModerator(new ManageUserChannelBanningRequestModel(this.selectedItem.userId,
-    //                                                                                     this.selectedItem.channelId,
-    //                                                                                     this.selectedItem.banReasonId,
-    //                                                                                     null,
-    //                                                                                     null,
-    //                                                                                     this.selectedItem.permanentBanned));
+
+    this._dataService.manageUserChannelPermissions(new ManageUserChannelPermissionsRequestModel(MANAGE_USER_PERMISSION_OPERATION_TYPES.CREATE_DELETE_MODERATOR,
+                                                                                         !isNullOrUndefined(this.selectedItem.userId)?this.selectedItem.userId:null,
+                                                                                         !isNullOrUndefined(this.selectedItem.channelId)?this.selectedItem.channelId:null,
+                                                                                         !isNullOrUndefined(this.selectedItem.isAdministrator)?this.selectedItem.isAdministrator:null,
+                                                                                         !isNullOrUndefined(this.selectedItem.isChannelModerator)?this.selectedItem.isChannelModerator:false,
+                                                                                         !isNullOrUndefined(this.selectedItem.canViewChannel)?this.selectedItem.canViewChannel:false,
+                                                                                         !isNullOrUndefined(this.selectedItem.canViewPosts)?this.selectedItem.canViewPosts:false,
+                                                                                         !isNullOrUndefined(this.selectedItem.canCreatePosts)?this.selectedItem.canCreatePosts:false,
+                                                                                         !isNullOrUndefined(this.selectedItem.canComment)?this.selectedItem.canComment:false,
+                                                                                         !isNullOrUndefined(this.selectedItem.canVote)?this.selectedItem.canVote:false));
   }
 }

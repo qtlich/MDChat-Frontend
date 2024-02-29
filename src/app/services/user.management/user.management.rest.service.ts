@@ -9,8 +9,12 @@ import {GetChannelBannedUsersResponseModel} from './models/get.channel.banned.us
 import {GetChannelModeratorUsersRequestModel} from './models/get.channel.moderator.users.request.model';
 import {GetChannelModeratorUsersResponseModel} from './models/get.channel.moderator.users.response.model';
 import {GetIsUserBannedInChannelRequestModel} from './models/get.is.user.banned.in.channel.request.model';
-import {GetIsUserBannedInChannelResponseModel} from './models/get.is.user.banned.in.channel.response.model';
-import {ManageUserChannelBanningRequestModel} from './models/manage.user.channel.banning.request.model';
+import {GetIsUserBannedInChannelResponseModel}     from './models/get.is.user.banned.in.channel.response.model';
+import {GetIsUserModeratorInChannelRequestModel} from './models/get.is.user.moderator.in.channel.request.model';
+import {GetIsUserModeratorInChannelResponseModel} from './models/get.is.user.moderator.in.channel.response.model';
+import {ManageUserChannelPermissionsRequestModel}  from './models/manage.user.channel.permissions.request.model';
+import {ManageUserChannelPermissionsResponseModel} from './models/manage.user.channel.permissions.response.model';
+import {ManageUserChannelBanningRequestModel}      from './models/manage.user.channel.banning.request.model';
 import {ManageUserChannelBanningResponseModel} from './models/manage.user.channel.banning.response.model';
 import {SearchUsersRequestModel}  from './models/search.users.request.model';
 import {SearchUsersResponseModel} from './models/search.users.response.model';
@@ -45,8 +49,16 @@ export class UserManagementRestService extends BaseRestApi
   {
     return this.post(`/user-management/manage-user-channel-banning`, item);
   }
+  public manageChannelUserPermissions(item: ManageUserChannelPermissionsRequestModel): Observable<ManageUserChannelPermissionsResponseModel[]>
+  {
+    return this.post(`/user-management/manage-channel-user-permissions`, item);
+  }
   public getIsUserBannedInChannel(item: GetIsUserBannedInChannelRequestModel): Observable<GetIsUserBannedInChannelResponseModel>
   {
     return this.post(`/user-management/is-user-banned`, item);
+  }
+  public getIsUserModeratorInChannel(item: GetIsUserModeratorInChannelRequestModel): Observable<GetIsUserModeratorInChannelResponseModel>
+  {
+    return this.post(`/user-management/is-user-moderator`, item);
   }
 }

@@ -55,7 +55,6 @@ export class BanUserDialogComponent extends BaseDialogComponent implements OnIni
 
   public filterUsers(value: string): void
   {
-    console.log('VALUE=>', value);
     this._userManagementService.searchUsers(new SearchUsersRequestModel(value));
   }
 

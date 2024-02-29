@@ -1,6 +1,6 @@
 <p-panel [toggleable] = "true" *ngIf = "channel">
   <p-header>
-    About channel
+    <b>About channel&nbsp;</b>
     <div class = "channel-badge" [routerLink] = "['/view-channel/',channel.channelId]">{{channel.channelName}}</div>
     <moderate-channel-button [channelId]="channel.channelId"></moderate-channel-button>
     <br>
